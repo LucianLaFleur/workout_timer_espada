@@ -1,3 +1,8 @@
+3/7:
+ update logic for counting rounds and shifting interval activities while keeping main motion consistent. 
+UI consistency for top-widgets like exercise label, timer, and round counter.
+!! Currently using an input statement for granular control to step through behavior one second at a time in update_timer()
+
 3/6 : current scope
   Make a timer assuming the workout type is arms and there's only one interval set for abs.
   complete: sliders actively show workout duration for calculated core factors of motions, rounds per motion, work time, and interval time
