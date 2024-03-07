@@ -56,31 +56,31 @@ class ExerciseTimerApp:
         self.exercise_label = tk.Label(master, text="Exercise:")
         self.exercise_label.config(font=("times", 24), fg="lime", bg="black", bd=2, relief="solid", padx=5, pady=5) 
         self.exercise_label.grid(row=0, column=0, columnspan=4, padx=5, pady=5)
-        
-        self.set_number_label = tk.Label(master, text="Set not started")
-        self.set_number_label.config(font=("courier", 22), fg="cyan", bg="black", bd=2, relief="solid", padx=5, pady=5) 
-        self.set_number_label.grid(row=1, column=0, columnspan=2, padx=5, pady=5)
 
         self.timer_label = tk.Label(master, text="Time Remaining:")
         self.timer_label.config(font=("courier", 22), fg="lime", bg="black", bd=2, relief="solid", padx=5, pady=5) 
-        self.timer_label.grid(row=1, column=2, columnspan=2, padx=5, pady=5)
+        self.timer_label.grid(row=1, column=0, columnspan=4, padx=5, pady=5)
+
+        self.set_number_label = tk.Label(master, text="Set not started")
+        self.set_number_label.config(font=("courier", 22), fg="cyan", bg="black", bd=2, relief="solid", padx=5, pady=5) 
+        self.set_number_label.grid(row=2, column=0, columnspan=4, padx=5, pady=5)
 
         # Labels for sliders  -----------------------------------------------------------------------
         self.num_sets_label = tk.Label(master, text="Sets per exercise")
         self.num_sets_label.config(font=("Times", 12), fg="#cc3", bg="#225") 
-        self.num_sets_label.grid(row=2, column=0)
+        self.num_sets_label.grid(row=3, column=0)
 
         self.num_motions_label = tk.Label(master, text="# Motions")
         self.num_motions_label.config(font=("Times", 12), fg="#cc3", bg="#225") 
-        self.num_motions_label.grid(row=2, column=1)
+        self.num_motions_label.grid(row=3, column=1)
 
         self.active_duration_label = tk.Label(master, text="work (s)")
         self.active_duration_label.config(font=("Times", 12), fg="#cc3", bg="#225") 
-        self.active_duration_label.grid(row=2, column=2)
+        self.active_duration_label.grid(row=3, column=2)
 
         self.rest_duration_label = tk.Label(master, text="interval (s)")
         self.rest_duration_label.config(font=("Times", 12), fg="#cc3", bg="#225") 
-        self.rest_duration_label.grid(row=2, column=3)
+        self.rest_duration_label.grid(row=3, column=3)
 
         # nyi checkbox for muscle groups -----------------------------------------------------------------------
         # self.num_target_groups = tk.Label(master, text="num target muscle groups")
@@ -93,22 +93,22 @@ class ExerciseTimerApp:
         self.num_sets_slider = tk.IntVar()
         self.num_sets_slider = tk.Scale(master, from_=1, to=5, orient=tk.HORIZONTAL, variable=self.num_sets_slider, command=self.update_workout_timing_preview_label)
         self.num_sets_slider.set(3)
-        self.num_sets_slider.grid(row=3, column=0, padx=5)
+        self.num_sets_slider.grid(row=4, column=0, padx=5)
 
         self.num_motions = tk.IntVar()
         self.num_motions = tk.Scale(master, from_=2, to=20, orient=tk.HORIZONTAL,variable=self.num_motions, command=self.update_workout_timing_preview_label)
         self.num_motions.set(3)
-        self.num_motions.grid(row=3, column=1, padx=5)
+        self.num_motions.grid(row=4, column=1, padx=5)
         
         self.active_duration_slider = tk.IntVar()
         self.active_duration_slider = tk.Scale(master, from_=2, to=90, orient=tk.HORIZONTAL, resolution=2, variable=self.active_duration_slider, command=self.update_workout_timing_preview_label)
-        self.active_duration_slider.set(4)
-        self.active_duration_slider.grid(row=3, column=2, padx=5)
+        self.active_duration_slider.set(2)
+        self.active_duration_slider.grid(row=4, column=2, padx=5)
 
         self.rest_between_set_duration_slider = tk.IntVar()
-        self.rest_between_set_duration_slider = tk.Scale(master, from_=5, to=120, orient=tk.HORIZONTAL, resolution=5, variable=self.rest_between_set_duration_slider, command=self.update_workout_timing_preview_label)
-        self.rest_between_set_duration_slider.set(6)
-        self.rest_between_set_duration_slider.grid(row=3, column=3, padx=5)
+        self.rest_between_set_duration_slider = tk.Scale(master, from_=3, to=120, orient=tk.HORIZONTAL, resolution=3, variable=self.rest_between_set_duration_slider, command=self.update_workout_timing_preview_label)
+        self.rest_between_set_duration_slider.set(3)
+        self.rest_between_set_duration_slider.grid(row=4, column=3, padx=5)
         
         self.workout_timing_data_label = tk.Label(master, text="awaiting input data proper...")
         self.workout_timing_data_label.grid(row=6, column=0, columnspan=4, padx=5)
@@ -176,9 +176,6 @@ class ExerciseTimerApp:
         selected_actions = random.sample(target_arr, num_actions)
         return selected_actions
 
-    # Countdown for each exercise
-    #  For one action, one interval, targeting a single muscle group
-
     def get_workout_motions(self, target_muscle_group):
         self.listbox_of_chosen_exercises.delete(0, tk.END)
         self.listbox_of_interval_activities.delete(0, tk.END)
@@ -202,7 +199,8 @@ class ExerciseTimerApp:
         for i in range(0, self.num_exercises):
             small_interval_actions_list = self.select_actions_from_arr(self.num_sets_per_exercise, interval_activity_source_list)
             big_interval_action_list.append(small_interval_actions_list)
-        input(f" testing for list of sublists : {big_interval_action_list}")
+        self.selected_interval_actions = big_interval_action_list
+        print(f"all interval sub arrs: {self.selected_interval_actions}")
 
     def run_all_the_things(self):
         # initialize basic stuff
@@ -217,47 +215,68 @@ class ExerciseTimerApp:
         self.get_workout_motions(self.target_muscle_group_list)
         self.select_interval_activities_randomizer(self.interval_activity_list)
         self.set_number_label.config(text=f"Set 1 of {self.num_sets_per_exercise}")
-        self.exercise_label.config(text=f"Action: {self.selected_exercises[0]}")
+        self.exercise_label.config(text=f"Action:\n {self.selected_exercises[0]}")
 
         # self.selected_exercises is now populated
         self.update_timer()
     
-    # def update_exercise_label(self):
-    #     current_exercise = self.exercises[self.current_exercise_index]
-    #     print("1111112")
-    #     self.exercise_label.config(text=f"Action: {current_work_motion}")
-    # #     self.set_number_label.config(text=f"Set {motion_number} of {self.num_sets_slider.get()}")
+    def update_exercise_label(self):
+        # from the selected exercises arr, get the current exercise via index
+        current_exercise = self.selected_exercises[self.current_exercise_index]
+        self.exercise_label.config(text=f"Action:\n {current_exercise}", fg="lime", bg="black")
 
-    # def update_set_label(self):
-    #     print("00003")
+    def update_interval_label(self):
+        current_interval_motion = self.selected_interval_actions[self.current_exercise_index][self.current_round_index]
+        self.exercise_label.config(text=f"Interval:\n {current_interval_motion}", fg="purple", bg="yellow")
 
     def update_timer(self):
-        if self.remaining_action_time > 0:
+        # top portion contains adjusting the timer while time remains for set
+        if self.is_it_action_time:
             self.remaining_action_time -= 1
-            self.timer_label.config(text="Time left: " + str(self.remaining_action_time))
-        elif self.remaining_interval_time > 0:
-            self.remaining_interval_time -= 1
-            self.timer_label.config(text="Time left: " + str(self.remaining_interval_time))
+            self.timer_label.config(text="Time left: " + str(self.remaining_action_time), fg="lime", bg="black")
         else:
-            # Move to the next set or exercise
-        # self.current_exercise_index = 0
-        # self.current_round_index = 0
+            self.remaining_interval_time -= 1
+            self.timer_label.config(text="Time left: " + str(self.remaining_interval_time), fg="yellow", bg="black")
+# ---------------------------------------------------------------------------------------------------------------- 
+        # When a timer hits zero...
+        if (self.is_it_action_time) and (self.remaining_action_time == 0):
+            self.update_interval_label()
+            self.is_it_action_time = False
+        elif self.remaining_interval_time == 0:
+            self.update_exercise_label()
+            #  reset both timing counters here, DANGEROUS to use timer ticks as conditionals because of unpredictable interplay
+            self.remaining_action_time = self.active_duration_slider.get()  # Reset exercise time-amount
+            self.remaining_interval_time = self.rest_between_set_duration_slider.get()  # Reset interval time-amount
+            self.is_it_action_time = True
+            # "round" count only increases when the interval action is complete
             self.current_round_index += 1
-            if self.current_round_index >= self.num_sets_per_exercise:
-                self.current_round_index = 0
-                self.current_exercise_index += 1
-                if self.current_exercise_index >= self.num_exercises:
-                    return  # End of exercise routine
-            self.remaining_action_time = self.active_duration_slider.get()  # Reset exercise timer
-            self.remaining_interval_time = self.rest_between_set_duration_slider.get()  # Reset interval timer
-            self.update_labels()
-        self.master.after(1000, self.update_timer)
+            self.set_number_label.config(text=f"Set {self.current_round_index + 1} of {self.num_sets_per_exercise}")
+        # print(f"round: {self.current_round_index + 1}")
+        # print(f"numsets per exercise = {self.num_sets_per_exercise}")
+        input("HOLD --------- 01")
+        if self.current_round_index == self.num_sets_per_exercise:
+            self.current_round_index = 0
+            self.current_exercise_index += 1
+            print(f"{self.remaining_interval_time}")
+            print(f"Current round is {self.current_round_index +1} of {self.num_sets_per_exercise}")
+            input(f"current round index should be 0 : {self.current_round_index} \n exercise index should be increased, not 0 : {self.current_exercise_index}")
+            if self.current_exercise_index >= self.num_exercises:
+                print(f"exercise session complete! {self.current_exercise_index} rounds of {self.num_exercises} complete!")
+                return  # End of exercise routine
+            else:
+                print(f"{self.num_exercises - self.current_exercise_index} exercise motions remain")
+
+        if not self.pause:
+            self.master.after(1000, self.update_timer)
+        # on completing a full set of rounds interval, increase index by 1 to move to the next 
+                # self.current_exercise_index += 1
+        
     # Toggle timer countdown
     def toggle_timer(self):
         self.pause = not self.pause
         if not self.pause:
             # (use regex to get the amount of time remaining from the timer label to re-start)
-            self.countdown(int(self.timer_label.cget("text").split(": ")[-1]))
+            self.update_timer(int(self.timer_label.cget("text").split(": ")[-1]))
     def print_workout_to_txt(self):
         # unformatted, lame time object
         raw_time = datetime.now()
@@ -417,3 +436,27 @@ if __name__ == "__main__":
     # break duration 
 
     # NYI make the text interruptable so you can punch-out a text-file with a timestamp while paused or ended
+
+#     Week 1: 10 reps x 3 sets (30 seconds rest)
+# Week 2: 12 reps x 3 sets (30 seconds rest)
+# Week 3: 15 reps x 3 sets (30 seconds rest)
+# Week 4: 15 reps x 3 sets (20 seconds rest)
+# Week 5: 15 reps x 3 sets (20 seconds rest) *couldn’t improve this week, it happens*
+# Week 6: 15 reps x 4 sets (20 seconds rest)
+    
+    # NYI change bg color of countdown timer to yellow when half, red when last 10 seconds
+
+    # Devlog stuff:
+        #  cannot just use time.sleep, display update would hang if not using the .after functionality because TK inter is weird like that
+    # cannot iterate over things with a normal loop either, so have to use after as a new paradigm...
+    #  it's multithreading and time synchronization and it's a fucking nightmare
+
+
+
+    # NYI set selection:
+    # self.target_muscle_group_keyword = "shoulders"
+    #     self.target_muscle_group_list = self.ticep_exercises
+    #     self.interval_activity_keyword = "abs"
+    #     self.interval_activity_list = []
+    #     self.workout_data_list = []
+    # ... need logic to select string variable from combobox, then use that string to resolve an associated array
