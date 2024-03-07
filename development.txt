@@ -1,0 +1,23 @@
+3/6 : current scope
+  Make a timer assuming the workout type is arms and there's only one interval set for abs.
+  complete: sliders actively show workout duration for calculated core factors of motions, rounds per motion, work time, and interval time
+  complete: Can generate random unique items from target muscle group list
+            - chosen motions display correctly in left column
+            - the number of chosen items correctly uses the slider value for number of exercises
+    NEXT:
+    Make display for interval activities in right column
+      - needs to be overwritten when moving to next main motion
+    Make countdown work for activity poriton
+    Countdown needs to work for interval portion
+
+    FIX - left-display needs to delete area when generating new set
+    
+---------------------------------------------------------
+    NYI: 
+    *sound test for audio triggers
+      *sound test button for random drops
+      ****implement start, halfway, 10s warning, and end audio triggers.
+    output 
+      --- on-demand print button
+    workout type selection
+    mid-session longer break (toggle checkbox?)
