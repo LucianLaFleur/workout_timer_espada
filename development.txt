@@ -1,3 +1,7 @@
+3/8:
+ Data prepped for audio clips. Subset of share-able ones will be added to this repo.
+ Data organization for folder structure is important when dealing with a lot of material, which is meant to be personalized/augmented. Modularity is the intention of this project.
+
 3/7:
  update logic for counting rounds and shifting interval activities while keeping main motion consistent. 
 UI consistency for top-widgets like exercise label, timer, and round counter.
