@@ -5,7 +5,6 @@ import pygame
 import math
 import time
 import threading
-# https://www.setforset.com/blogs/news/bodyweight-leg-exercises-without-weights
 # Initial version: set for arms workout x abs on rest intervals
 
 class ExerciseTimerApp:
@@ -25,21 +24,27 @@ class ExerciseTimerApp:
 
         #  Audio collection (safe for sharing)
         # audio_hit_start/
-        start_bumper_aud_arr = ["audio_hit_start/go1.wav"]
+        self.start_bumper_aud_arr = ["audio_hit_start/go1.wav"]
+        self.temp_start_bumper_aud_arr = []
         # audio_active_songs/
-        active_song_aud_arr = ["audio_active_songs/bass_fish.wav", "audio_active_songs/battleSuit.wav", "audio_active_songs/desert1.wav", "audio_active_songs/desertTrance2.wav",
+        self.active_song_aud_arr = ["audio_active_songs/bass_fish.wav", "audio_active_songs/battleSuit.wav", "audio_active_songs/desert1.wav", "audio_active_songs/desertTrance2.wav",
         "audio_active_songs/expectationsShort.wav", "audio_active_songs/goinSteady_cut.wav", "audio_active_songs/heilo1.wav", "audio_active_songs/impositionOfUltimatim_short.wav",
         "audio_active_songs/mottai_nai.wav", "audio_active_songs/persist_against_all.wav", "audio_active_songs/sideAlleyShort.wav", "audio_active_songs/workshop1.wav"]
+        self.temp_active_song_aud_arr = []
         # audio_hit_half/
-        half_bumper_aud_arr = ["audio_hit_half/pdaBeepBeep.wav"]
+        self.half_bumper_aud_arr = ["audio_hit_half/pdaBeepBeep.wav"]
+        self.temp_half_bumper_aud_arr = []
         # audio_hit_end/
-        end_bumper_aud_arr = ["audio_hit_end/lvlup.wav"]
+        self.end_bumper_aud_arr = ["audio_hit_end/lvlup.wav"]
+        self.temp_end_bumper_aud_arr = []
         # audio_interval_songs/
-        interval_song_aud_arr = ["audio_interval_songs/all_you_can_do_cut.wav", "audio_interval_songs/anhedonia_short.wav",
+        self.interval_song_aud_arr = ["audio_interval_songs/all_you_can_do_cut.wav", "audio_interval_songs/anhedonia_short.wav",
         "audio_interval_songs/beat4354rs.wav", "audio_interval_songs/knifeOverHeart1.wav", "audio_interval_songs/LoyalObligation_cut.wav",
         "audio_interval_songs/purple_aviators_cut.wav", "audio_interval_songs/technical_complications.wav","audio_interval_songs/VacuousCuriosity.wav", "audio_interval_songs/WhatCannotBeReclaimed.wav"]
+        self.temp_interval_song_aud_arr = []
         # audio_special_ender/
-        special_ender_aud_arr = ["audio_special_ender/TP_Fanfare1.wav"]
+        self.special_ender_aud_arr = ["audio_special_ender/TP_Fanfare1.wav"]
+        self.temp_special_ender_aud_arr = []
 
         # List of exercises
         # biceb and general arms stuff
@@ -142,7 +147,7 @@ class ExerciseTimerApp:
         self.workout_timing_data_label.grid(row=6, column=0, columnspan=4, padx=5)
         self.workout_timing_data_label.config(font=("courier", 18), fg="cyan", bg="black")
 
-        self.start_button = tk.Button(master, text="Start Session", command=self.run_all_the_things)
+        self.start_button = tk.Button(master, text="Start Session", command=self.prime_timer_thread)
         self.start_button.grid(row=7, column=0, padx=5, pady=5)
         self.start_button.config(font=("impact", 14), fg="lime", bg="black")
 
@@ -150,9 +155,13 @@ class ExerciseTimerApp:
         self.pause_button.grid(row=7, column=1, padx=5, pady=5)
         self.pause_button.config(font=("Times", 14), fg="yellow", bg="black")
 
-        self.rand_snd_button = tk.Button(master, text="random sound", command=self.toggle_timer)
+        self.rand_snd_button = tk.Button(master, text="random sound", command=lambda: self.prime_audio_thread(self.active_song_aud_arr, self.temp_active_song_aud_arr, 6))
         self.rand_snd_button.grid(row=7, column=2, padx=5, pady=5)
         self.rand_snd_button.config(font=("impact", 14), fg="cyan", bg="black")
+
+        # self.interrupt_snd_button = tk.Button(master, text="random sound", command=self.select_and_play_random_aud(self.active_song_aud_arr, self.temp_active_song_aud_arr, 10))
+        # self.interrupt_snd_button.grid(row=7, column=2, padx=5, pady=5)
+        # self.interrupt_snd_button.config(font=("impact", 14), fg="cyan", bg="black")
 
         self.listbox_of_chosen_exercises = tk.Listbox(master)
         self.listbox_of_chosen_exercises.grid(row=8, column= 0, columnspan=2, padx=2, pady=5)
@@ -186,14 +195,6 @@ class ExerciseTimerApp:
         self.num_sets_per_exercise = 0
         self.current_exercise_index = 0
         self.current_round_index = 0
-
-    def play_audio(self, file_path, duration):
-        pygame.mixer.music.load(file_path)
-        pygame.mixer.music.play()
-        # Duration (seconds) X 1000 for miliseconds read by .wait() 
-        pygame.time.wait(duration * 1000)
-        # Stop playback after duration
-        pygame.mixer.music.stop()
     
     # def plain_interrupt_and_resume(self, primary_file, interrupt_file, interrupt_time, total_duration):
     #     # Start playing the primary audio
@@ -202,30 +203,7 @@ class ExerciseTimerApp:
     #     # Wait for interrupt_time seconds and then interrupt with another audio
     #     pygame.time.wait(interrupt_time * 1000)
     #     self.play_audio(interrupt_file, total_duration - interrupt_time)
-
-    def overlapping_interrupt_and_resume(self, primary_file, interrupt_file, interrupt_time, total_duration, primary_volume=1.0, interrupt_volume=1.0):
-        # Start playing the primary audio and interrupt audio in separate threads
-        primary_thread = threading.Thread(target=self.play_audio, args=(primary_file, total_duration - interrupt_time, primary_volume,))
-        interrupt_thread = threading.Thread(target=self.play_audio, args=(interrupt_file, total_duration - interrupt_time, interrupt_volume,))
-
-        primary_thread.start()
-        interrupt_thread.start()
-
-        # Wait for the interrupt time
-        time.sleep(interrupt_time)
-
-        # Lower the volume of the primary audio while the interrupt audio is playing
-        while interrupt_thread.is_alive():
-            pygame.mixer.music.set_volume(primary_volume * 0.5)  # Adjust volume as needed
-            time.sleep(0.1)  # Check every 0.1 seconds
-
-        # Restore the volume of the primary audio
-        pygame.mixer.music.set_volume(primary_volume)
-
-        # Wait for both threads to finish
-        primary_thread.join()
-        interrupt_thread.join()
-
+    
     def update_workout_timing_preview_label(self, value):
         #  STATIC VAL BELOW FOR EXERCISES
         num_exercises = self.num_motions.get()
@@ -270,7 +248,56 @@ class ExerciseTimerApp:
         self.selected_interval_actions = big_interval_action_list
         print(f"all interval sub arrs: {self.selected_interval_actions}")
 
-    def run_all_the_things(self):
+    def play_audio(self, file_path, duration):
+        pygame.mixer.music.load(file_path)
+        pygame.mixer.music.play()
+        # Duration (seconds) X 1000 for miliseconds read by .wait() 
+        pygame.time.wait(duration * 1000)
+        # Stop playback after duration
+        pygame.mixer.music.stop()
+        
+    def overlapping_interrupt_and_resume(self, primary_file, interrupt_file, interrupt_time, total_duration, primary_volume=1.0, interrupt_volume=1.0):
+        # Start playing the primary audio and interrupt audio in separate threads
+        primary_thread = threading.Thread(target=self.play_audio, args=(primary_file, total_duration - interrupt_time, primary_volume,))
+        interrupt_thread = threading.Thread(target=self.play_audio, args=(interrupt_file, total_duration - interrupt_time, interrupt_volume,))
+
+        primary_thread.start()
+        interrupt_thread.start()
+
+        # Wait for the interrupt time
+        time.sleep(interrupt_time)
+
+        # Lower the volume of the primary audio while the interrupt audio is playing
+        while interrupt_thread.is_alive():
+            pygame.mixer.music.set_volume(primary_volume * 0.5)  # Adjust volume as needed
+            time.sleep(0.1)  # Check every 0.1 seconds
+
+        # Restore the volume of the primary audio
+        pygame.mixer.music.set_volume(primary_volume)
+
+        # Wait for both threads to finish
+        primary_thread.join()
+        interrupt_thread.join()
+
+    def copy_src_arr_to_temp(self, src_arr, temp_arr):
+        random.shuffle(src_arr)
+        for x in src_arr:
+            temp_arr.append(x)
+    
+    def select_and_play_random_aud(self, src_arr, temp_arr, target_dur):
+        # regenerate the temp arr from the source if temp is empty
+        #   --- Because we're popping off each item, the temp array loses an item each time it's run, making it less repetitive
+        #   --- The copying process will shuffle the array before copying, so it's already random-order, thus just popping below
+        if len(temp_arr) == 0:
+            self.copy_src_arr_to_temp(src_arr, temp_arr)
+        chosen_aud = temp_arr.pop(0)
+        self.play_audio(chosen_aud, target_dur)
+
+    def prime_audio_thread(self, src_arr, temp_arr, target_dur):
+        audio_thread = threading.Thread(target=self.select_and_play_random_aud, args=(src_arr, temp_arr, target_dur))
+        audio_thread.start()
+
+    def start_workout(self):
         # initialize basic stuff
         self.num_exercises = self.num_motions.get()
         self.num_sets_per_exercise = self.num_sets_slider.get()
@@ -288,6 +315,10 @@ class ExerciseTimerApp:
         # self.selected_exercises is now populated
         self.update_timer()
     
+    def prime_timer_thread(self):
+        timer_thread = threading.Thread(target=self.start_workout)
+        timer_thread.start()
+    
     def update_exercise_label(self):
         # from the selected exercises arr, get the current exercise via index
         current_exercise = self.selected_exercises[self.current_exercise_index]
@@ -296,6 +327,9 @@ class ExerciseTimerApp:
     def update_interval_label(self):
         current_interval_motion = self.selected_interval_actions[self.current_exercise_index][self.current_round_index]
         self.exercise_label.config(text=f"Interval:\n {current_interval_motion}", fg="purple", bg="yellow")
+
+# def play_audio(self, file_path, duration):
+# def overlapping_interrupt_and_resume(self, primary_file, interrupt_file, interrupt_time, total_duration, primary_volume=1.0, interrupt_volume=1.0):
 
     def update_timer(self):
         # top portion contains adjusting the timer while time remains for set
@@ -380,6 +414,10 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+#  UTILITY CLOSET -----------------------------------------------------------------------------
+    
+# thread_name.join() #forces a thread to continue until completion until moving further in the program... might be needed?
 
 # DEAD CODE TO PROVE A POINT ABOUT ITERATIVE DEV ------------------------------
      
