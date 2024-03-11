@@ -14,33 +14,73 @@ class ExerciseTimerApp:
 
         # Set the height and width of the window
         self.master.geometry("900x680")
-        # Assign fixed width to column 1
-        # self.master.grid_columnconfigure(1, minsize=235)
-
-        #  initialize pygame so I can play music properly
         pygame.init()
 
+        self.default_encouragement = "audio_hit_start/letsGetMovingBubblegum1.wav"
+        self.halway_alarm = "audio_hit_half/pdaBeepBeep.wav"
+        # self.half_bumper_aud_arr = ["audio_hit_half/pdaBeepBeep.wav"]
+        # self.temp_half_bumper_aud_arr = []
+        self.workout_end_aud = "audio_special_ender/exitBumperGonnaMakeIt.wav"
         #  Audio collection (safe for sharing)
         # audio_hit_start/
         self.start_bumper_aud_arr = ["audio_hit_start/doYourBestBubblegum.wav", "audio_hit_start/fireupBubblegum1.wav", "audio_hit_start/kickoffBubblegum.wav", "audio_hit_start/letsGetMovingBubblegum1.wav",
        "audio_hit_start/letsGetMovingBubblegum1.wav", "audio_hit_start/showOnRoadBubblegum.wav", "audio_hit_start/time2grindBubblegum.wav"]
         self.temp_start_bumper_aud_arr = []
         # audio_active_songs/
-        self.active_song_aud_arr = ["audio_active_songs/bass_fish.wav", "audio_active_songs/battleSuit.wav", "audio_active_songs/desert1.wav", "audio_active_songs/desertTrance2.wav",
-        "audio_active_songs/expectationsShort.wav", "audio_active_songs/goinSteady_cut.wav", "audio_active_songs/heilo1.wav", "audio_active_songs/impositionOfUltimatim_short.wav",
-        "audio_active_songs/mottai_nai.wav", "audio_active_songs/persist_against_all.wav", "audio_active_songs/sideAlleyShort.wav", "audio_active_songs/workshop1.wav"]
-        self.temp_active_song_aud_arr = []
-        # audio_hit_half/
-        self.half_bumper_aud_arr = ["audio_hit_half/pdaBeepBeep.wav"]
-        self.temp_half_bumper_aud_arr = []
+        self.active_song_aud_arr = ["audio_active_songs/bass_fish.wav", 
+        "audio_active_songs/battleSuit.wav", 
+        "audio_active_songs/desert1.wav", 
+        "audio_active_songs/desertTrance2.wav",
+        "audio_active_songs/expectationsShort.wav", 
+        "audio_active_songs/goinSteady_cut.wav", 
+        "audio_active_songs/heilo1.wav", 
+        "audio_active_songs/impositionOfUltimatim_short.wav",
+        "audio_active_songs/mottai_nai.wav", 
+        "audio_active_songs/persist_against_all.wav", 
+        "audio_active_songs/sideAlleyShort.wav", 
+        "audio_active_songs/workshop1.wav"]
+        self.temp_active_song_aud_arr = []   
         # audio_hit_end/
-        self.end_bumper_aud_arr = ["audio_hit_end/catchBreathBubblefum.wav", "audio_hit_end/doneBubblegum2.wav", "audio_hit_end/dontOverexertBubblegum1.wav", "audio_hit_end/finished1bubblegum.wav",
-        "audio_hit_end/niceWorkBubblegum1.wav", "audio_hit_end/pauseBubblegum1.wav", "audio_hit_end/slowAndSteady1.wav", "audio_hit_end/takeABreatherBubblegum.wav"]
+        self.end_bumper_aud_arr = ["audio_hit_end/catchBreathBubblefum.wav",
+        "audio_hit_end/doneBubblegum2.wav", 
+        "audio_hit_end/dontOverexertBubblegum1.wav", 
+        # 
+        "audio_hit_end/niceWorkBubblegum1.wav", 
+        # "audio_hit_end/pauseBubblegum1.wav", 
+        "audio_hit_end/slowAndSteady1.wav", 
+        # "audio_hit_end/takeABreatherBubblegum.wav",
+        "audio_hit_end/mori_nicework.wav",
+        "audio_hit_end/mori_onemoreDone.wav",
+        "audio_hit_end/mori_take_a_breather.wav",
+        
+        "audio_hit_end/mori_switch_to_low_intensity.wav",
+        # "audio_hit_end/bubblegumPauseForAMoment.wav",
+        "audio_hit_end/bubblegum_oneMoreDown.wav",
+        # "audio_hit_end/bubblegum_slow_and_Steady.wav",
+        # "audio_hit_end/bubblegum_niceWorkThatOne.wav",
+        "audio_hit_end/bubblegum_takeABreather.wav",
+        "audio_hit_end/bubble_thatonesdone.wav"
+        # "audio_hit_end/.wav",
+        ]
+
+        # self.end_of_workout_arr = [
+        # "audio_hit_end/finished1bubblegum.wav",
+        # "audio_hit_end/mori_nice_jobrestforabit.wav",
+        # "audio_hit_end/bubblegum_time_to_rest.wav"
+        # ]
+
         self.temp_end_bumper_aud_arr = []
         # audio_interval_songs/
-        self.interval_song_aud_arr = ["audio_interval_songs/all_you_can_do_cut.wav", "audio_interval_songs/anhedonia_short.wav",
-        "audio_interval_songs/beat4354rs.wav", "audio_interval_songs/knifeOverHeart1.wav", "audio_interval_songs/LoyalObligation_cut.wav",
-        "audio_interval_songs/purple_aviators_cut.wav", "audio_interval_songs/technical_complications.wav","audio_interval_songs/VacuousCuriosity.wav", "audio_interval_songs/WhatCannotBeReclaimed.wav"]
+        self.interval_song_aud_arr = ["audio_interval_songs/all_you_can_do_cut.wav", 
+        "audio_interval_songs/anhedonia_short.wav",
+        "audio_interval_songs/beat4354rs.wav", 
+        "audio_interval_songs/knifeOverHeart1.wav", 
+        "audio_interval_songs/LoyalObligation_cut.wav",
+        "audio_interval_songs/purple_aviators_cut.wav", 
+        "audio_interval_songs/technical_complications.wav",
+        "audio_interval_songs/VacuousCuriosity.wav", 
+        "audio_interval_songs/DailyRounds.wav", 
+        "audio_interval_songs/WhatCannotBeReclaimed.wav"]
         self.temp_interval_song_aud_arr = []
         # audio_special_ender/
         self.special_ender_aud_arr = []
@@ -57,44 +97,100 @@ class ExerciseTimerApp:
         # mirrored below
         "lying side bicep suitcase", "single-arm crab-reach", "uppercut-cross", "side-chop cross", "palm to karate chop"]
 
-        self.ticep_exercises = ["tricep dips", "dolphin push-up", "plank to seal-pose", "sphinx dive-bombers", "tricep get-ups","lying side push-up",
-        "diamond pushup", "sphynx to plank crawler", "sphynx to pike-push crawler", "sphynx-pike-stand", "benched tricep push"]
+        self.ticep_exercises = [
+        "tricep dips", 
+        "dolphin push-up", 
+        "plank to seal-pose", 
+        "sphinx dive-bombers", 
+        "alternating leg tricep dips",
+        "elbows-back push-ups",
+        "tricep get-ups",
+        "lying side push-up",
+        "diamond pushup", 
+        "sphynx to plank crawler", 
+        "sphynx to pike-push crawler", 
+        "sphynx-pike-stand", 
+        # "tricep push" #requires bench
+        ]
 
         self.shoulder_exercises = ["pike position cross toe-touches", 
         "pike push-up", "plank shoulder taps",  "bear crawl", "slow and low crawl","supermans",
         "lying lat pull-downs", "snow angel shoulders", "flying cobra", "reaching row", "tension lat pull-downs", 
         "lat pull-down push-out", 
         # lay pull-down and push out is like a lateral row then extend arms at 90 degrees out
-        #   "seal bows", "pike walkout push-ups", "alternating shoulder swimmers"
+        # "seal bows", "pike walkout push-ups", "alternating shoulder swimmers"
         ]
 
         self.master_exercise_name_audio_dic = {
-            # Shoulders
-        "flying cobra": ["exercise_names/elf_flying_cobra.wav", "exercise_names/flyingCobraBubble.wav"],  
+        # Shoulders
         "bear crawl": ['exercise_names/bearCrawlBubble.wav'], 
-        "lying lat pull-downs": ["exercise_names/elf_kneeling_lat_pull_down_push_outs.wav", "exercise_names/lyingLatPullDownBubblegum.wav"],
+        "boat row" : ["exercise_names/23B_boatRow.wav"],
+        "flying cobra": ["exercise_names/elf_flying_cobra.wav", "exercise_names/flyingCobraBubble.wav"],
+        "lat pull-down push-out" : ["exercise_names/elf_kneeling_lat_pull_down_push_outs.wav"],
+        "lying lat pull-downs": ["exercise_names/lyingLatPullDownBubblegum.wav"],
         "pike position cross toe-touches":["exercise_names/elf_pike_position_cross_toe_touches.wav", "exercise_names/pikePositionCrossToeBubblegum.wav"], 
         "pike push-up":["exercise_names/elf_pike_push_up.wav", "exercise_names/pikePushUpBubblegum.wav"],
         "plank shoulder taps":["exercise_names/elf_plank_shoulder_taps.wav", "exercise_names/plankShoulderTapsbub.wav"], 
         "reaching row" : ["exercise_names/reachingRowBubble.wav"], 
-        "snow angel shoulders":["exercise_names/snowAngelShoulders1.wav"],
-        "tension lat pull-downs":["exercise_names/tensionLatPullDownBubblegum.wav"],
         "slow and low crawl": ["exercise_names/elf_slow_and_low_crawl.wav"],
+        "snow angel shoulders":["exercise_names/snowAngelShoulders1.wav"],
         "supermans": ["exercise_names/elf_supermans.wav"],
-        "lat pull-down push-out" : ["exercise_names/elf_tension_lat_pull_downs.wav"],
+        "tension lat pull-downs":["exercise_names/tensionLatPullDownBubblegum.wav","exercise_names/elf_tension_lat_pull_downs.wav"],
+        
         # abs
         "flutter kicks": ["exercise_names/flutterkickBubblegum.wav"], 
-        "full extension cross-crunch":["exercise_names/fullextensioncrossCrunchBubblegum.wav"],
+        "full extension cross-crunch":["exercise_names/23B_fullExtensionCrossCrunch.wav", "exercise_names/fullextensioncrossCrunchBubblegum.wav"],
+        "half windshield wiper combo": ["exercise_names/23b_halfwayWindshieldWiperCombo.wav"],
         "half-bridge hip-thrusts" : ["exercise_names/halfbridgeHipThrustsBubblegum.wav"], 
-        "heels to the heavens": ["exercise_names/heels2HeavensBubblegum.wav"],
-        "leg lifts, candle pose": ["exercise_names/legLiftCandleBubblegum.wav"], 
-        "oblique heel-taps":["exercise_names/obliqueHeelTaps.wav"]
+        "heels to the heavens": ["exercise_names/23b_heelsToHeavens.wav", "exercise_names/heels2HeavensBubblegum.wav"],
+        "leg lifts, candle pose": ["exercise_names/23B_legLiftsCandlePose.wav", "exercise_names/legLiftCandleBubblegum.wav"], 
+        "oblique heel-taps":["exercise_names/23b_obliqueHeelTaps.wav", "exercise_names/obliqueHeelTaps.wav"],
+        "sideways hip raise": ["exercise_names/23B_sidewaysHipRaise.wav"],
+        "windshield wiper leg lifts": ["exercise_names/23b_windshieldWiperLegLifts.wav"],
+        "hatchet cross tension": ["exercise_names/23b_hatchetMotionxCross.wav"],
+        "hip raise, leg extension": ["exercise_names/23B_hipRaiseLegExtension.wav"],
+        "seated russian twists": ["exercise_names/23B_seatedRussianTwists.wav"]
+        # "exercise_names/.wav"
         }
         
-        self.abs_exercises = ["flutter kicks", "full extension cross-crunch", "leg lifts, candle pose", "half-bridge hip-thrusts", "heels to the heavens",
-            "oblique heel-taps"
+        self.abs_exercises = [
+            "boat row",
+            # "flutter kicks", 
+            "full extension cross-crunch", 
+            # "half-bridge hip-thrusts", 
+            "heels to the heavens",
+            "leg lifts, candle pose",
+            "oblique heel-taps",
+            # The side-suitcase thing, also called a side hip crunch,
+            "sideways hip raise",
+            "half windshield wiper combo",
+            "windshield wiper leg lifts",
+            "hip raise, leg extension",
+            "seated russian twists"
+            # "dancing downward dog", "kneeling torso twists", "standing windmills", "standing bicycle", 
+            # "standing single cross crunch", "power knee-strike", "slo-mo mountain climbers", "oblique leg lift", "leg extension side-suitcase"
+            # opposite arm and leg out, then bring in
+            # "bird dog crunch", 
+            # pike position,single leg back kick extension to plank knee tuck, on same leg, alternating 
+            # "axe handle obliques", "banana boat rocker", 
+            # mirrored below:
+            # "seated single axe handle", 
+            # "figure-eight obliques"
+            # hands are clasped for the figure-eight obliques
             ]
+        
+        # "empty tension bicep curl"
+        #  dumbbells: seated single-arm curl
 
+        #  at gym: chin-ups
+
+        # leg motions/other:
+        # "pike plank uppercuts", "squat to rising uppercut", 
+        # "sunrise squats"
+        # low squat, tiptoe reach
+        
+        # six o'clock tick-tock, leg lift one at a time motion...
+        
         # Initialize widgets
         self.exercise_label = tk.Label(master, text="Exercise:")
         self.exercise_label.config(font=("times", 24), fg="lime", bg="black", bd=2, relief="solid", padx=5, pady=5) 
@@ -165,7 +261,7 @@ class ExerciseTimerApp:
         self.pause_button.grid(row=7, column=1, padx=5, pady=5)
         self.pause_button.config(font=("Times", 14), fg="yellow", bg="black")
 
-        self.rand_snd_button = tk.Button(master, text="random sound", command=lambda: self.get_and_play_rand_aud_to_end(self.start_bumper_aud_arr, self.temp_start_bumper_aud_arr))
+        self.rand_snd_button = tk.Button(master, text="random sound", command=lambda: self.get_and_play_rand_aud_to_end(self.end_bumper_aud_arr, self.temp_end_bumper_aud_arr))
         self.rand_snd_button.grid(row=7, column=2, padx=5, pady=5)
         self.rand_snd_button.config(font=("impact", 14), fg="cyan", bg="black")
 
@@ -299,24 +395,16 @@ class ExerciseTimerApp:
     def make_aud_thread_to_end(self, src_arr, temp_arr):
         audio_thread = threading.Thread(target=self.get_and_play_rand_aud_to_end, args=(src_arr, temp_arr))
         audio_thread.start()
-    
-    def halfway_sound_audio_thread(self, duration):
-        half_active_dur = math.floor(duration/2)
-        # starter_half_alarm = self.get_random_aud(self.half_bumper_aud_arr, self.temp_half_bumper_aud_arr)
-        starter_half_alarm = "audio_hit_half/pdaBeepBeep.wav"
-        time.sleep(half_active_dur)
-        halfway_alarm_thread = threading.Timer(half_active_dur, self.play_audio_until_end(starter_half_alarm,))
-        halfway_alarm_thread.start()
         
     def trigger_starter_aud_with_bg_delay(self, duration):
         # Initialize variables for handling the sounds
         half_active_dur = math.floor(duration/2)
         first_bg_track = self.temp_active_song_aud_arr.pop()
         # NOTE: NYI, trigger encouragement at the start of each set, instead of at every time, so use self.round counter here
-        starting_encouragement_aud_file = random.choice(self.start_bumper_aud_arr)
+        starting_encouragement_aud_file = self.start_bumper_aud_arr.pop()
         first_action = self.selected_exercises[0]
         first_exercise_aud_file = random.choice(self.master_exercise_name_audio_dic[first_action])
-        middle_sound_effect = pygame.mixer.Sound("audio_hit_half/pdaBeepBeep.wav")
+        middle_sound_effect = pygame.mixer.Sound(self.halway_alarm)
         print(f"chosen initial aud: {first_exercise_aud_file}")
         # Play starting encouragement audio
         starting_encouragement_sound = pygame.mixer.Sound(starting_encouragement_aud_file)
@@ -340,6 +428,12 @@ class ExerciseTimerApp:
         # (do not use music.stop because the channel will automatically be overwritten when the interval sound starts)
 
     def start_workout(self):
+        # copy the start auds and shuffle them around in a random order so we can pop them off later
+        self.copy_src_arr_to_temp(self.start_bumper_aud_arr, self.temp_start_bumper_aud_arr)
+        random.shuffle(self.temp_start_bumper_aud_arr)
+        # Do the same for set ender barks
+        self.copy_src_arr_to_temp(self.end_bumper_aud_arr, self.temp_end_bumper_aud_arr)
+        random.shuffle(self.temp_end_bumper_aud_arr)
         # initialize basic stuff
         self.num_exercises = self.num_motions.get()
         self.num_sets_per_exercise = self.num_sets_slider.get()
@@ -353,63 +447,86 @@ class ExerciseTimerApp:
         self.set_number_label.config(text=f"Set 1 of {self.num_sets_per_exercise}")
         self.exercise_label.config(text=f"Action:\n {self.selected_exercises[0]}")
         # self.selected_exercises is now populated
-        # self.run_starting_round_concurrently()
         # Initialize the bg_audio_array
         self.copy_src_arr_to_temp(self.active_song_aud_arr, self.temp_active_song_aud_arr)
         timer_thread = threading.Thread(target=self.update_timer)
         timer_thread.start()
         init_aud_thread = threading.Thread(target=self.trigger_starter_aud_with_bg_delay, args=(dur_active,))
-        init_aud_thread.start()
-        
+        init_aud_thread.start()       
     def update_exercise_label(self):
         # from the selected exercises arr, get the current exercise via index
         current_exercise = self.selected_exercises[self.current_exercise_index]
         self.exercise_label.config(text=f"Action:\n {current_exercise}", fg="lime", bg="black")
-
     def update_interval_label(self):
         current_interval_motion = self.selected_interval_actions[self.current_exercise_index][self.current_round_index]
         self.exercise_label.config(text=f"Interval:\n {current_interval_motion}", fg="purple", bg="yellow")
-
     def update_timer(self):
         # top portion contains adjusting the timer while time remains for set
-        if self.is_it_action_time:
-            self.remaining_action_time -= 1
-            self.timer_label.config(text="Time left: " + str(self.remaining_action_time), fg="lime", bg="black")
-        else:
-            self.remaining_interval_time -= 1
-            self.timer_label.config(text="Time left: " + str(self.remaining_interval_time), fg="yellow", bg="black")
+        # if self.is_it_action_time:
+        #     self.remaining_action_time -= 1
+        #     self.timer_label.config(text="Time left: " + str(self.remaining_action_time), fg="lime", bg="black")
+        # else:
+        #     self.remaining_interval_time -= 1
+        #     self.timer_label.config(text="Time left: " + str(self.remaining_interval_time), fg="yellow", bg="black")
 # ---------------------------------------------------------------------------------------------------------------- 
         # when Action timer hits zero 
         if (self.is_it_action_time) and (self.remaining_action_time == 0):
             #  End of active time, switch to Interval time
             self.update_interval_label()
+            self.timer_label.config(text="Time left: " + str(self.remaining_interval_time), fg="yellow", bg="black") 
             self.is_it_action_time = False
             # we don't want to initiate the audios if it's the end of the set, checks for end of routine in block later...
             if self.current_round_index != self.num_sets_per_exercise:
                 current_interval_act = self.selected_interval_actions[self.current_exercise_index][self.current_round_index]
                 current_interval_activity_name_aud_file = random.choice(self.master_exercise_name_audio_dic[current_interval_act])
-                self.play_audio_until_end(current_interval_activity_name_aud_file)
-                # self.halfway_sound_audio_thread(self.interval_duration_slider)
-                self.make_aud_thread_for_duration(self.interval_song_aud_arr, self.temp_interval_song_aud_arr, (self.interval_duration_slider.get()))
+                interval_intro_aud = pygame.mixer.Sound(current_interval_activity_name_aud_file)
+
+                # Check if encouragements need to regen and re-shuffle
+                if self.temp_end_bumper_aud_arr:
+                    relax_bark_aud = self.temp_end_bumper_aud_arr.pop()
+                else:
+                    self.copy_src_arr_to_temp(self.temp_end_bumper_aud_arr, self.temp_end_bumper_aud_arr)
+                    random.shuffle(self.temp_end_bumper_aud_arr)
+                    relax_bark_aud = self.temp_end_bumper_aud_arr.pop()
+                # stop the BG from overriding the relax-bark
+                pygame.mixer.music.set_volume(0.25)
+                relax_bark_sound_obj = pygame.mixer.Sound(relax_bark_aud)
+                relax_bark_sound_obj.play()
+                while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+                    pygame.time.Clock().tick(30)
+                interval_intro_aud.play()
+                while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+                    pygame.time.Clock().tick(30)
+                self.make_aud_thread_for_duration(self.interval_song_aud_arr, self.temp_interval_song_aud_arr, (self.interval_duration_slider.get()+1))
+                pygame.mixer.music.set_volume(1)
         # when Interval timer hits zero 
         elif self.remaining_interval_time == 0:
             # reset both timing counters here, 
             self.remaining_action_time = self.active_duration_slider.get()  # Reset exercise time-amount
             self.remaining_interval_time = self.interval_duration_slider.get()  # Reset interval time-amount
             self.is_it_action_time = True
-            # "round" count only increases when the interval action is complete
+            # "round" count increases when the interval action is complete
             self.current_round_index += 1
             self.set_number_label.config(text=f"Set {self.current_round_index + 1} of {self.num_sets_per_exercise}")
             self.update_exercise_label() 
+            self.timer_label.config(text="Time left: " + str(self.remaining_action_time), fg="lime", bg="black")
             if self.current_round_index != self.num_sets_per_exercise:
                 # NOTE: Diagnostic below... checks on audio file selected from array within the master dictionary
                 # print(f"Chose {current_action_aud_file} from : {self.master_exercise_name_audio_dic[current_exercise]}")
                 current_exercise = self.selected_exercises[self.current_exercise_index]
                 current_action_aud_file = random.choice(self.master_exercise_name_audio_dic[current_exercise]) 
-                self.play_audio_until_end(current_action_aud_file)
-                self.make_aud_thread_for_duration(self.active_song_aud_arr, self.temp_active_song_aud_arr, (self.active_duration_slider.get()))
-            # End Interval, start active
-             
+                action_intro_aud = pygame.mixer.Sound(current_action_aud_file)
+                action_intro_aud.play()
+                while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+                    pygame.time.Clock().tick(30)
+                self.make_aud_thread_for_duration(self.active_song_aud_arr, self.temp_active_song_aud_arr, (self.active_duration_slider.get()+1))
+        else: # If it's not zero, tick down the clock on the display and also tick down the action time var
+            if self.is_it_action_time:
+                self.remaining_action_time -= 1
+                self.timer_label.config(text="Time left: " + str(self.remaining_action_time), fg="lime", bg="black")
+            else:
+                self.remaining_interval_time -= 1
+                self.timer_label.config(text="Time left: " + str(self.remaining_interval_time), fg="yellow", bg="black")     
 
         if self.current_round_index == self.num_sets_per_exercise:
             # reset round index to 0 so it'll be used as the ordinal for the interval sub-arr
@@ -424,13 +541,32 @@ class ExerciseTimerApp:
                 self.set_number_label.config(text=f"Workout Complete!")
                 self.exercise_label.config(text=f"{self.duration_in_mins}mins exercise complete!", fg="lime", bg="black")
                 self.timer_label.config(text=f"Done!")
+                pygame.mixer.music.load(self.workout_end_aud)
+                pygame.mixer.music.play()
                 return  # End of exercise routine
 # Round is over, the exercise is not complete yet
             else:
                 current_exercise = self.selected_exercises[self.current_exercise_index]
                 current_action_aud_file = random.choice(self.master_exercise_name_audio_dic[current_exercise]) 
-                self.play_audio_until_end(current_action_aud_file)
-                self.make_aud_thread_for_duration(self.active_song_aud_arr, self.temp_active_song_aud_arr, (self.active_duration_slider.get()))
+                initial_exercise_for_round__aud = pygame.mixer.Sound(current_action_aud_file)
+                encouragement = self.default_encouragement
+                # Check if encouragements need to regen and re-shuffle
+                if len(self.temp_start_bumper_aud_arr) > 0:
+                    encouragement = self.temp_start_bumper_aud_arr.pop()
+                else:
+                    self.copy_src_arr_to_temp(self.start_bumper_aud_arr, self.temp_start_bumper_aud_arr)
+                    random.shuffle(self.temp_start_bumper_aud_arr)
+                    encouragement = self.temp_start_bumper_aud_arr.pop()
+
+                encouragement_aud = pygame.mixer.Sound(encouragement)
+                encouragement_aud.play()
+                while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+                    pygame.time.Clock().tick(30)
+
+                initial_exercise_for_round__aud.play()
+                while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+                    pygame.time.Clock().tick(30)
+                self.make_aud_thread_for_duration(self.active_song_aud_arr, self.temp_active_song_aud_arr, (self.active_duration_slider.get()+1))
                 # Use a dictionary association to get the audio file for the current exercise in particular (same var. as in the display for the exercise)
                 # reset number label to one at beginning of new exercise motion
                 self.set_number_label.config(text=f"Set {self.current_round_index + 1} of {self.num_sets_per_exercise}")
@@ -443,14 +579,13 @@ class ExerciseTimerApp:
         if not self.pause:
             self.master.after(1000, self.update_timer)
         # on completing a full set of rounds interval, increase index by 1 to move to the next 
-                # self.current_exercise_index += 1
-        
+                # self.current_exercise_index += 1       
     # Toggle timer countdown
     def toggle_timer(self):
         self.pause = not self.pause
         if not self.pause:
             self.update_timer()
-            
+
 def main():
     root = tk.Tk()
     app = ExerciseTimerApp(root)
