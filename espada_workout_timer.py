@@ -1,10 +1,33 @@
 import tkinter as tk
-from datetime import datetime
+from tkinter import ttk
+# from datetime import datetime
 import random
 import pygame
 import math
 import time
 import threading
+import audio_doc
+import stretches_doc
+# https://www.setforset.com/blogs/news/bodyweight-leg-exercises-without-weights
+# Initial version: set for arms workout x abs on rest intervals
+
+# -------------- Color scheme note for other tabs -----------------------------------
+   # Main color BG: DARK PURPLE: #27233A 
+    # # carmine #931621
+    #  saffron #F9C22E
+    # timberwolf grey #D5C7BC
+    # hunter green #34623F
+    #  lemon chiffon #FEF6C9
+    #  wisteria #BEA7E5
+    #  field drab (olive, dark) #73683B
+    #  ice blue #9BF3F0
+    # honolulu blue #0077B6
+    # sienna 	#A0522D
+# -------------- / Color scheme note  -----------------------------------------------
+
+#  Stretching version as basis for non-stop exercise target...
+#  Work and just rest version
+#  Stretching sets 35 sec each, with exercise intervals every 3 motions
 
 class ExerciseTimerApp:
     def __init__(self, master):
@@ -14,31 +37,37 @@ class ExerciseTimerApp:
 
         # Set the height and width of the window
         self.master.geometry("900x680")
-        pygame.init()
+        # Assign fixed width to column 1
+        # self.master.grid_columnconfigure(1, minsize=235)
 
+        # Create a Notebook widget to manage tabs
+        self.tab_manager = ttk.Notebook(master)
+        self.tab_manager.pack(fill="both", expand=True)
+        
+        self.tab1 = ttk.Frame(self.tab_manager)
+        self.tab_manager.add(self.tab1, text="Hard x Soft")
+
+        self.tab2 = ttk.Frame(self.tab_manager)
+        self.tab_manager.add(self.tab2, text="Stretches")
+
+        #  initialize pygame so I can play music properly
+        pygame.init()
+        # Load Stretches from stretches_doc.py --------------------------------------------------------------------------------------------------
+        # self.stretches_arr = stretches_doc
+        # ---------------------------------------------------------------------------------------------------------
+        #  Audio collection (safe for sharing)
         self.default_encouragement = "audio_hit_start/letsGetMovingBubblegum1.wav"
         self.halway_alarm = "audio_hit_half/pdaBeepBeep.wav"
         # self.half_bumper_aud_arr = ["audio_hit_half/pdaBeepBeep.wav"]
         # self.temp_half_bumper_aud_arr = []
         self.workout_end_aud = "audio_special_ender/exitBumperGonnaMakeIt.wav"
-        #  Audio collection (safe for sharing)
+        # ---------------------------------------------------------------------------------------------------------
         # audio_hit_start/
         self.start_bumper_aud_arr = ["audio_hit_start/doYourBestBubblegum.wav", "audio_hit_start/fireupBubblegum1.wav", "audio_hit_start/kickoffBubblegum.wav", "audio_hit_start/letsGetMovingBubblegum1.wav",
        "audio_hit_start/letsGetMovingBubblegum1.wav", "audio_hit_start/showOnRoadBubblegum.wav", "audio_hit_start/time2grindBubblegum.wav"]
         self.temp_start_bumper_aud_arr = []
         # audio_active_songs/
-        self.active_song_aud_arr = ["audio_active_songs/bass_fish.wav", 
-        "audio_active_songs/battleSuit.wav", 
-        "audio_active_songs/desert1.wav", 
-        "audio_active_songs/desertTrance2.wav",
-        "audio_active_songs/expectationsShort.wav", 
-        "audio_active_songs/goinSteady_cut.wav", 
-        "audio_active_songs/heilo1.wav", 
-        "audio_active_songs/impositionOfUltimatim_short.wav",
-        "audio_active_songs/mottai_nai.wav", 
-        "audio_active_songs/persist_against_all.wav", 
-        "audio_active_songs/sideAlleyShort.wav", 
-        "audio_active_songs/workshop1.wav"]
+        self.active_song_aud_arr = audio_doc.outsourced_active_song_aud_arr
         self.temp_active_song_aud_arr = []   
         # audio_hit_end/
         self.end_bumper_aud_arr = ["audio_hit_end/catchBreathBubblefum.wav",
@@ -116,9 +145,9 @@ class ExerciseTimerApp:
         self.shoulder_exercises = ["pike position cross toe-touches", 
         "pike push-up", "plank shoulder taps",  "bear crawl", "slow and low crawl","supermans",
         "lying lat pull-downs", "snow angel shoulders", "flying cobra", "reaching row", "tension lat pull-downs", 
-        "lat pull-down push-out", 
-        # lay pull-down and push out is like a lateral row then extend arms at 90 degrees out
-        # "seal bows", "pike walkout push-ups", "alternating shoulder swimmers"
+        "lat pull-down push-out" 
+        # lat pull-down and push out is like a lateral row then extend arms at 90 degrees out
+        # "back-splash reach-outs", "pike walkout push-ups", "alternating shoulder swimmers", "superman swimmers"
         ]
 
         self.master_exercise_name_audio_dic = {
@@ -156,6 +185,7 @@ class ExerciseTimerApp:
         self.abs_exercises = [
             "boat row",
             # "flutter kicks", 
+            # "reverse plank, flutter kicks"
             "full extension cross-crunch", 
             # "half-bridge hip-thrusts", 
             "heels to the heavens",
@@ -178,103 +208,178 @@ class ExerciseTimerApp:
             # "figure-eight obliques"
             # hands are clasped for the figure-eight obliques
             ]
-        
-        # "empty tension bicep curl"
-        #  dumbbells: seated single-arm curl
 
-        #  at gym: chin-ups
+#  --------- DISPLAY ---------------------------------
 
-        # leg motions/other:
-        # "pike plank uppercuts", "squat to rising uppercut", 
-        # "sunrise squats"
-        # low squat, tiptoe reach
-        
-        # six o'clock tick-tock, leg lift one at a time motion...
-        
-        # Initialize widgets
-        self.exercise_label = tk.Label(master, text="Exercise:")
+# ------ tab1 Initialize widgets ------------------------------------------------------------------------------------
+        self.exercise_label = tk.Label(self.tab1, text="Exercise:")
         self.exercise_label.config(font=("times", 24), fg="lime", bg="black", bd=2, relief="solid", padx=5, pady=5) 
         self.exercise_label.grid(row=0, column=0, columnspan=4, padx=5, pady=5)
 
-        self.timer_label = tk.Label(master, text="Time Remaining:")
+        self.timer_label = tk.Label(self.tab1, text="Time Remaining:")
         self.timer_label.config(font=("courier", 22), fg="lime", bg="black", bd=2, relief="solid", padx=5, pady=5) 
         self.timer_label.grid(row=1, column=0, columnspan=4, padx=5, pady=5)
 
-        self.set_number_label = tk.Label(master, text="Set not started")
+        self.set_number_label = tk.Label(self.tab1, text="Set not started")
         self.set_number_label.config(font=("courier", 22), fg="cyan", bg="black", bd=2, relief="solid", padx=5, pady=5) 
         self.set_number_label.grid(row=2, column=0, columnspan=4, padx=5, pady=5)
 
         # Labels for sliders  -----------------------------------------------------------------------
-        self.num_sets_label = tk.Label(master, text="Sets per exercise")
+
+        self.num_sets_label = tk.Label(self.tab1, text="Sets per exercise")
         self.num_sets_label.config(font=("Times", 12), fg="#cc3", bg="#225") 
         self.num_sets_label.grid(row=3, column=0)
 
-        self.num_motions_label = tk.Label(master, text="# Motions")
+        self.num_motions_label = tk.Label(self.tab1, text="# Motions")
         self.num_motions_label.config(font=("Times", 12), fg="#cc3", bg="#225") 
         self.num_motions_label.grid(row=3, column=1)
 
-        self.active_duration_label = tk.Label(master, text="work (s)")
+        self.active_duration_label = tk.Label(self.tab1, text="work (s)")
         self.active_duration_label.config(font=("Times", 12), fg="#cc3", bg="#225") 
         self.active_duration_label.grid(row=3, column=2)
 
-        self.rest_duration_label = tk.Label(master, text="interval (s)")
+        self.rest_duration_label = tk.Label(self.tab1, text="interval (s)")
         self.rest_duration_label.config(font=("Times", 12), fg="#cc3", bg="#225") 
         self.rest_duration_label.grid(row=3, column=3)
 
-        # nyi checkbox for muscle groups -----------------------------------------------------------------------
+        # nyi combobox dropdown for muscle groups -----------------------------------------------------------------------
         # self.num_target_groups = tk.Label(master, text="num target muscle groups")
         # self.num_target_groups.config(font=("Times", 12), fg="#cc3", bg="#225") 
         # self.num_target_groups.grid(row=2, column=1)
         
-        # Create Scale widgets -----------------------------------------------------------------------
+# Create Scale widgets -----------------------------------------------------------------------
         # Create Tkinter variables to store the values of the sliders
         
         self.num_sets_slider = tk.IntVar()
-        self.num_sets_slider = tk.Scale(master, from_=1, to=8, orient=tk.HORIZONTAL, variable=self.num_sets_slider, command=self.update_workout_timing_preview_label)
+        self.num_sets_slider = tk.Scale(self.tab1, from_=1, to=8, orient=tk.HORIZONTAL, variable=self.num_sets_slider, command=self.update_workout_timing_preview_label)
         self.num_sets_slider.set(3)
         self.num_sets_slider.grid(row=4, column=0, padx=5)
 
         self.num_motions = tk.IntVar()
-        self.num_motions = tk.Scale(master, from_=2, to=20, orient=tk.HORIZONTAL,variable=self.num_motions, command=self.update_workout_timing_preview_label)
+        self.num_motions = tk.Scale(self.tab1, from_=2, to=20, orient=tk.HORIZONTAL,variable=self.num_motions, command=self.update_workout_timing_preview_label)
         self.num_motions.set(3)
         self.num_motions.grid(row=4, column=1, padx=5)
         
         self.active_duration_slider = tk.IntVar()
-        self.active_duration_slider = tk.Scale(master, from_=6, to=90, orient=tk.HORIZONTAL, resolution=5, variable=self.active_duration_slider, command=self.update_workout_timing_preview_label)
+        self.active_duration_slider = tk.Scale(self.tab1, from_=6, to=90, orient=tk.HORIZONTAL, resolution=5, variable=self.active_duration_slider, command=self.update_workout_timing_preview_label)
         self.active_duration_slider.set(6)
         self.active_duration_slider.grid(row=4, column=2, padx=5)
 
         self.interval_duration_slider = tk.IntVar()
-        self.interval_duration_slider = tk.Scale(master, from_=6, to=120, orient=tk.HORIZONTAL, resolution=3, variable=self.interval_duration_slider, command=self.update_workout_timing_preview_label)
+        self.interval_duration_slider = tk.Scale(self.tab1, from_=6, to=120, orient=tk.HORIZONTAL, resolution=3, variable=self.interval_duration_slider, command=self.update_workout_timing_preview_label)
         self.interval_duration_slider.set(6)
         self.interval_duration_slider.grid(row=4, column=3, padx=5)
         
-        self.workout_timing_data_label = tk.Label(master, text="awaiting input data proper...")
+        self.workout_timing_data_label = tk.Label(self.tab1, text="awaiting input data proper...")
         self.workout_timing_data_label.grid(row=6, column=0, columnspan=4, padx=5)
         self.workout_timing_data_label.config(font=("courier", 18), fg="cyan", bg="black")
 
-        self.start_button = tk.Button(master, text="Start Session", command=self.start_workout)
+        self.start_button = tk.Button(self.tab1, text="Start Session", command=self.start_workout_hard_x_soft_pattern)
         self.start_button.grid(row=7, column=0, padx=5, pady=5)
         self.start_button.config(font=("impact", 14), fg="lime", bg="black")
 
-        self.pause_button = tk.Button(master, text="Pause/Resume", command=self.toggle_timer)
+        self.pause_button = tk.Button(self.tab1, text="Pause/Resume", command=self.toggle_timer)
         self.pause_button.grid(row=7, column=1, padx=5, pady=5)
         self.pause_button.config(font=("Times", 14), fg="yellow", bg="black")
 
-        self.rand_snd_button = tk.Button(master, text="random sound", command=lambda: self.get_and_play_rand_aud_to_end(self.end_bumper_aud_arr, self.temp_end_bumper_aud_arr))
+        self.rand_snd_button = tk.Button(self.tab1, text="random sound", command=lambda: self.get_and_play_rand_aud_to_end(self.end_bumper_aud_arr, self.temp_end_bumper_aud_arr))
         self.rand_snd_button.grid(row=7, column=2, padx=5, pady=5)
         self.rand_snd_button.config(font=("impact", 14), fg="cyan", bg="black")
 
-        self.listbox_of_chosen_exercises = tk.Listbox(master)
+        self.listbox_of_chosen_exercises = tk.Listbox(self.tab1)
         self.listbox_of_chosen_exercises.grid(row=8, column= 0, columnspan=2, padx=2, pady=5)
         self.listbox_of_chosen_exercises.config(font=("Times", 16), width="40", height="12", fg="orange", bg="black") 
 
-        self.listbox_of_interval_activities = tk.Listbox(master)
+        self.listbox_of_interval_activities = tk.Listbox(self.tab1)
         self.listbox_of_interval_activities.grid(row=8, column= 2, columnspan=2, padx=2, pady=5)
         self.listbox_of_interval_activities.config(font=("Times", 16), width="40", height="12", fg="lime", bg="black") 
        
-        # self.complete_exercises_text = tk.Text(master, height=10, width=40)
-        # self.complete_exercises_text.grid(row=2, column=0, columnspan=2, padx=5, pady=5)
+        # self.completed_exercises_text = tk.Text(self.tab1, height=10, width=40)
+        # self.completed_exercises_text.grid(row=2, column=0, columnspan=2, padx=5, pady=5)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ----------  Set up Tab2 widgets -------------------------------------------------------------------------------------------
+
+        self.stretch_name_label = tk.Label(self.tab2, text="Stretching!")
+                                                                # lavander blush X dark-purple
+        self.stretch_name_label.config(font=("times", 24), fg="#F8E5EE", bg="#27133A", bd=2, relief="solid", padx=5, pady=5) 
+        self.stretch_name_label.grid(row=0, column=0, columnspan=4, padx=5, pady=5)
+
+        self.stretch_timer_label = tk.Label(self.tab2, text="Time not yet started")
+                                                            #  aquamarine X dark-purple
+        self.stretch_timer_label.config(font=("arial", 22), fg="#52FFB8", bg="#27133A", bd=2, relief="solid", padx=5, pady=5) 
+        self.stretch_timer_label.grid(row=1, column=0, columnspan=4, padx=5, pady=5)
+
+        self.stretch_duration_slider = tk.IntVar()
+        self.stretch_duration_slider = tk.Scale(self.tab2, from_=20, to=90, orient=tk.HORIZONTAL, resolution=5, variable=self.stretch_duration_slider, command=self.update_workout_timing_preview_label)
+        self.stretch_duration_slider.set(30)
+        self.stretch_duration_slider.grid(row=3, column=0, padx=2)
+
+        self.stretch_time_length_label = tk.Label(self.tab2, text="(Generate a preivew for estimated workout time)")
+        self.stretch_time_length_label.grid(row=3, column=1, columnspan=3, padx=5)
+        self.stretch_time_length_label.config(font=("times", 16), fg="#F8E5EE", bg="#27133A")
+
+        # self.stretch_half_label = tk.Label(self.tab1, text="Set not started")
+        # self.stretch_half_label.config(font=("courier", 22), fg="cyan", bg="black", bd=2, relief="solid", padx=5, pady=5) 
+        # self.stretch_half_label.grid(row=2, column=0, columnspan=4, padx=5, pady=5)
+
+
+        self.stretch_start_button = tk.Button(self.tab2, text="Start Session", command=self.start_stretching_routine)
+        self.stretch_start_button.grid(row=7, column=0, padx=5, pady=5)
+        self.stretch_start_button.config(font=("impact", 14), fg="lime", bg="black")
+
+        self.stretch_pause_button = tk.Button(self.tab2, text="Pause/Resume", command=self.toggle_timer)
+        self.stretch_pause_button.grid(row=7, column=1, padx=5, pady=5)
+        self.stretch_pause_button.config(font=("Times", 14), fg="yellow", bg="black")
+
+        self.first_half_stretches = tk.Listbox(self.tab2)
+        self.first_half_stretches.grid(row=8, column= 0, columnspan=2, padx=2, pady=5)
+        self.first_half_stretches.config(font=("Times", 16), width="40", height="12", fg="orange", bg="black") 
+
+        self.second_half_stretches = tk.Listbox(self.tab2)
+        self.second_half_stretches.grid(row=8, column= 2, columnspan=2, padx=2, pady=5)
+        self.second_half_stretches.config(font=("Times", 16), width="40", height="12", fg="lime", bg="black")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         # Initialize variables
         self.selected_exercises = []
@@ -290,7 +395,6 @@ class ExerciseTimerApp:
         self.pause = True
         self.remaining_action_time = 0
         self.remaining_interval_time = 0
-        self.countup_timer = 0
         self.duration_in_mins = 0
         self.is_it_action_time = True
         self.num_exercises = 0
@@ -305,7 +409,11 @@ class ExerciseTimerApp:
     #     # Wait for interrupt_time seconds and then interrupt with another audio
     #     pygame.time.wait(interrupt_time * 1000)
     #     self.play_bg_audio_for_duration(interrupt_file, total_duration - interrupt_time)
-    
+    # Toggle timer countdown
+    def toggle_timer(self):
+        self.pause = not self.pause
+        if not self.pause:
+            self.update_timer_hard_x_soft_pattern()
     def update_workout_timing_preview_label(self, value):
         #  STATIC VAL BELOW FOR EXERCISES
         num_exercises = self.num_motions.get()
@@ -318,12 +426,10 @@ class ExerciseTimerApp:
         self.duration_in_mins = math.ceil(((num_exercises*(num_sets_per_exercise*(dur_active+dur_interval)) - dur_interval)+(break_interval * num_breaks))/60)
         workout_stats_string = f"Total Duration: {self.duration_in_mins} minutes \n{num_sets_per_exercise} sets, {dur_active}s active, {dur_interval}s intervals"
         self.workout_timing_data_label.config(text=workout_stats_string)
-
     def select_actions_from_arr(self, num_actions, target_arr):
         # from target array, select a random number of unique items represented by the integer : num_actions
         selected_actions = random.sample(target_arr, num_actions)
         return selected_actions
-
     def get_workout_motions(self, target_muscle_group):
         self.listbox_of_chosen_exercises.delete(0, tk.END)
         self.listbox_of_interval_activities.delete(0, tk.END)
@@ -339,7 +445,6 @@ class ExerciseTimerApp:
         for x in self.selected_exercises:
             self.listbox_of_chosen_exercises.insert(tk.END, x)
         self.pause = False
-
     def select_interval_activities_randomizer(self, interval_activity_source_list):
         # loop and bigger ar based on num of exercises
         big_interval_action_list = []
@@ -347,8 +452,6 @@ class ExerciseTimerApp:
             small_interval_actions_list = self.select_actions_from_arr(self.num_sets_per_exercise, interval_activity_source_list)
             big_interval_action_list.append(small_interval_actions_list)
         self.selected_interval_actions = big_interval_action_list
-        print(f"all interval sub arrs: {self.selected_interval_actions}")
-
     def play_bg_audio_for_duration(self, file_path, duration):
         pygame.mixer.music.load(file_path)
         pygame.mixer.music.play()
@@ -356,12 +459,10 @@ class ExerciseTimerApp:
         pygame.time.wait(duration * 1000)
         # Stop playback after duration
         pygame.mixer.music.stop()
-
     def copy_src_arr_to_temp(self, src_arr, temp_arr):
         random.shuffle(src_arr)
         for x in src_arr:
             temp_arr.append(x)
-    
     def select_and_play_random_bg_aud(self, src_arr, temp_arr, target_dur):
         pygame.mixer.init()
         # regenerate the temp arr from the source if temp is empty
@@ -371,31 +472,32 @@ class ExerciseTimerApp:
             self.copy_src_arr_to_temp(src_arr, temp_arr)
         chosen_aud = temp_arr.pop(0)
         self.play_bg_audio_for_duration(chosen_aud, target_dur)
-
     # for getting duraiton, don't play, just get the audio data itself
     def get_random_aud(self, src_arr, temp_arr):
         if len(temp_arr) == 0:
             self.copy_src_arr_to_temp(src_arr, temp_arr)
         chosen_aud = temp_arr.pop(0)
         return chosen_aud
-
     def make_aud_thread_for_duration(self, src_arr, temp_arr, target_dur):
         audio_thread = threading.Thread(target=self.select_and_play_random_bg_aud, args=(src_arr, temp_arr, target_dur))
         audio_thread.start()
-    
     # Simply plays the audio until the end, used for bumpers, not bg
     def play_audio_until_end(self, aud_file):
         pygame.mixer.init()
         pygame.mixer.Sound(aud_file).play()
-
     def get_and_play_rand_aud_to_end(self, src_arr, temp_arr):
         this_stupid_variable = self.get_random_aud(src_arr, temp_arr)
         self.play_audio_until_end(this_stupid_variable)
-
     def make_aud_thread_to_end(self, src_arr, temp_arr):
         audio_thread = threading.Thread(target=self.get_and_play_rand_aud_to_end, args=(src_arr, temp_arr))
-        audio_thread.start()
-        
+        audio_thread.start() 
+    def update_exercise_label(self):
+        # from the selected exercises arr, get the current exercise via index
+        current_exercise = self.selected_exercises[self.current_exercise_index]
+        self.exercise_label.config(text=f"Action:\n {current_exercise}", fg="lime", bg="black")
+    def update_interval_label(self):
+        current_interval_motion = self.selected_interval_actions[self.current_exercise_index][self.current_round_index]
+        self.exercise_label.config(text=f"Interval:\n {current_interval_motion}", fg="purple", bg="yellow")
     def trigger_starter_aud_with_bg_delay(self, duration):
         # Initialize variables for handling the sounds
         half_active_dur = math.floor(duration/2)
@@ -405,7 +507,6 @@ class ExerciseTimerApp:
         first_action = self.selected_exercises[0]
         first_exercise_aud_file = random.choice(self.master_exercise_name_audio_dic[first_action])
         middle_sound_effect = pygame.mixer.Sound(self.halway_alarm)
-        print(f"chosen initial aud: {first_exercise_aud_file}")
         # Play starting encouragement audio
         starting_encouragement_sound = pygame.mixer.Sound(starting_encouragement_aud_file)
         starting_encouragement_sound.play()
@@ -426,8 +527,7 @@ class ExerciseTimerApp:
         # (play pda beep at halfway point) Should overlap and not interrupt the bigger BG sound
         middle_sound_effect.play()
         # (do not use music.stop because the channel will automatically be overwritten when the interval sound starts)
-
-    def start_workout(self):
+    def start_workout_hard_x_soft_pattern(self):
         # copy the start auds and shuffle them around in a random order so we can pop them off later
         self.copy_src_arr_to_temp(self.start_bumper_aud_arr, self.temp_start_bumper_aud_arr)
         random.shuffle(self.temp_start_bumper_aud_arr)
@@ -441,7 +541,6 @@ class ExerciseTimerApp:
         dur_interval = self.interval_duration_slider.get()
         self.remaining_action_time = dur_active
         self.remaining_interval_time = dur_interval
-        self.countup_timer = 0
         self.get_workout_motions(self.target_muscle_group_list)
         self.select_interval_activities_randomizer(self.interval_activity_list)
         self.set_number_label.config(text=f"Set 1 of {self.num_sets_per_exercise}")
@@ -449,18 +548,12 @@ class ExerciseTimerApp:
         # self.selected_exercises is now populated
         # Initialize the bg_audio_array
         self.copy_src_arr_to_temp(self.active_song_aud_arr, self.temp_active_song_aud_arr)
-        timer_thread = threading.Thread(target=self.update_timer)
+        timer_thread = threading.Thread(target=self.update_timer_hard_x_soft_pattern)
         timer_thread.start()
         init_aud_thread = threading.Thread(target=self.trigger_starter_aud_with_bg_delay, args=(dur_active,))
         init_aud_thread.start()       
-    def update_exercise_label(self):
-        # from the selected exercises arr, get the current exercise via index
-        current_exercise = self.selected_exercises[self.current_exercise_index]
-        self.exercise_label.config(text=f"Action:\n {current_exercise}", fg="lime", bg="black")
-    def update_interval_label(self):
-        current_interval_motion = self.selected_interval_actions[self.current_exercise_index][self.current_round_index]
-        self.exercise_label.config(text=f"Interval:\n {current_interval_motion}", fg="purple", bg="yellow")
-    def update_timer(self):
+
+    def update_timer_hard_x_soft_pattern(self):
         # top portion contains adjusting the timer while time remains for set
         # if self.is_it_action_time:
         #     self.remaining_action_time -= 1
@@ -489,7 +582,8 @@ class ExerciseTimerApp:
                     random.shuffle(self.temp_end_bumper_aud_arr)
                     relax_bark_aud = self.temp_end_bumper_aud_arr.pop()
                 # stop the BG from overriding the relax-bark
-                pygame.mixer.music.set_volume(0.25)
+                pygame.mixer.music.stop()
+                # pygame.mixer.music.set_volume(0.25) # lower volume instead of stopping it entirely
                 relax_bark_sound_obj = pygame.mixer.Sound(relax_bark_aud)
                 relax_bark_sound_obj.play()
                 while pygame.mixer.get_busy():  # Wait for the sound to finish playing
@@ -498,7 +592,7 @@ class ExerciseTimerApp:
                 while pygame.mixer.get_busy():  # Wait for the sound to finish playing
                     pygame.time.Clock().tick(30)
                 self.make_aud_thread_for_duration(self.interval_song_aud_arr, self.temp_interval_song_aud_arr, (self.interval_duration_slider.get()+1))
-                pygame.mixer.music.set_volume(1)
+                # pygame.mixer.music.set_volume(1)
         # when Interval timer hits zero 
         elif self.remaining_interval_time == 0:
             # reset both timing counters here, 
@@ -516,6 +610,7 @@ class ExerciseTimerApp:
                 current_exercise = self.selected_exercises[self.current_exercise_index]
                 current_action_aud_file = random.choice(self.master_exercise_name_audio_dic[current_exercise]) 
                 action_intro_aud = pygame.mixer.Sound(current_action_aud_file)
+                pygame.mixer.music.stop()
                 action_intro_aud.play()
                 while pygame.mixer.get_busy():  # Wait for the sound to finish playing
                     pygame.time.Clock().tick(30)
@@ -533,14 +628,17 @@ class ExerciseTimerApp:
             self.current_round_index = 0
             # increase exercise index to move to the next item in selected_exercises
             self.current_exercise_index += 1
-            print(f"current round index is {self.current_round_index}")
-            print(f"{self.remaining_interval_time}")
-            print(f"Current exercise motion is {self.current_exercise_index +1} of {self.num_exercises}")
+            # print(f"current round index is {self.current_round_index}")
+            # print(f"Current exercise motion is {self.current_exercise_index +1} of {self.num_exercises}")
             if self.current_exercise_index >= self.num_exercises:
                 print(f"exercise session complete! {self.current_exercise_index} rounds of {self.num_exercises} complete!")
-                self.set_number_label.config(text=f"Workout Complete!")
+                self.set_number_label.config(text="Workout Complete!")
                 self.exercise_label.config(text=f"{self.duration_in_mins}mins exercise complete!", fg="lime", bg="black")
                 self.timer_label.config(text=f"Done!")
+                pygame.mixer.music.stop()
+                pygame.mixer.music.load(self.halway_alarm)
+                pygame.mixer.music.play()
+                time.sleep(0.4)
                 pygame.mixer.music.load(self.workout_end_aud)
                 pygame.mixer.music.play()
                 return  # End of exercise routine
@@ -557,7 +655,11 @@ class ExerciseTimerApp:
                     self.copy_src_arr_to_temp(self.start_bumper_aud_arr, self.temp_start_bumper_aud_arr)
                     random.shuffle(self.temp_start_bumper_aud_arr)
                     encouragement = self.temp_start_bumper_aud_arr.pop()
-
+                # reset number label to one at beginning of new exercise motion
+                self.set_number_label.config(text=f"Set {self.current_round_index + 1} of {self.num_sets_per_exercise}")
+                # Also call the update to the exercise label !!! yes, this is double-calling the exercise label on the last item of each iteration, FIX LATER: C-bug, optimization
+                self.update_exercise_label()
+                pygame.mixer.music.stop()
                 encouragement_aud = pygame.mixer.Sound(encouragement)
                 encouragement_aud.play()
                 while pygame.mixer.get_busy():  # Wait for the sound to finish playing
@@ -567,25 +669,56 @@ class ExerciseTimerApp:
                 while pygame.mixer.get_busy():  # Wait for the sound to finish playing
                     pygame.time.Clock().tick(30)
                 self.make_aud_thread_for_duration(self.active_song_aud_arr, self.temp_active_song_aud_arr, (self.active_duration_slider.get()+1))
-                # Use a dictionary association to get the audio file for the current exercise in particular (same var. as in the display for the exercise)
-                # reset number label to one at beginning of new exercise motion
-                self.set_number_label.config(text=f"Set {self.current_round_index + 1} of {self.num_sets_per_exercise}")
-                # Also call the update to the exercise label !!! yes, this is double-calling the exercise label on the last item of each iteration, FIX LATER: C-bug, optimization
-                self.update_exercise_label()
-                # NYI update this to be the interrupted one
-                print(f"{self.num_exercises - self.current_exercise_index} exercise motions remain")
-                print(self.selected_exercises[self.current_exercise_index:])
+
             print(f"current round index is {self.current_round_index}")
         if not self.pause:
-            self.master.after(1000, self.update_timer)
+            self.master.after(1000, self.update_timer_hard_x_soft_pattern)
         # on completing a full set of rounds interval, increase index by 1 to move to the next 
-                # self.current_exercise_index += 1       
-    # Toggle timer countdown
-    def toggle_timer(self):
-        self.pause = not self.pause
-        if not self.pause:
-            self.update_timer()
+                # self.current_exercise_index += 1    
+            
+    # ----------------------------------------------------------------------------------------------------------------------------------------------
+ 
+    def get_stretching_exercises(self):
+        stretch_keyword_arr = stretches_doc.master_stretch_keyword_arr
+        chosen_stretching_types = [] 
+        output_list_of_stretches = []
+        for mini_array in stretch_keyword_arr:
+            #  NYI standing only stretch: toggle with self.standing_stretch_only_bool
+            # selected_term = mini_array[0]
+            selected_term = random.choice(mini_array)
+            chosen_stretching_types.append(selected_term)
+        random.shuffle(chosen_stretching_types)
+        for x in chosen_stretching_types:
+            chosen_stretch_possibilities = stretches_doc.master_stretch_dic[x]
+            chosen_stretch_sub_arr= random.choice(chosen_stretch_possibilities)
+            for movement in chosen_stretch_sub_arr:
+                output_list_of_stretches.append(movement)
+        return output_list_of_stretches
 
+#  FIX VAR TO APPROPRIATE OUTPUT BELOW!!!!!!!!!!!
+        # return chosen_stretching_set
+
+    def start_stretching_routine(self):
+        # copy the start auds and shuffle them around in a random order so we can pop them off later
+        self.copy_src_arr_to_temp(self.start_bumper_aud_arr, self.temp_start_bumper_aud_arr)
+        random.shuffle(self.temp_start_bumper_aud_arr)
+        # Do the same for set ender barks
+        self.copy_src_arr_to_temp(self.end_bumper_aud_arr, self.temp_end_bumper_aud_arr)
+        random.shuffle(self.temp_end_bumper_aud_arr)
+        # initialize basic stuff
+        stretch_list = self.get_stretching_exercises()
+        print(f"stretch list = {stretch_list}")
+
+        self.stretch_time_length_label.config(text=f"testing here....")
+        num_of_stretches = len(stretch_list)
+        each_stretch_duration = self.stretch_duration_slider.get()
+        print(f"\t-- duration for each stretch: {each_stretch_duration}")
+        total_stretch_time_in_seconds = (each_stretch_duration)*(num_of_stretches)
+        total_stretch_set_time_in_mins = math.ceil((total_stretch_time_in_seconds)/60)
+        print(f" [+] Total stretch time in mins: {total_stretch_set_time_in_mins}")
+
+# ----------------------------------------------------------------------------------------------------------------------------------------------   
+    
 def main():
     root = tk.Tk()
     app = ExerciseTimerApp(root)
