@@ -1,3 +1,9 @@
+3/11:
+ Researched a set of core exercises and basic stretch routine to hit all muscle groups. Data added to stretches_doc.py. The program is big enough that it should be divided into subsequent parts.
+ Begin logic for continuous exercise, opo. action X interval format that the basic app already has.
+ Later goal will be to modulate patterns like active exercises and rest intervals, using sliders, but the simpler logic takes precedent.
+ Also, found good resources for bot-voices, though I'm not sure if it's a good idea to announce the source, since I'm not professionally affiliated with the company. Still, it's not for-profit, so it shouldn't cause a fuss.
+
 3/8:
  Data prepped for audio clips. Subset of share-able ones will be added to this repo.
  Data organization for folder structure is important when dealing with a lot of material, which is meant to be personalized/augmented. Modularity is the intention of this project.
