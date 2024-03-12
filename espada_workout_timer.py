@@ -8,20 +8,27 @@ import time
 import threading
 import audio_doc
 import stretches_doc
+# https://www.setforset.com/blogs/news/bodyweight-leg-exercises-without-weights
+# Initial version: set for arms workout x abs on rest intervals
 
 # -------------- Color scheme note for other tabs -----------------------------------
    # Main color BG: DARK PURPLE: #27233A 
-    # # carmine #931621
-    #  saffron #F9C22E
+    # aquamarine  52FFB8
+    # carmine #931621
+    # saffron #F9C22E
     # timberwolf grey #D5C7BC
     # hunter green #34623F
-    #  lemon chiffon #FEF6C9
-    #  wisteria #BEA7E5
-    #  field drab (olive, dark) #73683B
-    #  ice blue #9BF3F0
+    # lemon chiffon #FEF6C9
+    # wisteria #BEA7E5
+    # field drab (olive, dark) #73683B
+    # ice blue  #9BF3F0
     # honolulu blue #0077B6
     # sienna 	#A0522D
 # -------------- / Color scheme note  -----------------------------------------------
+
+#  Stretching version as basis for non-stop exercise target...
+#  Work and just rest version
+#  Stretching sets 35 sec each, with exercise intervals every 3 motions
 
 class ExerciseTimerApp:
     def __init__(self, master):
@@ -343,7 +350,7 @@ class ExerciseTimerApp:
 
         self.stretch_name_label = tk.Label(self.tab2, text="Stretching!")
                                                                 # lavander blush X dark-purple
-        self.stretch_name_label.config(font=("times", 24), fg="#F8E5EE", bg="#27133A", bd=2, relief="solid", padx=5, pady=5) 
+        self.stretch_name_label.config(font=("times", 24), fg="#F9C22E", bg="#27133A", bd=2, relief="solid", padx=5, pady=5) 
         self.stretch_name_label.grid(row=0, column=0, columnspan=4, padx=5, pady=5)
 
         self.stretch_timer_label = tk.Label(self.tab2, text="Time not yet started")
@@ -358,36 +365,36 @@ class ExerciseTimerApp:
 
         self.stretch_time_length_label = tk.Label(self.tab2, text="(Generate a preivew for estimated workout time)")
         self.stretch_time_length_label.grid(row=3, column=1, columnspan=3, padx=5)
-        self.stretch_time_length_label.config(font=("times", 16), fg="#F8E5EE", bg="#27133A")
+        self.stretch_time_length_label.config(font=("times", 16), fg="#9BF3F0", bg="#27133A")
 
         # self.stretch_half_label = tk.Label(self.tab1, text="Set not started")
-        # self.stretch_half_label.config(font=("courier", 22), fg="cyan", bg="black", bd=2, relief="solid", padx=5, pady=5) 
+        # self.stretch_half_label.config(font=("courier", 22), fg="#9BF3F0", bg="black", bd=2, relief="solid", padx=5, pady=5) 
         # self.stretch_half_label.grid(row=2, column=0, columnspan=4, padx=5, pady=5)
 
 
         self.stretch_start_button = tk.Button(self.tab2, text="Randomize Session", command=self.preview_stretching_routine)
         self.stretch_start_button.grid(row=7, column=0, padx=5, pady=5)
-        self.stretch_start_button.config(font=("impact", 14), fg="lime", bg="black")
+        self.stretch_start_button.config(font=("impact", 14), fg="#52FFB8", bg="black")
 
         self.stretch_pause_button = tk.Button(self.tab2, text="NYI Start")
         self.stretch_pause_button.grid(row=7, column=1, padx=5, pady=5)
-        self.stretch_pause_button.config(font=("Times", 14), fg="yellow", bg="black")
+        self.stretch_pause_button.config(font=("Times", 14), fg="#9BF3F0", bg="black")
 
         self.stretch_pause_button = tk.Button(self.tab2, text="SND TST", command=lambda: self.get_and_play_rand_aud_to_end(self.end_bumper_aud_arr, self.temp_end_bumper_aud_arr))
         self.stretch_pause_button.grid(row=7, column=2, padx=5, pady=5)
-        self.stretch_pause_button.config(font=("Times", 14), fg="yellow", bg="black")
+        self.stretch_pause_button.config(font=("Times", 14), fg="#BEA7E5", bg="black")
 
         self.stretch_pause_button = tk.Button(self.tab2, text="Pause/Resume", command=self.toggle_timer)
         self.stretch_pause_button.grid(row=7, column=3, padx=5, pady=5)
-        self.stretch_pause_button.config(font=("Times", 14), fg="yellow", bg="black")
+        self.stretch_pause_button.config(font=("Times", 14), fg="#9BF3F0", bg="black")
 
         self.first_half_stretches = tk.Listbox(self.tab2)
         self.first_half_stretches.grid(row=8, column= 0, columnspan=2, padx=2, pady=5)
-        self.first_half_stretches.config(font=("Times", 23), width="34", height="12", fg="lime", bg="black") 
+        self.first_half_stretches.config(font=("Times", 23), width="34", height="12", fg="lime", bg="#27233A") 
 
         self.second_half_stretches = tk.Listbox(self.tab2)
         self.second_half_stretches.grid(row=8, column= 2, columnspan=2, padx=2, pady=5)
-        self.second_half_stretches.config(font=("Times", 23), width="34", height="12", fg="lime", bg="black")
+        self.second_half_stretches.config(font=("Times", 23), width="34", height="12", fg="lime", bg="#27233A")
 
 
 
@@ -748,21 +755,45 @@ class ExerciseTimerApp:
                 output_list_of_stretches.append(movement)
         return output_list_of_stretches
     
-    def update_display_listing_stretches(self, stretch_list):
+    def update_list_display_with_hilight(self, stretch_list, target_index_to_hilight):
     #  Clear out listbox area before 
         self.first_half_stretches.delete(0, tk.END)
         self.second_half_stretches.delete(0, tk.END)
-        if len(stretch_list) < 13:
-            for stretch_name in stretch_list:
-                self.first_half_stretches.insert(tk.END, stretch_name)
-        else:
-            # Get the first 12 items via slice.
-            for first_chunk_stretch in (stretch_list[:12]):
-                self.first_half_stretches.insert(tk.END, first_chunk_stretch)
-            for second_chunk_stretch in (stretch_list[12:]):
-                self.second_half_stretches.insert(tk.END, second_chunk_stretch)
+        # Get the first 12 items via slice.
+        for i, stretch_name in enumerate(stretch_list):
+            # If index is under 13, print in the first column
+            if i < 12:
+                #  hilight the item when it matches the current "active" motion, showing it's place in the overall workout
+                if i == target_index_to_hilight:
+                    self.first_half_stretches.insert(tk.END, stretch_name)
+                                                                #  saffron
+                    self.first_half_stretches.itemconfig(i, {'fg': '#F9C22E'})
+                else:                                           # timberwolf grey
+                    self.first_half_stretches.insert(tk.END, stretch_name)
+                    self.first_half_stretches.itemconfig(i, {'fg': '#BEA7E5'})
+            #  exercise 12+ goes in second column at the listbox display
+            else:
+                #  Still check if the index matches the indicates one to hilight
+                if i == target_index_to_hilight:
+                    self.second_half_stretches.insert(tk.END, stretch_name)
+                    self.second_half_stretches.itemconfig(i-12, {'fg': '#F9C22E'})
+                else:
+                    self.second_half_stretches.insert(tk.END, stretch_name)
+                    self.second_half_stretches.itemconfig(i-12, {'fg': '#BEA7E5'})
+
+
+        # for first_chunk_stretch in (stretch_list[:12]):
+        #     if counter_var == target_index_to_hilight:
+        #         pass
+        #     self.first_half_stretches.insert(tk.END, first_chunk_stretch)
+        #     counter_var += 1
+        # if len(stretch_list) < 13:
+        #     for second_chunk_stretch in (stretch_list[12:]):
+        #         self.second_half_stretches.insert(tk.END, second_chunk_stretch)
     
     def preview_stretching_routine(self):
+        # Initialize the bg_audio_array
+        self.copy_src_arr_to_temp(self.active_song_aud_arr, self.temp_active_song_aud_arr)
         # copy the start auds and shuffle them around in a random order so we can pop them off later
         self.copy_src_arr_to_temp(self.start_bumper_aud_arr, self.temp_start_bumper_aud_arr)
         random.shuffle(self.temp_start_bumper_aud_arr)
@@ -772,11 +803,11 @@ class ExerciseTimerApp:
 
         # get the exercises for the continuous set:
         #  ------------ NOTE: modify with conditional for other continuous exercises?
-        stretch_list = self.get_stretching_exercises()
-        self.update_display_listing_stretches(stretch_list)
-        
+        self.selected_exercises = self.get_stretching_exercises()
+        # display the rolled exercises, hilighting the 0th index
+        self.update_list_display_with_hilight(self.selected_exercises, 0)
 
-        num_of_stretches = len(stretch_list)
+        num_of_stretches = len(self.selected_exercises)
         each_stretch_duration = self.stretch_duration_slider.get()
         print(f"\t-- duration for each stretch: {each_stretch_duration}")
         total_stretch_time_in_seconds = (each_stretch_duration)*(num_of_stretches)
@@ -784,6 +815,8 @@ class ExerciseTimerApp:
         print(f" [+] Total stretch time in mins: {total_stretch_set_time_in_mins}")
         self.stretch_time_length_label.config(text=f"Workout time total: {total_stretch_set_time_in_mins}m")
     
+        self.stretch_name_label.config(text=f"{self.selected_exercises[0]}")
+
 # ----------------------------------------------------------------------------------------------------------------------------------------------   
     
 def main():
