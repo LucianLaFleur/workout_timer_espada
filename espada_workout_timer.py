@@ -8,8 +8,6 @@ import time
 import threading
 import audio_doc
 import stretches_doc
-# https://www.setforset.com/blogs/news/bodyweight-leg-exercises-without-weights
-# Initial version: set for arms workout x abs on rest intervals
 
 # -------------- Color scheme note for other tabs -----------------------------------
    # Main color BG: DARK PURPLE: #27233A 
@@ -25,18 +23,14 @@ import stretches_doc
     # sienna 	#A0522D
 # -------------- / Color scheme note  -----------------------------------------------
 
-#  Stretching version as basis for non-stop exercise target...
-#  Work and just rest version
-#  Stretching sets 35 sec each, with exercise intervals every 3 motions
-
 class ExerciseTimerApp:
     def __init__(self, master):
         
         self.master = master
         self.master.title("Exercise Timer")
 
-        # Set the height and width of the window
-        self.master.geometry("900x680")
+        # Set the width and height of the window
+        self.master.geometry("1105x820")
         # Assign fixed width to column 1
         # self.master.grid_columnconfigure(1, minsize=235)
 
@@ -70,13 +64,14 @@ class ExerciseTimerApp:
         self.active_song_aud_arr = audio_doc.outsourced_active_song_aud_arr
         self.temp_active_song_aud_arr = []   
         # audio_hit_end/
-        self.end_bumper_aud_arr = ["audio_hit_end/catchBreathBubblefum.wav",
-        "audio_hit_end/doneBubblegum2.wav", 
-        "audio_hit_end/dontOverexertBubblegum1.wav", 
+        self.end_bumper_aud_arr = [
+        # "audio_hit_end/catchBreathBubblefum.wav",
+        # "audio_hit_end/doneBubblegum2.wav", 
+        # "audio_hit_end/dontOverexertBubblegum1.wav"
         # 
         "audio_hit_end/niceWorkBubblegum1.wav", 
         # "audio_hit_end/pauseBubblegum1.wav", 
-        "audio_hit_end/slowAndSteady1.wav", 
+        # "audio_hit_end/slowAndSteady1.wav", 
         # "audio_hit_end/takeABreatherBubblegum.wav",
         "audio_hit_end/mori_nicework.wav",
         "audio_hit_end/mori_onemoreDone.wav",
@@ -84,7 +79,7 @@ class ExerciseTimerApp:
         
         "audio_hit_end/mori_switch_to_low_intensity.wav",
         # "audio_hit_end/bubblegumPauseForAMoment.wav",
-        "audio_hit_end/bubblegum_oneMoreDown.wav",
+        # "audio_hit_end/bubblegum_oneMoreDown.wav",
         # "audio_hit_end/bubblegum_slow_and_Steady.wav",
         # "audio_hit_end/bubblegum_niceWorkThatOne.wav",
         "audio_hit_end/bubblegum_takeABreather.wav",
@@ -208,6 +203,30 @@ class ExerciseTimerApp:
             # "figure-eight obliques"
             # hands are clasped for the figure-eight obliques
             ]
+        
+        # "empty tension bicep curl"
+        #  dumbbells: seated single-arm curl
+
+        #  at gym: chin-ups
+
+        # leg motions/other:
+        # "pike plank uppercuts", "squat to rising uppercut", 
+        # "sunrise squats"
+        # low squat, tiptoe reach
+        
+        # six o'clock tick-tock, leg lift one at a time motion...
+        
+
+
+
+
+
+
+
+
+
+
+
 
 #  --------- DISPLAY ---------------------------------
 
@@ -288,11 +307,11 @@ class ExerciseTimerApp:
 
         self.listbox_of_chosen_exercises = tk.Listbox(self.tab1)
         self.listbox_of_chosen_exercises.grid(row=8, column= 0, columnspan=2, padx=2, pady=5)
-        self.listbox_of_chosen_exercises.config(font=("Times", 16), width="40", height="12", fg="orange", bg="black") 
+        self.listbox_of_chosen_exercises.config(font=("Times", 23), width="34", height="12", fg="lime", bg="black") 
 
         self.listbox_of_interval_activities = tk.Listbox(self.tab1)
         self.listbox_of_interval_activities.grid(row=8, column= 2, columnspan=2, padx=2, pady=5)
-        self.listbox_of_interval_activities.config(font=("Times", 16), width="40", height="12", fg="lime", bg="black") 
+        self.listbox_of_interval_activities.config(font=("Times", 23), width="34", height="12", fg="lime", bg="black") 
        
         # self.completed_exercises_text = tk.Text(self.tab1, height=10, width=40)
         # self.completed_exercises_text.grid(row=2, column=0, columnspan=2, padx=5, pady=5)
@@ -346,22 +365,29 @@ class ExerciseTimerApp:
         # self.stretch_half_label.grid(row=2, column=0, columnspan=4, padx=5, pady=5)
 
 
-        self.stretch_start_button = tk.Button(self.tab2, text="Start Session", command=self.start_stretching_routine)
+        self.stretch_start_button = tk.Button(self.tab2, text="Randomize Session", command=self.preview_stretching_routine)
         self.stretch_start_button.grid(row=7, column=0, padx=5, pady=5)
         self.stretch_start_button.config(font=("impact", 14), fg="lime", bg="black")
 
-        self.stretch_pause_button = tk.Button(self.tab2, text="Pause/Resume", command=self.toggle_timer)
+        self.stretch_pause_button = tk.Button(self.tab2, text="NYI Start")
         self.stretch_pause_button.grid(row=7, column=1, padx=5, pady=5)
+        self.stretch_pause_button.config(font=("Times", 14), fg="yellow", bg="black")
+
+        self.stretch_pause_button = tk.Button(self.tab2, text="SND TST", command=lambda: self.get_and_play_rand_aud_to_end(self.end_bumper_aud_arr, self.temp_end_bumper_aud_arr))
+        self.stretch_pause_button.grid(row=7, column=2, padx=5, pady=5)
+        self.stretch_pause_button.config(font=("Times", 14), fg="yellow", bg="black")
+
+        self.stretch_pause_button = tk.Button(self.tab2, text="Pause/Resume", command=self.toggle_timer)
+        self.stretch_pause_button.grid(row=7, column=3, padx=5, pady=5)
         self.stretch_pause_button.config(font=("Times", 14), fg="yellow", bg="black")
 
         self.first_half_stretches = tk.Listbox(self.tab2)
         self.first_half_stretches.grid(row=8, column= 0, columnspan=2, padx=2, pady=5)
-        self.first_half_stretches.config(font=("Times", 16), width="40", height="12", fg="orange", bg="black") 
+        self.first_half_stretches.config(font=("Times", 23), width="34", height="12", fg="lime", bg="black") 
 
         self.second_half_stretches = tk.Listbox(self.tab2)
         self.second_half_stretches.grid(row=8, column= 2, columnspan=2, padx=2, pady=5)
-        self.second_half_stretches.config(font=("Times", 16), width="40", height="12", fg="lime", bg="black")
-
+        self.second_half_stretches.config(font=("Times", 23), width="34", height="12", fg="lime", bg="black")
 
 
 
@@ -669,13 +695,40 @@ class ExerciseTimerApp:
                 while pygame.mixer.get_busy():  # Wait for the sound to finish playing
                     pygame.time.Clock().tick(30)
                 self.make_aud_thread_for_duration(self.active_song_aud_arr, self.temp_active_song_aud_arr, (self.active_duration_slider.get()+1))
-
+                # Use a dictionary association to get the audio file for the current exercise in particular (same var. as in the display for the exercise)
+                # print(f"{self.num_exercises - self.current_exercise_index} exercise motions remain")
+                # print(self.selected_exercises[self.current_exercise_index:])
             print(f"current round index is {self.current_round_index}")
         if not self.pause:
             self.master.after(1000, self.update_timer_hard_x_soft_pattern)
         # on completing a full set of rounds interval, increase index by 1 to move to the next 
                 # self.current_exercise_index += 1    
             
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     # ----------------------------------------------------------------------------------------------------------------------------------------------
  
     def get_stretching_exercises(self):
@@ -694,29 +747,43 @@ class ExerciseTimerApp:
             for movement in chosen_stretch_sub_arr:
                 output_list_of_stretches.append(movement)
         return output_list_of_stretches
-
-#  FIX VAR TO APPROPRIATE OUTPUT BELOW!!!!!!!!!!!
-        # return chosen_stretching_set
-
-    def start_stretching_routine(self):
+    
+    def update_display_listing_stretches(self, stretch_list):
+    #  Clear out listbox area before 
+        self.first_half_stretches.delete(0, tk.END)
+        self.second_half_stretches.delete(0, tk.END)
+        if len(stretch_list) < 13:
+            for stretch_name in stretch_list:
+                self.first_half_stretches.insert(tk.END, stretch_name)
+        else:
+            # Get the first 12 items via slice.
+            for first_chunk_stretch in (stretch_list[:12]):
+                self.first_half_stretches.insert(tk.END, first_chunk_stretch)
+            for second_chunk_stretch in (stretch_list[12:]):
+                self.second_half_stretches.insert(tk.END, second_chunk_stretch)
+    
+    def preview_stretching_routine(self):
         # copy the start auds and shuffle them around in a random order so we can pop them off later
         self.copy_src_arr_to_temp(self.start_bumper_aud_arr, self.temp_start_bumper_aud_arr)
         random.shuffle(self.temp_start_bumper_aud_arr)
         # Do the same for set ender barks
         self.copy_src_arr_to_temp(self.end_bumper_aud_arr, self.temp_end_bumper_aud_arr)
         random.shuffle(self.temp_end_bumper_aud_arr)
-        # initialize basic stuff
-        stretch_list = self.get_stretching_exercises()
-        print(f"stretch list = {stretch_list}")
 
-        self.stretch_time_length_label.config(text=f"testing here....")
+        # get the exercises for the continuous set:
+        #  ------------ NOTE: modify with conditional for other continuous exercises?
+        stretch_list = self.get_stretching_exercises()
+        self.update_display_listing_stretches(stretch_list)
+        
+
         num_of_stretches = len(stretch_list)
         each_stretch_duration = self.stretch_duration_slider.get()
         print(f"\t-- duration for each stretch: {each_stretch_duration}")
         total_stretch_time_in_seconds = (each_stretch_duration)*(num_of_stretches)
         total_stretch_set_time_in_mins = math.ceil((total_stretch_time_in_seconds)/60)
         print(f" [+] Total stretch time in mins: {total_stretch_set_time_in_mins}")
-
+        self.stretch_time_length_label.config(text=f"Workout time total: {total_stretch_set_time_in_mins}m")
+    
 # ----------------------------------------------------------------------------------------------------------------------------------------------   
     
 def main():
