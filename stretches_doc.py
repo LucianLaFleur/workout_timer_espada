@@ -1,9 +1,9 @@
 # NOTE: ALL [standing] variations are the last sub-array when multiple are avaliable (a mat/ floor may not be viable sometimes...)
-
+import random
 # key string will always end with _stand or _sit for each exercise type
 # intended to have either stand or sit as the key
 
-master_stretch_keyword_arr = [
+stretch_keyword_arr = [
     #  0 index is the standing version for all arrays
     ["ankles_mobility"],
     ["back_stand", "back_sit"],
@@ -23,22 +23,22 @@ master_stretch_keyword_arr = [
     ["tricep_stretch"],
     ["wrists"]
 ]
-master_warmup_keyword_arr = [
+warmup_keyword_arr = [
     "abs_work",
     "bicep_work",
     "leg work, hard",
-    "leg work, light"
+    "leg work, light",
     "pectoral_work",
+    "shoulder_work",
     "tricep_work",
-    "tricep_stretch",
     "wrists_work"
 ]
-master_stretch_dic = {
+stretch_dic = {
     "ankles_mobility":[
         ["Standing left ankle rotations", "Standing right ankle rotations"], 
         # ["Sitting, ankle rotations clockwise", "Sitting, ankle rotations counter-clockwise"],
         # ["Seated knee up toe-point, heel point", "seated boat isometric, toe-point heel-point"]
-        ["Standing left toe point, heel point", "Standing right toe point, heel point"]
+        ["Standing left heel-to-toe point", "Standing right heel-to-toe point"]
     ],
     "back_stand": [
         ["Left lunge torso turn", "Right lunge torso turn"], 
@@ -67,9 +67,10 @@ master_stretch_dic = {
         ["V-sit Left", "V-sit Right", "V-sit Center"]
     ],
     "hips_work": [
+        ["clockwise hula hip circles", "counter-clockwise hula hip-circles"],
         # ["Lying left leg hip mobility circles", "Lying right leg hip mobility circles"],
         ["Standing left hip circles", "Standing right hip circles"],
-        ["left sideways hip abduction", "right sideways hip abduction"],
+        ["left sideways hip abduction", "right sideways hip abduction"]
         # ["right leg, in and out hip-circles", "left leg, in and out hip-circles"]
         # ["Standing left straight-leg circles", "Standing right straight-leg circles"],
         # crab pose, leg traces a half-moon shape then switch legs
@@ -114,39 +115,46 @@ master_stretch_dic = {
         ["basic in-and-out wrist circles"],      
         ["3-count, X, Y, T, wrist rotations"], # "XYT, or "exit" dancer's wrist rotations, arms out, hug in for x, rotating wrists with each move                                                    
         # ["clockwise wrist-rotations", "counter-clockwise wrist-rotations"], 
-        ["5-count yak's tax, wrist rotations"] # ADV. "Yak's Tax" means Y-A-X-T-X
-        ["Cat's claw wrist bends", "thriller-pose wrist circles"], # side to side doing the car pose, forearm stretch ! be sure to go all the way up and all the way down with a wrist flap at the peak of each thriller pose
+        ["5-count yak's tax, wrist rotations"], # ADV. "Yak's Tax" means Y-A-X-T-X
+        ["Cat's claw wrist bends", "thriller-pose wrist circles"] # side to side doing the car pose, forearm stretch ! be sure to go all the way up and all the way down with a wrist flap at the peak of each thriller pose
         # Alternating palm-down forearm raises
     ]  
 }
-master_warmup_dic ={
-    # special selection keywords?
+special_list = [
+    "side-slugger torso twists",
+    "open hip, straight high-knees", # hands up, high knees
+    "torso twist hip taps", #don't forget to point the toes
+    "double-fang downward stab", # the high hammer curl
+    "squat to overhead press"
+    ]
+warmup_dic ={
     "abs_work": [
-        "Slow tension standing bicycles", 
+        "slow tension standing bicycles", 
         "windmill toe touches",
         "windmill sky chops", 
         "stellar windmills",
+#added to special list: Open hip, straight high-knees; hands up same as belly dancer, but focusing on knee movement and lower abs
         "belly dancer kicks", # high knees if no space for it
-        "Torso twisting slow side punches",
         "Lighthouse torso twists",
-        "Cross-core knee strike",
+        "cross-core knee strike",
         "torso twist, alternating lunges",
         "squat between standing bicycles",
         "straight-leg toe taps",
         "draw sword, side-bend",
-        "Torso twist hip taps",
-        "Open hip, straight high-knees"
+        "wood chopper"
+#added to special list: "Torso twist hip taps",
+#added to special list: "side-slugger torso twists"
+        
     ],
     "bicep_work":[
         "curl to overhead press", 
         "biceb curl fly press", 
-        "claw-hand Z-curls",
-        "curl up, double punch out" 
+        "claw-hand Z-curls", 
+        "curl up, double punch out", # Greaser's jacket
         # biceb curl double punch
         # "mummy hug" # zombie curl, arms across chest, outward fly, clap in, z-curl down
-        "claw-hand z-curl", 
         # "claw hand alternating bicep curls", 
-        "barrel hug hammer curl", 
+        "barrel hug hammer curl"
         # "sky scratchers" # "Volkenkratzer", claw pose biceb curl with mulitary press
         # Scary bear bicebs # claw pose biceb curl, arm rotation 
         # "45-degree palm press" # the bell-ringer
@@ -154,16 +162,18 @@ master_warmup_dic ={
     "leg work, hard":[
         # "triangle pose side lunges", 
         "step-back lunges", 
+        "torso-twist lunges", #remember to tap opposite heel of planted foot
         "three-point frog squats", 
+        # "comound fly press lunge",
         "squat pulse stand ups",
         # "prisoner squat to standing bicycle", 
-        "squat to overhead press"
+# moved to special arr "squat to overhead press"
     ],
     "leg work, light":[
         # "marching zombie high knees", 
         "marching doll high knees", 
         "wall-crawlers" # "standing bird-dog reach"
-        "heel-to-toe calf raises",
+        # "heel-to-toe calf raises",
         # "point inward, point out calf raises", #turn on the heel
         # ["inward pointing calf-raises", "outward pointing calf-raises"]
         # "alternating reach and hip abduction" #reach with left arm as right leg goes out to side
@@ -177,7 +187,7 @@ master_warmup_dic ={
         # "arms fly out, double-punch forward", 
         # "hands-together up-and-downs", 
         # hands together, press up like hands together in tree pose, then down, like a lateral row
-        "open hip thunderbolt palm press"
+        "open hip thunderbolt palm press",
          # kneeling version lets you back bend for more range of movement
         # kneeling thunderbolt prayer,
         "X-Y fly press" # fly press, cross arms in an X, then arms go up to a y-pose, back in for X
@@ -187,15 +197,16 @@ master_warmup_dic ={
         # "arms out, tension wrist rotations",
         "four-count cheer squad", 
         # "wax on, wax off", # full motion to activate tricep
-        "slow overhead lat pull-down"
+        "slow overhead lat pull-down",
         # "overhead lat pull down push-out"
         # "lateral pull down to shoulder shrug forward-back", 
         "single arm side-stepping sky punches", 
+        "back-stroke torso twists",
         "sky-punch, side stab",
         # "sky punch palm out, palm in",
         # "ankle raise, shoulder shrugs",
         # "ankle raise, big shoulder circles",
-        "vampire wings" # from arms at sides, zombie claw up (for forearm tension), upward fly like opening a cape, arms rake down, picep curl inward, z-curl down to starting position
+        "vampire wings" # claw pose, hands down in front, up to Y position and back down again
 
     ],
     "tricep_work":[
@@ -203,35 +214,71 @@ master_warmup_dic ={
         # ["side-step, side-stab"], # like a sideways chop, always keeping motion inward for play area
         # ["left tension tricep kickbacks", "right tension tricep kickbacks"],
         # "bodyweight tricep dips"
-        "alternating hammer-downs", 
-        "double-fang downward stabs"
+        "florentine 1-2", # arms up as if holding two swords, left arm to right shoulder chambered while right arm is up and out, backslash with left and down-slash with right; both go down with gravity, then switch; 
+            # ^^ looks like a dance move tricep extension for an out
+        "alternating hammer-downs" 
+# *added to special arr "double-fang downward stab"
     ],
     "wrists_work":[
         # "alternating claw-hand forearm raise", # same as zombie claw forearm raise, looks like frankenstein's monster
         "zombie claw forearm raise",
         "T-rex bicep curl", #wrists bent to add extra tension and activate forearms 
         "A-pose rotating claw-curls", #forearm tension, rotate to wrists-behind-back position, wrists tense back, then rotate to palm forward, wrists tense up and in
-        "claw-hand Z-curls"
+        "claw-hand Z-curls",
+        "shrieking ghoul"
         # "arms forward, tension wrist rotations",
         # "arms out, tension wrist rotations" # crossover with shoulders
     ]
 }
 
-# ------------------------------------------------------------------------------------------------------------------------------------
-                                                # STRETCHES
-# ------------------------------------------------------------------------------------------------------------------------------------
- # "Left lunge torso turn", "Right lunge torso turn", "standing hula hip rotations, clockwise", "standing hula hip rotations, counter-clockwise",
-    # "Left leg across, model pose", "Right leg across, model pose",
-    # "Left, standing forward lean calf stretch", "Right standing forward lean calf stretch",
-    # "Pike position, left cross calf stretch", "Pike position, right cross calf stretch",
-    # "Standing left knee-tuck stretch", "Standing right knee-tuck stretch", "Left leg back, lunging stretch", "Right leg back, lunging stretch",
-    # "Lying left knee-tuck stretch", "Lying right knee-tuck stretch",
-    # "Standing-v Left-leg", "Standing-v Right-leg", "standing-v center stretch",
-    # "V-sit Left", "V-sit Right", "V-sit Center",
-    # "Look-up neck rotation", "Look-down neck rotation",
-    # "Standing quad stretch, left", "Standing quad stretch, right",
-    # "Lying quad stretch, left", "Lying quad stretch, right",
-    # "Standing center toe-touch reach", "Left leg over right, toe-touch", "Right leg over left, toe-touch",
-    # "Sitting toe-touch reach", "Left leg out, toe-touch", "Right leg out, toe-touch", "Sitting toe touch", "Sitting left leg extension hold", "Sitting right leg extension hold",   
-    # "Center split", "left side-lunge", "right side-lunge",
-    # "Center split", "Left front-split", "Right front-split"
+def get_stretch_x_warmup_list():
+    # due to the set size of the workout to hit all muscle groups, there's an imbalance
+    # 13 total stretches. 15 warmup moves = 28 total moves, not counting mirroring
+    # 2 initial warmup moves get the blood flowing, then each stretch is followed by another warm-up move.
+    combined_list = []
+    list_of_stretch_lists = []
+    selected_warmups_name_arr = []
+    # get 2 random exercises for warm-up, 
+    random_2_starters = random.sample(warmup_keyword_arr, 2)
+    temp_warmup_keyword_arr = warmup_keyword_arr
+    for item in random_2_starters:
+        temp_warmup_keyword_arr.append(item)
+
+    for keyword in temp_warmup_keyword_arr:
+        chosen_warmup = random.choice(warmup_dic[keyword])
+        selected_warmups_name_arr.append(chosen_warmup)
+    for special_item in special_list:
+        selected_warmups_name_arr.append(special_item)
+    
+    random.shuffle(selected_warmups_name_arr)
+    # input(f"current warmups are: >>> \n{selected_warmups_name_arr}")
+
+    # randomize the order of stretches
+
+    for x in stretch_keyword_arr:
+        chosen_stretch_type = random.choice(x)
+        chosen_stretch_motion_arr = random.choice(stretch_dic[chosen_stretch_type])
+        list_of_stretch_lists.append(chosen_stretch_motion_arr)
+    random.shuffle(list_of_stretch_lists)
+    # input(f"current stretch motions >> \n{list_of_stretch_lists}")
+    
+    # enumerating on the warmups names because they'll go up to 15
+    for i, stretch_name in enumerate(selected_warmups_name_arr):
+        # since enumerate i starts at 0, we'll get the first two warm-ups like this, then move on to adding a stretch+warmup
+        if i < 2:
+            # print(f"index 'i' is {i}, not in main portion yet")
+            #  select an appropriate random item from the arrays at the dictionary entry accessed by the appropriate keyword
+            combined_list.append(stretch_name)
+        else:
+            # the stretches lag behind by 2 from the warmup list since we start off with 2 warm up moves before stretching
+                # within the list-of-stretch-lists, this targets the sub-array at the given index.
+                # this keeps all hamstring sets or quad sets together even if mirrored.
+            random.shuffle(list_of_stretch_lists[i-2])
+                # ^^ also shuffling so it's not always left/right/center as data input is like
+            for individual_stretch in list_of_stretch_lists[i-2]:
+                combined_list.append(individual_stretch)
+            combined_list.append(stretch_name)
+
+    return combined_list
+
+prepared_list = get_stretch_x_warmup_list()
