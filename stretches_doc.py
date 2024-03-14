@@ -13,7 +13,10 @@ stretch_keyword_arr = [
     #  NOTE: currently disabling the v-sit due to not having the right audio for it.
     # "hamstring_sit"
     ],
-    ["hips_work"],
+    ["hips_work"
+    #  NOTE: no audio for sitting hip work either
+    #  "hips_sitting"
+     ],
     ["neck"],
     ["quads_stand", "quads_sit"],
     # single hamstring stretch focus
@@ -35,68 +38,71 @@ warmup_keyword_arr = [
 ]
 stretch_dic = {
     "ankles_mobility":[
-        ["Standing left ankle rotations", "Standing right ankle rotations"], 
+        ["L.Stand ankle rotations", "R.Stand ankle rotations"], 
         # ["Sitting, ankle rotations clockwise", "Sitting, ankle rotations counter-clockwise"],
         # ["Seated knee up toe-point, heel point", "seated boat isometric, toe-point heel-point"]
-        ["Standing left heel-to-toe point", "Standing right heel-to-toe point"]
+        ["L.Stand heel-to-toe point", "R.Stand heel-to-toe point"]
     ],
     "back_stand": [
-        ["Left lunge torso turn", "Right lunge torso turn"], 
-        ["standing hula hip rotations, clockwise", "standing hula hip rotations, counter-clockwise"]
+        ["L.Lunge torso turn", "R.Lunge torso turn"], 
+        ["clock hula hips", "counter hula hips"],
     ],
     "back_sit": [
         ["Left leg across, model pose", "Right leg across, model pose"]
     ],
     "calves_stand":[
-        ["Left, standing forward lean calf stretch", "Right standing forward lean calf stretch"]
+        ["L-stand fw-lean calf", "R-stand fw-lean calf"]
     ],
     "calves_sit": [
-        ["Pike position, left cross calf stretch", "Pike position, right cross calf stretch"]
+        ["Pike, L-calf stretch", "Pike, R-calf stretch"]
     ],
     "glutes_stand": [
-        ["Standing left knee-tuck stretch", "Standing right knee-tuck stretch"], 
-        ["Left leg back, lunging stretch", "Right leg back, lunging stretch"]
+        ["Stand L. knee-tuck", "Stan R. knee-tuck"], 
+        ["L.bk, lunging stretch", "R.bk, lunging stretch"]
     ],
     "glutes_sit": [
-        ["Lying left knee-tuck stretch", "Lying right knee-tuck stretch"]
+        ["Lying L-knee-tuck stretch", "Lying R-knee-tuck"]
     ],
     "hamstring_stand": [
-        ["Standing-v Left-leg", "Standing-v Right-leg", "standing-v center stretch"]
+        ["Standing-V Left-leg", "Standing-V Right-leg", "Stand-V center St."]
     ],
     "hamstring_sit": [
         ["V-sit Left", "V-sit Right", "V-sit Center"]
     ],
     "hips_work": [
-        ["clockwise hula hip circles", "counter-clockwise hula hip-circles"],
-        # ["Lying left leg hip mobility circles", "Lying right leg hip mobility circles"],
-        ["Standing left hip circles", "Standing right hip circles"],
-        ["left sideways hip abduction", "right sideways hip abduction"]
-        # ["right leg, in and out hip-circles", "left leg, in and out hip-circles"]
+        ["L.Stand hip circles", "R.Stand hip circles", "frog squat stretch"],
+        ["L.side hip abduction", "R.Side hip abduction", "frog squat stretch"]
+        # 
         # ["Standing left straight-leg circles", "Standing right straight-leg circles"],
         # crab pose, leg traces a half-moon shape then switch legs
         # ["crab pose, half moon kicks", "seated scissor circles"]
     ],
+    # "hips_sitting":[
+    #     ["Butterfly Stretch", "Lie.L.Leg hip Circles", "Lie.R.Leg hip Circles"],
+    #     ["Butterfly Stretch", "Lie.L.Leg alt. hip-cir.", "Lie.R.Leg alt. hip-cir."],
+    #     ["Butterfly Stretch", "Sit L.Hip Abduction", "Sit L.Hip Abduction"]
+    # ],
     "neck": [
-        ["Look-up neck rotation", "Look-down neck rotation"]
+        ["Look-up neck ro.", "Look-down neck ro."]
     ],
     "quads_stand":[
-        ["Standing quad stretch, left", "Standing quad stretch, right"]
+        ["L.Stand quad pull", "R.Stand quad pull"]
     ],
     "quads_sit": [
-        ["Lying quad stretch, left", "Lying quad stretch, right"]
+        ["L.Lying quad stretch", "R.Lying quad stretch"]
     ],
     "shoulder_stretch":[
         # ["Left arm reach-across, squats", "Right arm reach-across squatz"], 
-        ["Left arm reach-across, high-knee lifts", "Right arm reach-across, high-knee lifts"],
-        ["Left arm reach-across, side-to-side step", "Right arm reach-across, side-to-side step"]
+        ["L.Arm Across high-knees", "R.Arm Across high-knees"],
+        ["L.Arm Across side step", "R.Arm Across side step"]
         # ["Left arm reach-across, ankle raises", "Right arm reach-across, ankle raises"]
     ],
     "sing_hamstring_stand": [
-        ["Standing center toe-touch reach", "Left leg over right, toe-touch", "Right leg over left, toe-touch"]
+        ["Stand.Center toe-touch", "L.Over toe-touch", "R.Over toe-touch"]
     ],
     "sing_hamstring_sit": [
-        ["Sitting toe-touch reach", "Left leg out, toe-touch", "Right leg out, toe-touch"], 
-        ["Sitting toe touch", "Sitting left leg extension hold", "Sitting right leg extension hold"]
+        ["Sit.Toe-touch", "L.Leg out, toe-touch", "R.Leg out, toe-touch"], 
+        ["Sit.Toe-touch", "Sit L.Extension hold", "Sit R.Extension hold"]
     ],   
     "splits_stand":[
         ["Center split", "left side-lunge", "right side-lunge"]
