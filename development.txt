@@ -1,3 +1,10 @@
+3/18:
+IMPORTANT UPDATE: Shifting from array structure to object oriented structure where each exercise is an object.
+reason: previous structure was sorting exercise types into arrays. This led to redundancy and difficulty in making arrays where certain situations applied. Damaged modularity and data normalization.
+Solution: making exercises into objects allows to make a property containing ".info" lists, which are string tags with keywords. This allows for the filtering of exercises containing or lacking a certain tag.
+[!] greater emphasis will be put on re-working functions to manipulate objects in this manner
+- reviewed all current exercises (around 350) and arranged them into proper primary muscle groups. This will make tagging easier for the object translation
+
 3/11:
  Researched a set of core exercises and basic stretch routine to hit all muscle groups. Data added to stretches_doc.py. The program is big enough that it should be divided into subsequent parts.
  Begin logic for continuous exercise, opo. action X interval format that the basic app already has.
