@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-# from datetime import datetime
+from datetime import datetime
 import random
 import pygame
 import math
@@ -8,6 +8,8 @@ import time
 import threading
 import audio_doc
 import stretches_doc
+import exercise_lists
+import make_martial_arts
 # https://www.setforset.com/blogs/news/bodyweight-leg-exercises-without-weights
 # Initial version: set for arms workout x abs on rest intervals
 
@@ -30,6 +32,242 @@ import stretches_doc
 #  Work and just rest version
 #  Stretching sets 35 sec each, with exercise intervals every 3 motions
 
+
+# -------------- For martial arts audio with 43e's voice -----------------------------------
+voice_43e_dictionary = {
+    "backhand": "martial_audio/43e_backhand1.wav",
+    "backstep": "martial_audio/43e_backstep_util.wav",
+    "back-sway": "martial_audio/43e_backSway.wav",
+    "bell clap": "martial_audio/43e_bellClap.wav",
+    "chain punch": "martial_audio/43e_chainPunch.wav",
+    "choke slam": "martial_audio/43e_chokeSlam.wav",
+    "cross-punch": "martial_audio/43e_crossPunch.wav",
+    "cross-to-knee": "martial_audio/43e_crossToKnee.wav",
+    "cross palm strike": "martial_audio/43e_crosstoPalmStrike.wav",
+    "cross to shuffle punch": "martial_audio/43e_crossToShufflePunch.wav",
+    "double-arm shove":"martial_audio/43e_doubleArmShove.wav",
+    "ducking sway":"martial_audio/43e_duckingSway.wav",
+    "downward elbow strike":"martial_audio/43e_downwardElbowStrike.wav",
+    "elbow jab":"martial_audio/43e_elbowJab1.wav",
+    "elbow smash":"martial_audio/43e_elbowSmash.wav",
+    "falling double axe handle": "martial_audio/43e_fallingDoubleAxeHandle.wav",
+    "feinting hook, true jab" :"martial_audio/43e_feintHookJab.wav",
+    "feinting cross":"martial_audio/43e_feintingCross343.wav",
+    "feinting cross, side chop":"martial_audio/43e_feintingCrossSideChop.wav",
+    "feinting hook":"martial_audio/43e_feintingHook.wav",
+    "feinting hook, shove":"martial_audio/43e_feintingHookShove.wav",
+    "feinting jab":"martial_audio/43e_feintingJab.wav",
+    "feinting jab, true cross":"martial_audio/43e_feintJabTrueCross.wav",
+    "knee-feint":"martial_audio/43e_feintKnee_2.wav",
+    "gut punch":"martial_audio/43e_gutPunch.wav",
+    "heavy palm strike":"martial_audio/43e_heavyPalmStrike.wav",
+    "high block":"martial_audio/43e_highBlock.wav",
+    # :"martial_audio/43e_highFullRedirection.wav",
+    "hooking knee strike":"martial_audio/43e_hookingKneeStrike.wav",
+    "hook, shove":"martial_audio/43e_hookShove.wav",
+    "inner parry":"martial_audio/43e_innerParry.wav",
+    # :"martial_audio/43e_inwardFullRedirection.wav",
+    "in-sway" :"martial_audio/43e_inwardSway.wav",
+    "straight jab" :"martial_audio/43e_jab.wav",
+    "jab, karate chop":"martial_audio/43e_jabKarateChop.wav",
+    # :"martial_audio/43e_jabPalmStrike.wav",
+    "jab to knee":"martial_audio/43e_jabToKnee.wav",
+    "karate chop":"martial_audio/43e_entheusiasticKarateChop.wav",
+    "low block":"martial_audio/43e_lowBlock_0.wav",
+    # :"martial_audio/43e_lowBlockFullRedirection.wav",
+    # :"martial_audio/43e_lowBlockOutwwardParry.wav",
+    "lunge for the legs":"martial_audio/43e_lungeForTheLegs.wav",
+    # :"martial_audio/43e_outwardFullRedirection.wav",
+    "outward parry":"martial_audio/43e_outwardParry.wav",
+    "outward parry palm strike":"martial_audio/43e_outwardParryPalmStrike.wav",
+    "out-sway":"martial_audio/43e_outwardSway.wav",
+    "quick palm strike":"martial_audio/43e_palmStrike2.wav",
+    "quarter turn roll":"martial_audio/43e_quarterTurnRoll.wav",
+    "quarter turn step":"martial_audio/43e_quarterTurnStep.wav",
+    "roll and uppercut":"martial_audio/43e_rollingUppercut.wav",
+    "roll and hook":"martial_audio/43e_rollinHook.wav",
+    "shuffle back":"martial_audio/43e_shuffleBack.wav",
+    "shuffle forward":"martial_audio/43e_shuffleForward.wav",
+    "shuffle-forward jab":"martial_audio/43e_shuffleForwardJab.wav",
+    "side chop":"martial_audio/43e_sideChop.wav",    
+    "sidestep roll":"martial_audio/43e_sidestepRoll.wav",
+    "step forward":"martial_audio/43e_stepForward_utility.wav",
+    "single-leg shove takedown":"martial_audio/43e_singleLegShoveTakedown.wav",
+    "straight knee":"martial_audio/43e_straightKnee.wav",
+    "outward parry, clothesline":"martial_audio/43e_outwardParryClothesline.wav",
+    "throat punch":"martial_audio/43e_throatPunch.wav",
+    "white crane, shove":"martial_audio/43e_whiteCraneShove.wav",
+    "low shove":"martial_audio/43e_lowShove.wav",
+    "feinting jab":"martial_audio/43e_feintingJab.wav",
+    "rising double axe handle":"martial_audio/43e_RisingDoubleAxeHandle.wav",
+    "superman punch":"martial_audio/43e_SupermanPunch.wav",
+    "white crane, bell clap":"martial_audio/43e_WhiteCraneBellClap.wav",
+    # :"martial_audio/.wav",
+}
+voice_43e_feint_auds = [
+    "martial_audio/43e_feint2.wav",
+    "martial_audio/43e_feint.wav"
+]
+voice_43e_left_auds = [
+    "martial_audio/43e_left.wav",
+    "martial_audio/43e_leftFootForward.wav",
+    "martial_audio/43e_leftFootForward2.wav",
+    "martial_audio/43e_leftSide.wav"
+]
+voice_43e_right_auds = [
+    "martial_audio/43e_right.wav",
+    "martial_audio/43e_rightfootforward.wav",
+    "martial_audio/43e_rightFootForward2.wav",
+    "martial_audio/43e_rightSide.wav"
+]
+
+
+class WorkoutMove:
+    def __init__(self, name_string, display_name_list, info_list):
+        self.key_name = name_string
+        self.display_name_list = display_name_list
+        self.info_list = info_list
+
+# key name
+all_exercise_objects = [
+    WorkoutMove("single rock-and-box",
+        ["L. rock-and-box","R. rock-and-box"],
+        ["abs", "obliques", "delts", "mirrored", "cardio", "light", "martial"]),
+    WorkoutMove("alternating rock-and-box", # need aud
+        ["Alt. rock-and-box"],
+        ["abs", "obliques", "delts", "cardio", "light", "martial"]),
+    WorkoutMove("Side-slugger torso twist", # side punch, turn, punch to other side
+        ["Side-slugger torso twist"],
+        ["abs", "cardio", "light", "control", "martial", "res.band"]),
+    WorkoutMove("squat to overhead press",
+        ["squat to overhead press"],
+        ["hamstrings", "delts", "med", "cardio", "compound", "big_weight", "small_weight"]),
+    WorkoutMove("marching doll high knee",
+        ["marching doll high knee"],
+        ["hip flexors", "delts", "light", "cardio", "compound"]),
+    WorkoutMove("alt. arm fly side-step",
+        ["alt. arm fly side-step"],
+        ["pecs", "delts", "light", "cardio", "compound"]),
+    WorkoutMove("lat pull-down push-out",
+        ["lat pull-down push-out"],
+        ["traps", "delts", "compound", "cardio", "small_weight"]),
+    WorkoutMove("3-point frog squats",
+        ["3-point frog squats"],
+        ["quads", "delts", "med", "cardio", "compound", "dumbbell"]),
+    WorkoutMove("kneel_lat pull-down push-out", # need aud
+        ["Kn.Lat pull-down push-out"],# need aud
+        ["traps", "delts", "compound", "cardio", "small_weight", "ground"]),
+    WorkoutMove("single forearm raise",
+        ["L.forearm raise", "R.forearm raise"],
+        ["forearms", "mirrored", "small_weight", "big_weight"]),
+    WorkoutMove("single inner bicep curl",# need aud
+        ["L.inner bicep curl", "R.inner bicep curl"],
+        ["biceps", "mirrored", "small_weight", "big_weight"])
+]
+
+# franken forearm, delts
+# preying mantis
+#  cats claw wrists, cat
+# thriller wrises, dance
+#  a pose inner
+#  a pose outer
+
+# also need aud call: auds exist
+# R.Elbow, L.Knee
+# L.Elbow, R.Knee
+#  figure eight obliques
+# prisoner position high knees #dance
+
+# SALVAGE THE WARMUPS FROM STRETCHES DOC FIRST BECAUSE AUDIO EXISTS
+
+all_workout_object_keys = [
+"Side-slugger torso twist", 
+"single rock-and-box", 
+"alternating rock-and-box",
+"squat to overhead press",
+"marching doll high knee",
+"alt. arm fly side-step",
+"lat pull-down push-out",
+"3-point frog squats",
+"kneel_lat pull-down push-out",
+"single forearm raise",
+"single inner bicep curl"
+]
+
+def exclude_keywords_from_workout_list(keyword_list):
+    # out_arr = []
+    # for move in all_exercise_objects:
+    #     for keyword in keyword_list:
+    #         if keyword in move.info_list:
+    #             for name_string in move.display_name_list:
+    #                 out_arr.append(name_string)
+    # print(out_arr)
+    out_arr = [move.display_name_list for move in all_exercise_objects if not any(exclusion_term in keyword_list for exclusion_term in move.info_list)]
+    # print(out_arr)
+
+def get_moves_matching_at_least_one_keyword(keyword_list):
+    # iterate through all exercise objects. only return the ones that match at least one item in the target array
+    out_arr = [move.display_name_list for move in all_exercise_objects if any(exclusion_term in keyword_list for exclusion_term in move.info_list)]
+    # return [car for car in cars if not any(color in exclude_colors for color in car.color)]
+    # print(out_arr)
+    
+# NYI NOTE: NYI filtering options in the above functions DO work! Not applied though
+# get_moves_matching_at_least_one_keyword(["traps"])
+# print(f"*"*24)
+# exclude_keywords_from_workout_list(["delts", "biceps"])
+
+# audio: Lunge down into triangle pose standups!
+# "kn.Lat pull-down push-out" audio_hit_half/pdaBeepBeep.wav
+# "L.forearm raise", "R.forearm raise" audio_hit_half/pdaBeepBeep.wav
+# "L.inner bicep curl", "R.inner bicep curl" audio_hit_half/pdaBeepBeep.wav
+
+# main properties for info:
+#   - main muscle group is in position 0. Other muscle groups follow
+#   - if NEEDS equipment, tag keyword "equip" DO NOT use if there is an empty-hand variant; this is a limiting filter
+#   -- if compatible with heavy lifting, "big_weight", and light only, "small_weight"
+#   - if needs ground for sit of lying, tag keyword "ground"
+#   - if not compatible with a VR workout, tag "no vr"
+#   - cardio, stretch, compound, res.band, dumbbell
+#   - light, med, heavy, explosive, high impact
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class ExerciseTimerApp:
     def __init__(self, master):
         
@@ -51,191 +289,246 @@ class ExerciseTimerApp:
         self.tab2 = ttk.Frame(self.tab_manager)
         self.tab_manager.add(self.tab2, text="Stretches")
 
+        self.tab3 = ttk.Frame(self.tab_manager)
+        self.tab_manager.add(self.tab3, text="Boxing")
+
         #  initialize pygame so I can play music properly
         pygame.init()
         # Load Stretches from stretches_doc.py --------------------------------------------------------------------------------------------------
         # self.stretches_arr = stretches_doc
         # ---------------------------------------------------------------------------------------------------------
-        #  Audio collection (safe for sharing)
-        self.default_encouragement = "audio_hit_start/letsGetMovingBubblegum1.wav"
-        self.halway_alarm = "audio_hit_half/pdaBeepBeep.wav"
-        # self.half_bumper_aud_arr = ["audio_hit_half/pdaBeepBeep.wav"]
+        #  Init all temp arrs for all audio categories / this is also a list of which arrs exist
+        self.temp_start_bumper_aud_arr = []
+        self.temp_active_song_aud_arr = []
+        self.temp_end_bumper_aud_arr = []   
+        self.temp_interval_song_aud_arr = []
         # self.temp_half_bumper_aud_arr = []
-        self.workout_end_aud = "audio_special_ender/exitBumperGonnaMakeIt.wav"
+        # self.end_of_workout_arr = []
+        # self.temp_special_ender_aud_arr = []
+        self.default_encouragement = "audio_hit_start/letsGetMovingBubblegum1.wav"
+        #  -----------------------------------------------------------------------------
+        # NOTE: motion halfway SFX, motion end SFX, and workout end MSG are currently static sounds
+        self.halfway_alarm = "audio_hit_half/pdaBeepBeep.wav"
+        self.end_alarm = "audio_hit_end/blake_gunfire_shot.wav"
+        self.workout_end_aud = "audio_special_ender/TP_Fanfare_SmallItem_tada.wav"
         # ---------------------------------------------------------------------------------------------------------
         # audio_hit_start/
-        self.start_bumper_aud_arr = ["audio_hit_start/doYourBestBubblegum.wav", "audio_hit_start/fireupBubblegum1.wav", "audio_hit_start/kickoffBubblegum.wav", "audio_hit_start/letsGetMovingBubblegum1.wav",
-       "audio_hit_start/letsGetMovingBubblegum1.wav", "audio_hit_start/showOnRoadBubblegum.wav", "audio_hit_start/time2grindBubblegum.wav"]
-        self.temp_start_bumper_aud_arr = []
-        # audio_active_songs/
-        self.active_song_aud_arr = audio_doc.outsourced_active_song_aud_arr
-        self.temp_active_song_aud_arr = []   
-        # audio_hit_end/
-        self.end_bumper_aud_arr = [
-        # "audio_hit_end/catchBreathBubblefum.wav",
-        # "audio_hit_end/doneBubblegum2.wav", 
-        # "audio_hit_end/dontOverexertBubblegum1.wav"
-        # 
-        "audio_hit_end/niceWorkBubblegum1.wav", 
-        # "audio_hit_end/pauseBubblegum1.wav", 
-        # "audio_hit_end/slowAndSteady1.wav", 
-        # "audio_hit_end/takeABreatherBubblegum.wav",
-        "audio_hit_end/mori_nicework.wav",
-        "audio_hit_end/mori_onemoreDone.wav",
-        "audio_hit_end/mori_take_a_breather.wav",
+        self.start_bumper_aud_arr = audio_doc.outsourced_start_bumper_aud_arr 
         
-        "audio_hit_end/mori_switch_to_low_intensity.wav",
-        # "audio_hit_end/bubblegumPauseForAMoment.wav",
-        # "audio_hit_end/bubblegum_oneMoreDown.wav",
-        # "audio_hit_end/bubblegum_slow_and_Steady.wav",
-        # "audio_hit_end/bubblegum_niceWorkThatOne.wav",
-        "audio_hit_end/bubblegum_takeABreather.wav",
-        "audio_hit_end/bubble_thatonesdone.wav"
-        # "audio_hit_end/.wav",
-        ]
+        # audio_active_songs for push sets
+        self.active_song_aud_arr = audio_doc.outsourced_active_song_aud_arr
+        
+        # audio_interval_songs, for downtempo sets/rest
+        self.interval_song_aud_arr = audio_doc.outsourced_interval_song_aud_arr 
+        
+        # audio_hit_end, for end of motion
+        self.end_bumper_aud_arr = audio_doc.outsourced_end_bumper_aud_arr 
 
-        # self.end_of_workout_arr = [
-        # "audio_hit_end/finished1bubblegum.wav",
-        # "audio_hit_end/mori_nice_jobrestforabit.wav",
-        # "audio_hit_end/bubblegum_time_to_rest.wav"
-        # ]
-
-        self.temp_end_bumper_aud_arr = []
-        # audio_interval_songs/
-        self.interval_song_aud_arr = ["audio_interval_songs/all_you_can_do_cut.wav", 
-        "audio_interval_songs/anhedonia_short.wav",
-        "audio_interval_songs/beat4354rs.wav", 
-        "audio_interval_songs/knifeOverHeart1.wav", 
-        "audio_interval_songs/LoyalObligation_cut.wav",
-        "audio_interval_songs/purple_aviators_cut.wav", 
-        "audio_interval_songs/technical_complications.wav",
-        "audio_interval_songs/VacuousCuriosity.wav", 
-        "audio_interval_songs/DailyRounds.wav", 
-        "audio_interval_songs/WhatCannotBeReclaimed.wav"]
-        self.temp_interval_song_aud_arr = []
-        # audio_special_ender/
-        self.special_ender_aud_arr = []
-        self.temp_special_ender_aud_arr = []
-
-        # List of exercises
-        # biceb and general arms stuff
-        self.arm_exercises = ["walking push-ups", "sumo-squat push-ups", "T-plank alternating push-ups",  
-        "crunching bicep curl", "pike push-up", "plank-tuck walk-up", "alternating plank-tuck", "alternating crab bridge reaches",
-        "plank-tuck push-up", "planche push-up", "push-up pop-ups", "frog stand to ukemi",  
-        "reverse-palm push-up", "dive-bomber push-up", "lying reverse biceb curl", "Alternating Moscow T-planks", 
-        "towel reverse biceb curl", "lying towel hammer curl", "shoulder tension circles", "walk the plank"
-        # walk the plank is inchworm
-        # mirrored below
-        "lying side bicep suitcase", "single-arm crab-reach", "uppercut-cross", "side-chop cross", "palm to karate chop"]
-
-        self.ticep_exercises = [
-        "tricep dips", 
-        "dolphin push-up", 
-        "plank to seal-pose", 
-        "sphinx dive-bombers", 
-        "alternating leg tricep dips",
-        "elbows-back push-ups",
-        "tricep get-ups",
-        "lying side push-up",
-        "diamond pushup", 
-        "sphynx to plank crawler", 
-        "sphynx to pike-push crawler", 
-        "sphynx-pike-stand", 
-        # "tricep push" #requires bench
-        ]
-
-        self.shoulder_exercises = ["pike position cross toe-touches", 
-        "pike push-up", "plank shoulder taps",  "bear crawl", "slow and low crawl","supermans",
-        "lying lat pull-downs", "snow angel shoulders", "flying cobra", "reaching row", "tension lat pull-downs", 
-        "lat pull-down push-out" 
-        # lat pull-down and push out is like a lateral row then extend arms at 90 degrees out
-        # "back-splash reach-outs", "pike walkout push-ups", "alternating shoulder swimmers", "superman swimmers"
-        ]
+        # audio_special_ender for when the workout is done
+        # self.special_ender_aud_arr = []
 
         self.master_exercise_name_audio_dic = {
-        # Shoulders
-        "bear crawl": ['exercise_names/bearCrawlBubble.wav'], 
+# [!] Abs  ------------------------------------------------------------------------------------------------------
+        "belly dancer kicks":["exercise_names/mori_bellydancerKicks.wav"], 
+        "cross-core knee strike":["exercise_names/mori_crossCoreKneeStrike.wav"],
+        "draw sword, side-bend":["exercise_names/mori_drawSwordSideBend.wav"],
+    # + Center abs target -------------------------
+        "hip raise, leg extension": ["exercise_names/23B_hipRaiseLegExtension.wav"],
         "boat row" : ["exercise_names/23B_boatRow.wav"],
-        "flying cobra": ["exercise_names/elf_flying_cobra.wav", "exercise_names/flyingCobraBubble.wav"],
+        "leg lifts, candle pose": ["exercise_names/23B_legLiftsCandlePose.wav", "exercise_names/legLiftCandleBubblegum.wav"],
+        # [add l8r]: Turtle crunch
+
+    # + Lower Abs  ----------------------------------------
+        # compound for hip flexor, quad, lower ab
+        "wall-crawlers":["exercise_names/mori_wallCrawlers.wav"],
+        "open-hip, str. high-knee":["stretch_auds/mori_handsUpHighKnees.wav", "stretch_auds/mori_highKnees.wav"],
+        "flutter kicks": ["exercise_names/flutterkickBubblegum.wav"], 
+        "L.out Knee Strike": ["exercise_names/mori_leftOutstepKneeStrike.wav"],
+        "R.out Knee Strike": ["exercise_names/mori_rightOutstepKneeStrike.wav"],
+        # compound for hip flexor, quad, lower ab, shoulder
+        "full extension cross-crunch":["exercise_names/23B_fullExtensionCrossCrunch.wav", "exercise_names/fullextensioncrossCrunchBubblegum.wav"],
+        # compound for obliques
+        "half windshield wiper combo": ["exercise_names/23b_halfwayWindshieldWiperCombo.wav"],
+        # [add l8r; NYI] single leg windshield wiper
+        # [add l8r; NYI] seated leg lever
+    # + Obliques  ---------------------------------------------------------------------------
+        "Figure-8 oblique Ax.":["exercise_names/kaf_figure8Obliques.wav", "exercise_names/kaf_alternatingAxeHandleObliques.wav"],
+        "side-slugger torso twist":["stretch_auds/mori_torsoTwistSidePunch.wav", "stretch_auds/mori_torsoTwistPunches.wav", "stretch_auds/mori_sideChamberSlugs.wav"], # compound 
+        "lighthouse torso twists":["stretch_auds/mori_lighthouseTorsoTwists.wav"],
+        # "sideways hip raise": ["exercise_names/23B_sidewaysHipRaise.wav"],
+        "oblique heel-taps":["exercise_names/23b_obliqueHeelTaps.wav", "exercise_names/obliqueHeelTaps.wav"],
+        "windshield wiper leg lifts": ["exercise_names/23b_windshieldWiperLegLifts.wav"], # ADVANCED
+        "hatchet cross tension": ["exercise_names/23b_hatchetMotionxCross.wav"],
+        "seated russian twists": ["exercise_names/23B_seatedRussianTwists.wav"],
+        "torso twist hip taps":["exercise_names/mori_torsoTwistHipTaps.wav"], # can also be done weighted
+    # + Quads  -----------------------------------------------------------------------------------
+        "alt. torso-twist lunges":["stretch_auds/mori_twistedCactusLunge.wav", "stretch_auds/mori_torsoTwistLunges.wav"], #also weighted 
+        "step-back lunges":["exercise_names/mori_stepBackLunges.wav"], 
+    # + Shoulders --------------------------------------------------------------------------------
+        "L. rock-and-box": ["exercise_names/mori_leftRockAndBox.wav"],
+        "R. rock-and-box": ["exercise_names/mori_RightrockAndBox.wav"],
+    # + Upper abs -------------------------------------------------------------------------------------
+    # "open-hip T-bolt pr.ess":["stretch_auds/.wav"],
+    # basic crunch
+    # + Unknown / research needed ------------------------------------------------------------------
+        "half-bridge hip-thrusts" : ["exercise_names/halfbridgeHipThrustsBubblegum.wav"], 
+        "heels to the heavens": ["exercise_names/23b_heelsToHeavens.wav", "exercise_names/heels2HeavensBubblegum.wav"], 
+        "slow stand. Bicycles":["exercise_names/kaf_standing_bicycle.wav", "exercise_names/mori_slowTensionStandingBicycles.wav"], 
+        "stellar windmills":["exercise_names/mori_stellarWindmills.wav"],
+        "straight-leg toe taps":["exercise_names/mori_straightLegToeTaps.wav"],
+        "windmill toe touches":["exercise_names/kaf_standing_windmills.wav", "exercise_names/mori_windmillToeTouches.wav"],
+        "windmill sky chops":["exercise_names/mori_windmillSkyChops.wav"],
+        "wood chopper oblique":["stretch_auds/mori_woodChopper.wav", "stretch_auds/mori_treeChopper.wav"],
+# [!] Biceps ------------------------------------------------------------------------------------------------------
+    # + Pecs
+        "barrel hug hammer curl":["stretch_auds/mori_barrelHugHammerCurl.wav"], #  Unique compound for barrel hug...
+        "biceb curl fly press":["stretch_auds/mori_bicepCurlFlyPress2.wav", "stretch_auds/mori_bicepCurlFlyPress.wav"],
+    # + Delts, upper chest, traps (with military press)
+        "curl, overhead press":["stretch_auds/mori_curlToOverHeadPress.wav"],
+    # + Delts
+        "curl & double punch out":["stretch_auds/mori_curlUpDoublePunchOut.wav"],
+    # + Forearm 
+        "T-rex bicep curl":["stretch_auds/mori_trexBicebCurl.wav"], # weighted variation
+        "A-pose ro. claw-curls":["stretch_auds/mori_latPoseRotatingClaws.wav"],
+        "shrieking ghoul":["stretch_auds/mori_shriekingGhoul1.wav", "stretch_auds/mori_shriekingGhoul2.wav"], # and Delts
+    # + Tricep & forearm
+        "alternating hammer-downs":["stretch_auds/mori_whackamoleHammers.wav","stretch_auds/mori_alternatingHammerDown.wav", "stretch_auds/mori_altWhackAMole.wav"],
+# Delts -----------------------------------------------------------
+        "Franken Forearm Raise":["exercise_names/me_frankensteinForearmRaise.wav"],
+# [!] Forearms ------------------------------------------------------------------------------------------------------
+        "claw-hand Z-curls":["stretch_auds/mori_clawHandZCurls.wav", "stretch_auds/mori_clawHandZCurls2.wav"],
+        "zombie claw f.Arm Raise":["stretch_auds/mori_zombie_clawForearmRaise.wav"], 
+        "Mantis forearm raise":["exercise_names/me_preyingMantisForearmRaise.wav"],
+# [!] Hamstrings ---------------------------------------------------------------------------------------------------
+    # + Delts, traps
+        "squat to overhead press":["exercise_names/mori_squatToOverheadPress1.wav"],
+# [!] Hip Flexors ----------------------------------------------------------------------------------------
+        "R.Side hip abduction":["exercise_names/kaf_obliqueLegLift.wav"],
+        "L.Side hip abduction":["exercise_names/kaf_obliqueLegLift.wav"],
+    # + delts    
+        "marching doll high knee":["stretch_auds/mori_marchingDollHighKnee.wav"],
+# [!] Pectorals ----------------------------------------------------------------------------------------------------
+        "alt. arm fly side-step":["stretch_auds/mori_singleArmFlySidestep.wav"],
+    # Division for upper, side, and lower pecs needed
+    # + delts
+        "sky-punch fly press":["stretch_auds/mori_skyPunchFlyPress.wav"],
+        "vampire wings":["stretch_auds/mori_vampireWings.wav"],
+        "X-Y fly press":["stretch_auds/mori_xyFlyPress.wav", "stretch_auds/mori_cactusHugger.wav"],
+    # compound, multiple
+        "florentine 1-2":["stretch_auds/mori_florentine12.wav", "stretch_auds/mori_florentineone-two.wav"],
+
+# [!] Quads -----------------------------------------------------------------------------------------------------     
+        "squat pulse stand-ups":["exercise_names/mori_squatPulseStandUps.wav", "exercise_names/mori_squatPulseStandUp2.wav"],
+        "3-point frog squats":["stretch_auds/mori_3ptFrogSquats.wav"],
+
+# [!] Shoulders------------------------------------------------------------------------------------------------------
+        #  !!! - Division for delts and traps needed -
+        "slow lat pull-down":["exercise_names/kaf_tensionLatPullDown.wav", "exercise_names/tensionLatPullDownBubblegum.wav","exercise_names/elf_tension_lat_pull_downs.wav","stretch_auds/mori_overheadLat3.wav", "stretch_auds/mori_overheadLatPulldown2.wav"],
+        "sing.Side-step sky-punch":["stretch_auds/mori_singleArmSidesteppingSkyPunches.wav"],
+        "back-stroke torso twist":["stretch_auds/mori_armCircleTorsoRotations.wav", "stretch_auds/mori_backstrokeTorsoTwists.wav"],
+        "sky-punch, side stab":["stretch_auds/mori_skyPunchSideStab.wav"],
+        "4-count cheer squad":["stretch_auds/mori_4countCheerSquad.wav"],
+        "bear crawl": ["exercise_names/bearCrawlBubble.wav"], 
+        "flying cobra": ["exercise_names/kaf_flyingCobra.wav", "exercise_names/elf_flying_cobra.wav", "exercise_names/flyingCobraBubble.wav"],
         "lat pull-down push-out" : ["exercise_names/elf_kneeling_lat_pull_down_push_outs.wav"],
-        "lying lat pull-downs": ["exercise_names/lyingLatPullDownBubblegum.wav"],
+        "lying lat pull-downs": ["exercise_names/kaf_lyingLatPullDowns.wav", "exercise_names/lyingLatPullDownBubblegum.wav"],
         "pike position cross toe-touches":["exercise_names/elf_pike_position_cross_toe_touches.wav", "exercise_names/pikePositionCrossToeBubblegum.wav"], 
         "pike push-up":["exercise_names/elf_pike_push_up.wav", "exercise_names/pikePushUpBubblegum.wav"],
-        "plank shoulder taps":["exercise_names/elf_plank_shoulder_taps.wav", "exercise_names/plankShoulderTapsbub.wav"], 
-        "reaching row" : ["exercise_names/reachingRowBubble.wav"], 
+        "plank shoulder taps":["exercise_names/kaf_plankShoulderTaps.wav", "exercise_names/elf_plank_shoulder_taps.wav", "exercise_names/plankShoulderTapsbub.wav"], 
+        "reaching row" : ["exercise_names/kaf_reachingRow.wav", "exercise_names/reachingRowBubble.wav"], 
         "slow and low crawl": ["exercise_names/elf_slow_and_low_crawl.wav"],
-        "snow angel shoulders":["exercise_names/snowAngelShoulders1.wav"],
-        "supermans": ["exercise_names/elf_supermans.wav"],
-        "tension lat pull-downs":["exercise_names/tensionLatPullDownBubblegum.wav","exercise_names/elf_tension_lat_pull_downs.wav"],
-        
-        # abs
-        "flutter kicks": ["exercise_names/flutterkickBubblegum.wav"], 
-        "full extension cross-crunch":["exercise_names/23B_fullExtensionCrossCrunch.wav", "exercise_names/fullextensioncrossCrunchBubblegum.wav"],
-        "half windshield wiper combo": ["exercise_names/23b_halfwayWindshieldWiperCombo.wav"],
-        "half-bridge hip-thrusts" : ["exercise_names/halfbridgeHipThrustsBubblegum.wav"], 
-        "heels to the heavens": ["exercise_names/23b_heelsToHeavens.wav", "exercise_names/heels2HeavensBubblegum.wav"],
-        "leg lifts, candle pose": ["exercise_names/23B_legLiftsCandlePose.wav", "exercise_names/legLiftCandleBubblegum.wav"], 
-        "oblique heel-taps":["exercise_names/23b_obliqueHeelTaps.wav", "exercise_names/obliqueHeelTaps.wav"],
-        "sideways hip raise": ["exercise_names/23B_sidewaysHipRaise.wav"],
-        "windshield wiper leg lifts": ["exercise_names/23b_windshieldWiperLegLifts.wav"],
-        "hatchet cross tension": ["exercise_names/23b_hatchetMotionxCross.wav"],
-        "hip raise, leg extension": ["exercise_names/23B_hipRaiseLegExtension.wav"],
-        "seated russian twists": ["exercise_names/23B_seatedRussianTwists.wav"]
-        # "exercise_names/.wav"
-        }
-        
-        self.abs_exercises = [
-            "boat row",
-            # "flutter kicks", 
-            # "reverse plank, flutter kicks"
-            "full extension cross-crunch", 
-            # "half-bridge hip-thrusts", 
-            "heels to the heavens",
-            "leg lifts, candle pose",
-            "oblique heel-taps",
-            # The side-suitcase thing, also called a side hip crunch,
-            "sideways hip raise",
-            "half windshield wiper combo",
-            "windshield wiper leg lifts",
-            "hip raise, leg extension",
-            "seated russian twists"
-            # "dancing downward dog", "kneeling torso twists", "standing windmills", "standing bicycle", 
-            # "standing single cross crunch", "power knee-strike", "slo-mo mountain climbers", "oblique leg lift", "leg extension side-suitcase"
-            # opposite arm and leg out, then bring in
-            # "bird dog crunch", 
-            # pike position,single leg back kick extension to plank knee tuck, on same leg, alternating 
-            # "axe handle obliques", "banana boat rocker", 
-            # mirrored below:
-            # "seated single axe handle", 
-            # "figure-eight obliques"
-            # hands are clasped for the figure-eight obliques
-            ]
-        
-        # "empty tension bicep curl"
-        #  dumbbells: seated single-arm curl
+        "snow angel shoulders":["exercise_names/kaf_snowAngelShoulders.wav", "exercise_names/snowAngelShoulders1.wav"],
+        "supermans": ["exercise_names/kaf_supermans.wav", "exercise_names/elf_supermans.wav"],
+# [!] Triceps    ------------------------------------------------------------------------------------------------------
+    # + bicep 
+        # "left overhead tricep extension":["exercise_names/mori_leftOverheadTriExtension.wav"]
+        # "right overhead tricep extension":["exercise_names/mori_RtOverheadTriExtension.wav", "exercise_names/mori_RtOverheadTriExtension.wav"] 
+        # "chop out, scrape in":["stretch_auds/.wav"], # compound, push and pull
 
-        #  at gym: chin-ups
+    #  + Delts
+        "double-fang down-stab":["stretch_auds/mori_doubleFangDown3.wav", "stretch_auds/mori_doubleFangDownwardStab.wav"],
+        # draw double swords from back # (the elephant tusk backpack)
+        # from 3/4 boxer's stance, Ushiro-iaijutsu (L/R mirror), one arm at a time, full range of motion for tricep dip back, full slash forward
+# + Forearms
+        # "basic hammer curl":["stretch_auds/mori_alt_basicHammerCurls.wav"],   
+        #  Hammer curl to wrist rotation # compoun
+        #  Double chop pulse : Arms at sides, hammer curl, karate chop hands full wrist extension, then at bottom position with arms at waist, wrists go down and up
+    # + Multiple compound, chest and shoulders
+        # "high-hammer curls": ["stretch_auds/mori_highHammerCurl.wav"],
+        # "Alt. high-hammer curls": ["stretch_auds/mori_altHighHammerCurls.wav"],
+   
+# [!] Stretches ------------------------------------------------------------------------------------------------------
+        "R.Stand ankle rotations":["stretch_auds/me_RtLegStAnkleRotation.wav", "stretch_auds/me_rtSideStandAnkleRotations.wav"],
+        "L.Stand ankle rotations":["stretch_auds/me_leftLegStAnkleRotations.wav"],
+        "L.Stand heel-to-toe point":["stretch_auds/me_leftLegStandingHeelToToePoint.wav"],
+        "R.Stand heel-to-toe point":["stretch_auds/me_RtLegStHeelToToePoint.wav"],
+        "L.Arm Across high-knees":["stretch_auds/me_leftArmAcrossKneeRaises.wav", "stretch_auds/me_leftARmAcrossHighKneeRaze.wav", "stretch_auds/me_leftArmAcrossHighKnees.wav"], 
+        "R.Arm Across high-knees":["stretch_auds/me_RtArmAcrossHighKnee1.wav", "stretch_auds/me_rightArmAcrossHighKnee2.wav"],
+        "L.Arm Across side step":["stretch_auds/me_leftArmAcrossSideStep.wav"], 
+        "R.Arm Across side step":["stretch_auds/me_RightArmAcrossSideStep.wav", "stretch_auds/me_rtArmAcrossSideStep.wav"],
+        "L.Arm Across, Calf Raise":["stretch_auds/me_LArmAcrossAnkleRaises.wav"], 
+        "R.Arm Across, Calf Raise":["stretch_auds/me_right_armAcrossCalfRaises.wav"],
+        "L. Tri. & ankle raises":["stretch_auds/me_leftTricepStretchCalfRaises2.wav"], 
+        "R. Tri. & ankle raises":["stretch_auds/me_righttricepStretchCalf2.wav"],
+        "L. Tri. & high-knees":["stretch_auds/me_leftTricepKneeRaises.wav"], 
+        "R. Tri. & high-knees":["stretch_auds/me_rightTricepHighKneeRaise.wav", "stretch_auds/me_rightTriKneeRaises.wav"],
+        "L. Tri, side-step":["stretch_auds/me_leftTriSidestep.wav"],
+        "R. Tri, side-step":["stretch_auds/me_rtTriSideStep.wav"],
+        "Arms up, wrist-ro.":["stretch_auds/me_armsUpWristRotations.wav"], 
+        "Arms out, wrist-ro.":["stretch_auds/me_armsOutWristRotations.wav"],
+        "X-Y-T Wrist rotations":["stretch_auds/me_xytWristRotations.wav"], 
+        "Y-A-X-T-X, wrist ro.":["stretch_auds/me_yaxtx_spelled.wav", "stretch_auds/me_yaxtx_wrist2.wav"], 
+        "A-pose In. Wrist Cir.":["stretch_auds/me_aPoseInwardWrCircles.wav"],
+        "A-pose Out Wrist Cir.":["stretch_auds/me_a_poseOutWristCircles.wav", "stretch_auds/me_a_poseOutWristCir2.wav"],
+        # "Down In/Out Wrist Cir.":["stretch_auds/.wav"],
+        "Cat's claw wrist bends":["stretch_auds/me_catsClawWristBends.wav"], 
+        "Thriller wrist cir.":["stretch_auds/me_thrillerWristCircles.wav"],
+        # "Frog Squat Stretch":["exercise_names/.wav"],
+        "L.Lunge torso turn":["stretch_auds/me_leftLungeTrianglePose.wav"],
+        "R.Lunge torso turn":["stretch_auds/me_rightLungeTrianglePose.wav"],
+        "clock hula hips":["stretch_auds/me_standingHulaHipRotations_clockwise.wav"],
+        "counter hula hips" :["stretch_auds/me_standingHulaHipRotations_counterclockwise.wav"],
+        "L.Leg cross model pose":["stretch_auds/me_leftlegAcrossmodelpose.wav"],
+        "R.Leg cross model pose":["stretch_auds/me_rightLegAcrossModelPose.wav"],
+        "L-stand fw-lean calf":["stretch_auds/mori_standLeftLeanCalfStretch.wav", "stretch_auds/mori_leftLegStandLeanForwardCalf2.wav", "stretch_auds/me_leftstandingforwardleaningcalfStretch.wav"],
+        "R-stand fw-lean calf":["stretch_auds/mori_StandRightCalfStretch2.wav", "stretch_auds/mori_right_leg_calfStretch1.wav"],
+        "Pike, L-calf stretch":["stretch_auds/me_pikePositionleftCrossCalfStretch.wav"],
+        "Pike, R-calf stretch":["stretch_auds/me_pikePositionRightCrossCalfStretch.wav"],
+        "Stand L. knee-tuck":["stretch_auds/mori_standingLeftKneeTuckHold.wav"],
+        "Stand R. knee-tuck":["stretch_auds/mori_standingRightkneeTuckHold.wav"],
+        "L.back, lunging stretch":["stretch_auds/mori_leftlegBackLungingStretch.wav"],
+        "R.back, lunging stretch":["stretch_auds/mori_rightLegBackLungingStretch.wav"],
+        "Lying L-knee-tuck":["stretch_auds/mori_lyingleftKneeTuckStretch.wav"],
+        "Lying R-knee-tuck":["stretch_auds/mori_lyingRightKneeTuckStretch.wav"],
+        "Stand-V Left-leg":["stretch_auds/mori_standingVLeftLeg.wav"],
+        "Stand-V Right-leg":["stretch_auds/mori_standingVRightLeg.wav"],
+        "Stand-V center":["stretch_auds/mori_standingVCenterStretch.wav"],
+        # "V-sit Left":["stretch_auds/me_standingVLeftLeg.wav"],
+        # "V-sit Right":["stretch_auds/me_standingVRightLeg.wav"],
+        # "V-sit Center":["stretch_auds/me_standingVCenterStretch.wav"],
+        "Look-up neck ro.":["stretch_auds/mori_upperHalfCircleNeckRotation.wav"],
+        "Look-down neck ro.":["stretch_auds/mori_downwardhalfCircleNeckRotation.wav"],
+        "L.Stand quad pull":["stretch_auds/me_standingleftquadStretch.wav"],
+        "R.Stand quad pull":["stretch_auds/me_standingRightQuadStretch.wav"],
+        "L.Lying quad stretch":["stretch_auds/me_lyingLeftQuedStretch.wav"],
+        "R.Lying quad stretch":["stretch_auds/me_lyingRightQuadStretch.wav"],
+        "Stand.Center toe-touch":["stretch_auds/me_Standing_center_toe_touch_reach.wav"],
+        "L.Over toe-touch":["stretch_auds/me_leftLegoverrighttoetouch.wav"],
+        "R.Over toe-touch":["stretch_auds/me_rightlegOverLeftToeTouch.wav"],
+        "Sit.Toe-touch":["stretch_auds/me_sittingtoetouchreach.wav","stretch_auds/me_sittingToeTouchReach2.wav"],
+        "L.Leg out, toe-touch":["stretch_auds/me_leftLegOutToeTouchReach.wav"],
+        "R.Leg out, toe-touch":["stretch_auds/me_rightlegOutToeTouchReach.wav"],
+        "Sit L.Extension hold":["stretch_auds/me_sittingLeftLegExtensionHold.wav"],
+        "Sit R.Extension hold":["stretch_auds/me_sittingRightLegExtensionHold.wav"],   
+        "Center split":["stretch_auds/me_centerSplit.wav"],
+        "Left side-lunge":["stretch_auds/me_leftSideLunge.wav"],
+        "Right side-lunge":["stretch_auds/me_rightSideLunge.wav"],
+        "Left front-split":["stretch_auds/me_leftFrontSplit.wav"],
+        "Right front-split":["stretch_auds/me_rightFrontSplit.wav"],
 
-        # leg motions/other:
-        # "pike plank uppercuts", "squat to rising uppercut", 
-        # "sunrise squats"
-        # low squat, tiptoe reach
-        
-        # six o'clock tick-tock, leg lift one at a time motion...
-        
+     }
 
-
-
-
-
-
-
-
-
-
-
-
-#  --------- DISPLAY ---------------------------------
+#  -------------------------------------------------- DISPLAY -------------------------------------------------------
 
 # ------ tab1 Initialize widgets ------------------------------------------------------------------------------------
         self.exercise_label = tk.Label(self.tab1, text="Exercise:")
@@ -304,7 +597,7 @@ class ExerciseTimerApp:
         self.start_button.grid(row=7, column=0, padx=5, pady=5)
         self.start_button.config(font=("impact", 14), fg="lime", bg="black")
 
-        self.pause_button = tk.Button(self.tab1, text="Pause/Resume", command=self.toggle_timer)
+        self.pause_button = tk.Button(self.tab1, text="Pause/Resume", command=self.toggle_hard_timer)
         self.pause_button.grid(row=7, column=1, padx=5, pady=5)
         self.pause_button.config(font=("Times", 14), fg="yellow", bg="black")
 
@@ -323,78 +616,116 @@ class ExerciseTimerApp:
         # self.completed_exercises_text = tk.Text(self.tab1, height=10, width=40)
         # self.completed_exercises_text.grid(row=2, column=0, columnspan=2, padx=5, pady=5)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # ----------  Set up Tab2 widgets -------------------------------------------------------------------------------------------
 
         self.stretch_name_label = tk.Label(self.tab2, text="Stretching!")
                                                                 # lavander blush X dark-purple
-        self.stretch_name_label.config(font=("times", 24), fg="#F9C22E", bg="#27133A", bd=2, relief="solid", padx=5, pady=5) 
+        self.stretch_name_label.config(font=("times", 36), fg="#F9C22E", bg="#27133A", bd=2, relief="solid", padx=5, pady=5) 
         self.stretch_name_label.grid(row=0, column=0, columnspan=4, padx=5, pady=5)
 
-        self.stretch_timer_label = tk.Label(self.tab2, text="Time not yet started")
-                                                            #  aquamarine X dark-purple
-        self.stretch_timer_label.config(font=("arial", 22), fg="#52FFB8", bg="#27133A", bd=2, relief="solid", padx=5, pady=5) 
-        self.stretch_timer_label.grid(row=1, column=0, columnspan=4, padx=5, pady=5)
+        self.stretch_timer_label = tk.Label(self.tab2, text="(seconds per move)")
+                                                            #  ice blue
+        self.stretch_timer_label.config(font=("arial", 22), fg="#9BF3F0", bg="#27133A", bd=2, relief="solid", padx=5, pady=5) 
+        self.stretch_timer_label.grid(row=1, column=0, padx=5, pady=5)
+
+        self.stretch_time_length_label = tk.Label(self.tab2, text="(est. workout time)")
+        self.stretch_time_length_label.grid(row=1, column=1, padx=5)
+                                                                #  aquamarine X dark-purple
+        self.stretch_time_length_label.config(font=("times", 22), fg="#52FFB8", bg="#27133A")
+
+        self.stretch_pause_button = tk.Button(self.tab2, text="SND TST", command=lambda: self.get_and_play_rand_aud_to_end(self.end_bumper_aud_arr, self.temp_end_bumper_aud_arr))
+        self.stretch_pause_button.grid(row=1, column=2, padx=5, pady=5)
+        self.stretch_pause_button.config(font=("Times", 14), fg="#BEA7E5", bg="black")
 
         self.stretch_duration_slider = tk.IntVar()
-        self.stretch_duration_slider = tk.Scale(self.tab2, from_=20, to=90, orient=tk.HORIZONTAL, resolution=5, variable=self.stretch_duration_slider, command=self.update_workout_timing_preview_label)
+        self.stretch_duration_slider = tk.Scale(self.tab2, from_=6, to=90, orient=tk.HORIZONTAL, resolution=6, variable=self.stretch_duration_slider, command=self.update_stretch_timing_preview_label)
         self.stretch_duration_slider.set(30)
         self.stretch_duration_slider.grid(row=3, column=0, padx=2)
 
-        self.stretch_time_length_label = tk.Label(self.tab2, text="(Generate a preivew for estimated workout time)")
-        self.stretch_time_length_label.grid(row=3, column=1, columnspan=3, padx=5)
-        self.stretch_time_length_label.config(font=("times", 16), fg="#9BF3F0", bg="#27133A")
-
-        # self.stretch_half_label = tk.Label(self.tab1, text="Set not started")
-        # self.stretch_half_label.config(font=("courier", 22), fg="#9BF3F0", bg="black", bd=2, relief="solid", padx=5, pady=5) 
-        # self.stretch_half_label.grid(row=2, column=0, columnspan=4, padx=5, pady=5)
-
-
-        self.stretch_start_button = tk.Button(self.tab2, text="Randomize Session", command=self.preview_stretching_routine)
-        self.stretch_start_button.grid(row=7, column=0, padx=5, pady=5)
+        self.stretch_start_button = tk.Button(self.tab2, text="Randomize Session", command=self.initialize_stretches_update_display)
+        self.stretch_start_button.grid(row=4, column=0, padx=5, pady=5)
         self.stretch_start_button.config(font=("impact", 14), fg="#52FFB8", bg="black")
 
-        self.stretch_pause_button = tk.Button(self.tab2, text="NYI Start")
-        self.stretch_pause_button.grid(row=7, column=1, padx=5, pady=5)
+        # self.stretch_pause_button = tk.Button(self.tab2, text="Start", command=self.start_continuous_session)
+        # self.stretch_pause_button.grid(row=7, column=1, padx=5, pady=5)
+        # self.stretch_pause_button.config(font=("Times", 14), fg="#9BF3F0", bg="black")
+
+        self.stretch_pause_button = tk.Button(self.tab2, text="Start", command=self.start_continuous_session)
+        self.stretch_pause_button.grid(row=4, column=1, padx=5, pady=5)
         self.stretch_pause_button.config(font=("Times", 14), fg="#9BF3F0", bg="black")
 
-        self.stretch_pause_button = tk.Button(self.tab2, text="SND TST", command=lambda: self.get_and_play_rand_aud_to_end(self.end_bumper_aud_arr, self.temp_end_bumper_aud_arr))
-        self.stretch_pause_button.grid(row=7, column=2, padx=5, pady=5)
-        self.stretch_pause_button.config(font=("Times", 14), fg="#BEA7E5", bg="black")
+        # self.stretch_pause_button = tk.Button(self.tab2, text="test1", command=self.get_karate_exercises(8))
+        # self.stretch_pause_button.grid(row=7, column=2, padx=5, pady=5)
+        # self.stretch_pause_button.config(font=("Times", 14), fg="#BEA7E5", bg="black")
+    
+        self.stretch_pause_button = tk.Button(self.tab2, text="Pause/Resume", command=self.toggle_warmup_timer)
+        self.stretch_pause_button.grid(row=4, column=2, padx=5, pady=5)
+        self.stretch_pause_button.config(font=("Times", 14), fg="#9BF3F0", bg="black")
+        
+        self.first_col_stretches = tk.Listbox(self.tab2)
+        self.first_col_stretches.grid(row=8, column= 0,  padx=4, pady=5)
+        self.first_col_stretches.config(font=("Times", 24), width="22", height="16", bg="#27233A") 
 
-        self.stretch_pause_button = tk.Button(self.tab2, text="Pause/Resume", command=self.toggle_timer)
-        self.stretch_pause_button.grid(row=7, column=3, padx=5, pady=5)
+        self.second_col_stretches = tk.Listbox(self.tab2)
+        self.second_col_stretches.grid(row=8, column= 1, padx=4, pady=5)
+        self.second_col_stretches.config(font=("Times", 24), width="22", height="16", bg="#27233A")
+
+        self.third_col_stretches = tk.Listbox(self.tab2)
+        self.third_col_stretches.grid(row=8, column= 2, padx=4, pady=5)
+        self.third_col_stretches.config(font=("Times", 24), width="22", height="16", bg="#27233A")
+
+#  tab 3 -----------------------------------------------------------------------------------------
+
+        self.boxing_name_label = tk.Label(self.tab3, text="Let's do kickboxing!")
+                                                            # lavander blush X dark-purple
+        self.boxing_name_label.config(font=("times", 36), fg="#F9C22E", bg="#27133A", bd=2, relief="solid", padx=5, pady=5) 
+        self.boxing_name_label.grid(row=0, column=0, columnspan=4, padx=5, pady=5)
+
+        self.boxing_pause_button = tk.Button(self.tab3, text="Preview", command=lambda:self.preview_boxing_workout())
+        self.boxing_pause_button.grid(row=1, column=0, padx=5, pady=5)
+        self.boxing_pause_button.config(font=("times", 14), fg="#BEA7E5", bg="black")
+
+        self.boxing_timer_label = tk.Label(self.tab3, text="Sec/Move")
+                                                            #  ice blue
+        self.boxing_timer_label.config(font=("times", 22), fg="#9BF3F0", bg="#27133A", bd=2, relief="solid", padx=5, pady=5) 
+        self.boxing_timer_label.grid(row=1, column=1, padx=5, pady=5)
+
+        self.boxing_duration_slider = tk.IntVar()
+        self.boxing_duration_slider = tk.Scale(self.tab3, from_=2, to=90, orient=tk.HORIZONTAL, resolution=8, variable=self.boxing_duration_slider, command=self.update_boxing_preview_label)
+        self.boxing_duration_slider.set(2)
+        self.boxing_duration_slider.grid(row=1, column=2, padx=2)
+
+        # self.boxing_start_button = tk.Button(self.tab2, text="Randomize Session", command=self.initialize_stretches_update_display)
+        self.boxing_start_button = tk.Button(self.tab3, text="START", command=self.start_boxing_routine)
+        self.boxing_start_button.grid(row=2, column=0, padx=5, pady=5)
+        self.boxing_start_button.config(font=("impact", 14), fg="#52FFB8", bg="black")
+
+        self.boxing_time_length_label = tk.Label(self.tab3, text="# of Moves")
+        self.boxing_time_length_label.grid(row=2, column=1, padx=5, pady=5)
+                                                                #  aquamarine X dark-purple
+        self.boxing_time_length_label.config(font=("times", 22), fg="#52FFB8", bg="#27133A")
+
+        self.boxing_move_number_slider = tk.IntVar()
+        self.boxing_move_number_slider = tk.Scale(self.tab3, from_=2, to=30, orient=tk.HORIZONTAL, resolution=2, variable=self.boxing_move_number_slider, command=self.update_boxing_preview_label)
+        self.boxing_move_number_slider.set(2)
+        self.boxing_move_number_slider.grid(row=2, column=2, padx=2)
+
+        self.stretch_pause_button = tk.Button(self.tab3, text="Pause/Resume", command=self.toggle_boxing_timer)
+        self.stretch_pause_button.grid(row=3, column=0, padx=5, pady=5)
         self.stretch_pause_button.config(font=("Times", 14), fg="#9BF3F0", bg="black")
 
-        self.first_half_stretches = tk.Listbox(self.tab2)
-        self.first_half_stretches.grid(row=8, column= 0, columnspan=2, padx=2, pady=5)
-        self.first_half_stretches.config(font=("Times", 23), width="34", height="12", fg="lime", bg="#27233A") 
+        self.boxing_time_preview_label = tk.Label(self.tab3, text="Est. Time: (adjust sliders)")
+        self.boxing_time_preview_label.grid(row=3, column=1, columnspan= 3, padx=2, pady=5)
+                                                                #  aquamarine X dark-purple
+        self.boxing_time_preview_label.config(font=("times", 22), fg="#52FFB8", bg="#27133A")
 
-        self.second_half_stretches = tk.Listbox(self.tab2)
-        self.second_half_stretches.grid(row=8, column= 2, columnspan=2, padx=2, pady=5)
-        self.second_half_stretches.config(font=("Times", 23), width="34", height="12", fg="lime", bg="#27233A")
+
+        self.boxing_timer_display = tk.Label(self.tab3, text="[time display]")
+        self.boxing_timer_display.grid(row=4, column=0, columnspan= 4, padx=2, pady=5)
+                                                                #  aquamarine X dark-purple
+        self.boxing_timer_display.config(font=("times", 34), fg="lime", bg="black")
+
+
 
 
 
@@ -417,38 +748,233 @@ class ExerciseTimerApp:
         # Initialize variables
         self.selected_exercises = []
         self.selected_interval_actions = []
+        self.selected_stretches = []
         # ------------- NYI need to change muscle group selection
         self.target_muscle_group_keyword = "shoulders"
-        self.target_muscle_group_list = self.shoulder_exercises
+        self.target_muscle_group_list = exercise_lists.shoulder_exercises
         self.interval_activity_keyword = "abs"
-        self.interval_activity_list = self.abs_exercises
+        self.interval_activity_list = exercise_lists.bodyweight_abs_single_motion_list
         self.workout_data_list = []
 
         self.countdown_done = False
         self.pause = True
         self.remaining_action_time = 0
         self.remaining_interval_time = 0
+    
         self.duration_in_mins = 0
         self.is_it_action_time = True
         self.num_exercises = 0
         self.num_sets_per_exercise = 0
         self.current_exercise_index = 0
         self.current_round_index = 0
-    
-    # def plain_interrupt_and_resume(self, primary_file, interrupt_file, interrupt_time, total_duration):
-    #     # Start playing the primary audio
-    #     self.play_bg_audio_for_duration(primary_file, total_duration - interrupt_time)
 
-    #     # Wait for interrupt_time seconds and then interrupt with another audio
-    #     pygame.time.wait(interrupt_time * 1000)
-    #     self.play_bg_audio_for_duration(interrupt_file, total_duration - interrupt_time)
+        # used in tab2, for stretches, the stretch time slider will update this
+        self.standing_stretch_only = False
+        self.continuous_action_time = 0
+        self.current_continuous_action_index = 0
+
+        self.boxing_workout_move_list = ["default string"]
+        self.boxing_duration_in_mins = 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # def simply_play_bgm_once(self, targetAudFile):
+    #     pygame.mixer.music.load(targetAudFile)
+    #     pygame.mixer.music.play(loops=0)     
+          
     # Toggle timer countdown
-    def toggle_timer(self):
+    def toggle_hard_timer(self):
         self.pause = not self.pause
         if not self.pause:
             self.update_timer_hard_x_soft_pattern()
+        else:
+            pygame.mixer.music.stop()
+
+    def toggle_warmup_timer(self):
+        self.pause = not self.pause
+        if not self.pause:
+            self.update_timer_continuous_action_pattern()
+        else:
+            pygame.mixer.music.stop()
+
+    def toggle_boxing_timer(self):
+        self.pause = not self.pause
+        if not self.pause:
+            if len(self.temp_active_song_aud_arr) == 0:
+                    self.copy_src_arr_to_temp(audio_doc.outsourced_active_song_aud_arr, self.temp_active_song_aud_arr)
+# .pop() progressively reduces the length of the active song array
+            chosen_bgm = self.temp_active_song_aud_arr.pop()
+            duration_of_boxing_movement = self.boxing_duration_slider.get()
+            pygame.mixer.music.load(chosen_bgm)
+            # Play the background track (the .stop() clauses should halt this...)
+            pygame.mixer.music.play()
+            self.update_boxing_timer_and_manage_aud_triggers()
+        else:
+            pygame.mixer.music.stop()
+
+    def update_boxing_preview_label(self, value):
+        time_per_boxing_exercise = self.boxing_duration_slider.get()
+        num_boxing_moves = self.boxing_move_number_slider.get()
+        self.boxing_duration_in_mins = math.ceil((num_boxing_moves*(time_per_boxing_exercise))/60)
+        boxing_time_string = f"Est. Time: {self.boxing_duration_in_mins} mins \n{num_boxing_moves} moves at {time_per_boxing_exercise}s each."
+        self.boxing_time_preview_label.config(text=boxing_time_string)
+    
+    def get_boxing_arr(self):
+        # need to divide by 2 because all moves are L/R mirrored and come in pairs, but input is for each set to iterate over, not individual
+        n_of_moves_halved = int((self.boxing_move_number_slider.get())/2)
+        boxing_output_arr = make_martial_arts.get_string_list(n_of_moves_halved)
+        # reset the boxing move list to an empty string so we can repopulate it
+        self.boxing_workout_move_list = []
+        for x in boxing_output_arr:
+            self.boxing_workout_move_list.append(x)
+
+    def preview_boxing_workout(self):
+        self.get_boxing_arr()
+        boxing_move_display_string = "\n".join(self.boxing_workout_move_list[0][:-1])
+        self.boxing_name_label.config(text=boxing_move_display_string)
+        self.boxing_timer_display.config(text="Time left: " + str(self.boxing_duration_slider.get()), fg="lime", bg="black")
+
+    def start_boxing_routine(self):
+        self.pause = False
+        self.copy_src_arr_to_temp(audio_doc.outsourced_active_song_aud_arr, self.temp_active_song_aud_arr)
+        # if the workout move list item has the default string in it, means no preview was made, so we need to make the moves array and update the display
+        if self.boxing_workout_move_list[0] == "default string":
+            self.preview_boxing_workout()
+        self.remaining_action_time = self.boxing_duration_slider.get()
+        self.manage_boxing_audio_cues(self.boxing_workout_move_list[0])
+        self.update_boxing_timer_and_manage_aud_triggers()
+        # otherwise, we can assume there's the array of moves already exists
+# self.current_exercise_index = 0
+
+    def manage_boxing_audio_cues(self, input_list_of_strings):
+        for current_word in input_list_of_strings:
+            if current_word == "Right":
+                rand_right_bark = random.choice(voice_43e_right_auds)
+                pygame.mixer.music.stop()
+                pygame.mixer.Sound(rand_right_bark).play()
+                while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+                    pygame.time.Clock().tick(30)
+            elif current_word == "Left":
+                rand_left_bark = random.choice(voice_43e_left_auds)
+                pygame.mixer.music.stop()
+                pygame.mixer.Sound(rand_left_bark).play()
+                while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+                    pygame.time.Clock().tick(30)
+            elif current_word == "sound_end_flag":
+                # print("sound end flag reached, starting separate thread")
+#  NOTE: NYI mute background music with a toggle?
+                # if bgm_on == True:
+# if the active song array gets depleted, then re-shuffle and regenerate with the following function 
+                if len(self.temp_active_song_aud_arr) == 0:
+                    self.copy_src_arr_to_temp(audio_doc.outsourced_active_song_aud_arr, self.temp_active_song_aud_arr)
+# .pop() progressively reduces the length of the active song array
+                chosen_bgm = self.temp_active_song_aud_arr.pop()
+                duration_of_boxing_movement = self.boxing_duration_slider.get()
+                bgm_thread = threading.Thread(target=self.play_bg_audio_until_end, args=(chosen_bgm,))
+                bgm_thread.start() 
+            else:
+                audio_bark = voice_43e_dictionary[current_word]
+                pygame.mixer.music.stop()
+                pygame.mixer.Sound(audio_bark).play()
+                while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+                    pygame.time.Clock().tick(30)
+
+    def update_boxing_timer_and_manage_aud_triggers(self):
+        if self.remaining_action_time == 0:
+            # Check if we've reached the end of the line
+            
+            # len needs -1 because we're tracking from a 0 index
+            if self.current_exercise_index == (len(self.boxing_workout_move_list)-1):
+                # trigger ending message and jump out of the program if we've reached 0 on the last item
+                print("workout over!")
+                self.boxing_name_label.config(text=f"{self.boxing_duration_in_mins} min long workout over!")
+                self.boxing_timer_display.config(text="Done!")
+                self.write_receipt_of_boxing_workout()
+                pygame.mixer.music.stop()
+                pygame.mixer.Sound(self.workout_end_aud).play()
+                return
+            # else:
+            #     print(f"Movement #{self.current_exercise_index} of {len(self.boxing_workout_move_list)}")
+            # increase the targeting index. The 0th index will run the first time through because we're fueling up remaining_action_time in start_boxing_routine()
+            self.current_exercise_index += 1
+            # target the list of strings for the current move
+            
+            # input(f"curr idx = {self.current_exercise_index}\ncurrent move {self.boxing_workout_move_list[self.current_exercise_index]}")
+            curr_list_of_audio_strings = self.boxing_workout_move_list[self.current_exercise_index]
+            
+            # replenish action time as a new move starts
+            self.remaining_action_time = self.boxing_duration_slider.get()
+            # make the display string and update the label area for the name of the movement/combo
+            boxing_move_display_string = "\n".join(curr_list_of_audio_strings[:-1])
+            self.boxing_name_label.config(text=boxing_move_display_string)
+            aud_management_thread = threading.Thread(target=self.manage_boxing_audio_cues, args=(curr_list_of_audio_strings,))
+            aud_management_thread.start()
+        else:
+            self.remaining_action_time -= 1
+            self.boxing_timer_display.config(text="Time left: " + str(self.remaining_action_time), fg="lime", bg="black")
+        if not self.pause:
+            self.master.after(1000, self.update_boxing_timer_and_manage_aud_triggers)
+
+    def write_receipt_of_boxing_workout(self):
+        current_time_stamp = datetime.now().strftime("%d-%m_%H-%M") 
+        timestamp_filename = "boxing" + current_time_stamp + ".txt"
+        with open(timestamp_filename, 'w', encoding='utf-8') as file:
+            file.write(f"Boxing exercise! Duration: {self.boxing_duration_in_mins} mins ; at {current_time_stamp}\n")
+            counter_var = 0
+            for string_set in self.boxing_workout_move_list:
+                counter_var += 1
+                # only print every other because we have 2 instances of each workout item
+                if counter_var % 2 ==0:
+                    # ignore the first because it'll be "left/right" and the last is the aud-end flag string always
+                    action_output_string = ", ".join(string_set[1:-1])
+                    file.write(action_output_string+ "\n")
+            file.write("and that's all she wrote!")
+        print("Workout textfile completed! Check current folder for receipt of workout!")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def update_workout_timing_preview_label(self, value):
-        #  STATIC VAL BELOW FOR EXERCISES
         num_exercises = self.num_motions.get()
         num_sets_per_exercise = self.num_sets_slider.get()
         dur_active = self.active_duration_slider.get()
@@ -457,7 +983,7 @@ class ExerciseTimerApp:
         num_breaks = 0
         # duration_in_mins = math.ceil(((num_sets*(dur_active+dur_interval)) - dur_interval)+(break_interval * num_breaks)/60)
         self.duration_in_mins = math.ceil(((num_exercises*(num_sets_per_exercise*(dur_active+dur_interval)) - dur_interval)+(break_interval * num_breaks))/60)
-        workout_stats_string = f"Total Duration: {self.duration_in_mins} minutes \n{num_sets_per_exercise} sets, {dur_active}s active, {dur_interval}s intervals"
+        workout_stats_string = f"Total Duration: {self.duration_in_mins} minutes \n{num_exercises} exercises; {num_sets_per_exercise} sets/exercise\n {dur_active}s active, {dur_interval}s intervals"
         self.workout_timing_data_label.config(text=workout_stats_string)
     def select_actions_from_arr(self, num_actions, target_arr):
         # from target array, select a random number of unique items represented by the integer : num_actions
@@ -471,8 +997,8 @@ class ExerciseTimerApp:
         workout_stats = self.workout_timing_data_label.cget("text")
         self.workout_data_list.append(workout_stats)
         # --------------- NYI : Logic for different kinds of sessions in different functions?-----------------------------------------------------------------------------------
-        #  !!! NYI muscle group selection with a combobox (if combobox = arms, then self.arm_exercises...)
-        target_action_list = self.shoulder_exercises
+        #  !!! NYI muscle group selection with a combobox 
+        target_action_list = exercise_lists.shoulder_exercises
         # populate an array object with the main exercises
         self.selected_exercises = self.select_actions_from_arr(self.num_motions.get(), target_action_list)
         for x in self.selected_exercises:
@@ -492,6 +1018,9 @@ class ExerciseTimerApp:
         pygame.time.wait(duration * 1000)
         # Stop playback after duration
         pygame.mixer.music.stop()
+    def play_bg_audio_until_end(self, file_path):
+        pygame.mixer.music.load(file_path)
+        pygame.mixer.music.play()
     def copy_src_arr_to_temp(self, src_arr, temp_arr):
         random.shuffle(src_arr)
         for x in src_arr:
@@ -539,7 +1068,7 @@ class ExerciseTimerApp:
         starting_encouragement_aud_file = self.start_bumper_aud_arr.pop()
         first_action = self.selected_exercises[0]
         first_exercise_aud_file = random.choice(self.master_exercise_name_audio_dic[first_action])
-        middle_sound_effect = pygame.mixer.Sound(self.halway_alarm)
+        middle_sound_effect = pygame.mixer.Sound(self.halfway_alarm)
         # Play starting encouragement audio
         starting_encouragement_sound = pygame.mixer.Sound(starting_encouragement_aud_file)
         starting_encouragement_sound.play()
@@ -661,15 +1190,13 @@ class ExerciseTimerApp:
             self.current_round_index = 0
             # increase exercise index to move to the next item in selected_exercises
             self.current_exercise_index += 1
-            # print(f"current round index is {self.current_round_index}")
-            # print(f"Current exercise motion is {self.current_exercise_index +1} of {self.num_exercises}")
             if self.current_exercise_index >= self.num_exercises:
                 print(f"exercise session complete! {self.current_exercise_index} rounds of {self.num_exercises} complete!")
                 self.set_number_label.config(text="Workout Complete!")
                 self.exercise_label.config(text=f"{self.duration_in_mins}mins exercise complete!", fg="lime", bg="black")
                 self.timer_label.config(text=f"Done!")
                 pygame.mixer.music.stop()
-                pygame.mixer.music.load(self.halway_alarm)
+                pygame.mixer.music.load(self.halfway_alarm)
                 pygame.mixer.music.play()
                 time.sleep(0.4)
                 pygame.mixer.music.load(self.workout_end_aud)
@@ -692,7 +1219,6 @@ class ExerciseTimerApp:
                 self.set_number_label.config(text=f"Set {self.current_round_index + 1} of {self.num_sets_per_exercise}")
                 # Also call the update to the exercise label !!! yes, this is double-calling the exercise label on the last item of each iteration, FIX LATER: C-bug, optimization
                 self.update_exercise_label()
-                pygame.mixer.music.stop()
                 encouragement_aud = pygame.mixer.Sound(encouragement)
                 encouragement_aud.play()
                 while pygame.mixer.get_busy():  # Wait for the sound to finish playing
@@ -708,8 +1234,6 @@ class ExerciseTimerApp:
             print(f"current round index is {self.current_round_index}")
         if not self.pause:
             self.master.after(1000, self.update_timer_hard_x_soft_pattern)
-        # on completing a full set of rounds interval, increase index by 1 to move to the next 
-                # self.current_exercise_index += 1    
             
 
 
@@ -736,89 +1260,363 @@ class ExerciseTimerApp:
 
 
 
-    # ----------------------------------------------------------------------------------------------------------------------------------------------
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def get_non_ground_continual_exercise_list_from_objects(self):
+            combined_list = []
+            list_of_stretch_lists = []
+            selected_warmups_name_arr = []
+
+            temp_warmup_keyword_arr = stretches_doc.warmup_keyword_arr
+
+            # for item in random_2_starters:
+            #     temp_warmup_keyword_arr.append(item)
+    # Get a list of warm-ups by using the keywords on the dictionary, then shuffle the results up
+            for keyword in temp_warmup_keyword_arr:
+                chosen_warmup = random.choice(stretches_doc.warmup_dic[keyword])
+                selected_warmups_name_arr.append(chosen_warmup)
+            for special_item in stretches_doc.special_list:
+                selected_warmups_name_arr.append(special_item)
+            random.shuffle(selected_warmups_name_arr)
+    # Get stretch arrays based off keyword
+            for x in stretches_doc.stretch_keyword_arr:
+                if self.standing_stretch_only == True:
+                    # 0th index always is a standing variation
+                    chosen_stretch_type = x[0]
+                else:
+                    chosen_stretch_type = random.choice(x)
+                chosen_stretch_motion_arr = random.choice(stretches_doc.stretch_dic[chosen_stretch_type])
+                list_of_stretch_lists.append(chosen_stretch_motion_arr)
+            random.shuffle(list_of_stretch_lists)
+
+            # print(selected_warmups_name_arr)
+            # input(len(selected_warmups_name_arr))
+
+            for i, warmup_move_name in enumerate(selected_warmups_name_arr):
+                # first 2 are just warm ups, then stretch+warmup
+                if i < 2:
+                    # print(f"index 'i' is {i}, not in main portion yet")
+                    #  select an appropriate random item from the arrays at the dictionary entry accessed by the appropriate keyword
+                    combined_list.append(warmup_move_name)
+                else:
+                        # sub arrays keeps all hamstring sets or quad sets together even if mirrored. Needs -2 to account for skipping 2 iterations at start for initial duo of warmups
+                    target_stretch_sub_arr = list_of_stretch_lists[i-2]
+                    random.shuffle(target_stretch_sub_arr)
+                        # ^^ also shuffling so it's not always left/right/center as data input is like
+                    for individual_stretch in target_stretch_sub_arr:
+                        combined_list.append(individual_stretch)
+                    combined_list.append(warmup_move_name)
+            self.selected_stretches =  combined_list
+            print(f"# of stretch motions: {len(self.selected_stretches)}")
+
+# Stretching pattern is rather static due to targeting whole body
     def get_stretching_exercises(self):
-        stretch_keyword_arr = stretches_doc.master_stretch_keyword_arr
-        chosen_stretching_types = [] 
-        output_list_of_stretches = []
-        for mini_array in stretch_keyword_arr:
-            #  NYI standing only stretch: toggle with self.standing_stretch_only_bool
-            # selected_term = mini_array[0]
-            selected_term = random.choice(mini_array)
-            chosen_stretching_types.append(selected_term)
-        random.shuffle(chosen_stretching_types)
-        for x in chosen_stretching_types:
-            chosen_stretch_possibilities = stretches_doc.master_stretch_dic[x]
-            chosen_stretch_sub_arr= random.choice(chosen_stretch_possibilities)
-            for movement in chosen_stretch_sub_arr:
-                output_list_of_stretches.append(movement)
-        return output_list_of_stretches
-    
-    def update_list_display_with_hilight(self, stretch_list, target_index_to_hilight):
+        combined_list = []
+        list_of_stretch_lists = []
+        selected_warmups_name_arr = []
+        # temp_warmup_keyword_arr = []
+
+# get 2 random exercises for warm-up, 
+        # random_2_starters = random.sample(stretches_doc.warmup_keyword_arr, 2)
+        # # Make a temporary array to hold all warmup keywords + the extra 2
+
+        # Delta
+        temp_warmup_keyword_arr = stretches_doc.warmup_keyword_arr
+
+        # for item in random_2_starters:
+        #     temp_warmup_keyword_arr.append(item)
+# Get a list of warm-ups by using the keywords on the dictionary, then shuffle the results up
+        for keyword in temp_warmup_keyword_arr:
+            chosen_warmup = random.choice(stretches_doc.warmup_dic[keyword])
+            selected_warmups_name_arr.append(chosen_warmup)
+        for special_item in stretches_doc.special_list:
+            selected_warmups_name_arr.append(special_item)
+        random.shuffle(selected_warmups_name_arr)
+# Get stretch arrays based off keyword
+        for x in stretches_doc.stretch_keyword_arr:
+            if self.standing_stretch_only == True:
+                # 0th index always is a standing variation
+                chosen_stretch_type = x[0]
+            else:
+                chosen_stretch_type = random.choice(x)
+            chosen_stretch_motion_arr = random.choice(stretches_doc.stretch_dic[chosen_stretch_type])
+            list_of_stretch_lists.append(chosen_stretch_motion_arr)
+        random.shuffle(list_of_stretch_lists)
+
+        # print(selected_warmups_name_arr)
+        # input(len(selected_warmups_name_arr))
+
+        for i, warmup_move_name in enumerate(selected_warmups_name_arr):
+            # first 2 are just warm ups, then stretch+warmup
+            if i < 2:
+                # print(f"index 'i' is {i}, not in main portion yet")
+                #  select an appropriate random item from the arrays at the dictionary entry accessed by the appropriate keyword
+                combined_list.append(warmup_move_name)
+            else:
+                    # sub arrays keeps all hamstring sets or quad sets together even if mirrored. Needs -2 to account for skipping 2 iterations at start for initial duo of warmups
+                target_stretch_sub_arr = list_of_stretch_lists[i-2]
+                random.shuffle(target_stretch_sub_arr)
+                    # ^^ also shuffling so it's not always left/right/center as data input is like
+                for individual_stretch in target_stretch_sub_arr:
+                    combined_list.append(individual_stretch)
+                combined_list.append(warmup_move_name)
+        self.selected_stretches =  combined_list
+        print(f"# of stretch motions: {len(self.selected_stretches)}")
+
+    def update_list_display_with_hilight(self, target_index_to_hilight):
     #  Clear out listbox area before 
-        self.first_half_stretches.delete(0, tk.END)
-        self.second_half_stretches.delete(0, tk.END)
+        self.first_col_stretches.delete(0, tk.END)
+        self.second_col_stretches.delete(0, tk.END)
+        self.third_col_stretches.delete(0, tk.END)
         # Get the first 12 items via slice.
-        for i, stretch_name in enumerate(stretch_list):
-            # If index is under 13, print in the first column
-            if i < 12:
+        for i, stretch_name in enumerate(self.selected_stretches):
+            # If index is under 16, print in the first column
+# NOTE : assumes column height for stretches is 16  
+            if i < 16:
+                # input(f"idx {i} gets col 1 >> {stretch_name}")
                 #  hilight the item when it matches the current "active" motion, showing it's place in the overall workout
                 if i == target_index_to_hilight:
-                    self.first_half_stretches.insert(tk.END, stretch_name)
+                    self.first_col_stretches.insert(tk.END, stretch_name)
                                                                 #  saffron
-                    self.first_half_stretches.itemconfig(i, {'fg': '#F9C22E'})
-                else:                                           # timberwolf grey
-                    self.first_half_stretches.insert(tk.END, stretch_name)
-                    self.first_half_stretches.itemconfig(i, {'fg': '#BEA7E5'})
+                    self.first_col_stretches.itemconfig(i, {'fg': '#F9C22E'})
+                else:                                           
+                    self.first_col_stretches.insert(tk.END, stretch_name)
+                                                                # wisteria, soft color for dark-purple background
+                    self.first_col_stretches.itemconfig(i, {'fg': '#BEA7E5'})
             #  exercise 12+ goes in second column at the listbox display
-            else:
+            elif i < 31:
+                # input(f"[!] idx {i} gets col 2 >> {stretch_name}")
                 #  Still check if the index matches the indicates one to hilight
                 if i == target_index_to_hilight:
-                    self.second_half_stretches.insert(tk.END, stretch_name)
-                    self.second_half_stretches.itemconfig(i-12, {'fg': '#F9C22E'})
+                    self.second_col_stretches.insert(tk.END, stretch_name)
+                    self.second_col_stretches.itemconfig(i-16, {'fg': '#F9C22E'})
                 else:
-                    self.second_half_stretches.insert(tk.END, stretch_name)
-                    self.second_half_stretches.itemconfig(i-12, {'fg': '#BEA7E5'})
+                    self.second_col_stretches.insert(tk.END, stretch_name)
+                    self.second_col_stretches.itemconfig(i-16, {'fg': '#BEA7E5'})
+                # listbox.tag_configure("normal_font", font=normal_font)
+                # listbox.tag_configure("large_font", font=large_font)
+            else:
+                # input(f"[@_@!] idx {i} gets col 3! >> {stretch_name}")
+                #  Still check if the index matches the indicates one to hilight
+                if i == target_index_to_hilight:
+                    self.third_col_stretches.insert(tk.END, stretch_name)
+                    self.third_col_stretches.itemconfig(i-31, {'fg': '#F9C22E'})
+                else:
+                    self.third_col_stretches.insert(tk.END, stretch_name)
+                    self.third_col_stretches.itemconfig(i-31, {'fg': '#BEA7E5'})
 
+    def update_stretch_timing_preview_label(self, value):
+        if len(self.selected_stretches) == 0:
+            # NOTE: this is a recursive call to generate the stretching exercises, then call this update again, as well as updating the preview list
+            # this generates a preview if messing with the slider before hitting the preview button
+            self.initialize_stretches_update_display()
+        num_of_stretches = len(self.selected_stretches)
+        # initialize stretching time to slider variable
+        self.continuous_action_time = self.stretch_duration_slider.get()
+        # Calculate the time of the stretching workout
+        total_stretch_time_in_seconds = (self.continuous_action_time)*(num_of_stretches)
+        total_stretch_set_time_in_mins = math.ceil((total_stretch_time_in_seconds)/60)
+        self.stretch_time_length_label.config(text=f"Workout time total: {total_stretch_set_time_in_mins}m")
+        
+    def initialize_stretches_update_display(self):
+        # Get the randomized list of exercises
+        self.get_stretching_exercises()
+        # display the rolled exercises, hilighting the 0th index
+        self.update_list_display_with_hilight(0)
 
-        # for first_chunk_stretch in (stretch_list[:12]):
-        #     if counter_var == target_index_to_hilight:
-        #         pass
-        #     self.first_half_stretches.insert(tk.END, first_chunk_stretch)
-        #     counter_var += 1
-        # if len(stretch_list) < 13:
-        #     for second_chunk_stretch in (stretch_list[12:]):
-        #         self.second_half_stretches.insert(tk.END, second_chunk_stretch)
-    
-    def preview_stretching_routine(self):
+        self.update_stretch_timing_preview_label(self.stretch_duration_slider.get())
+        # num_of_stretches = len(self.selected_stretches)
+        # # initialize stretching time to slider variable
+        # self.continuous_action_time = self.stretch_duration_slider.get()
+        # # Calculate the time of the stretching workout
+        # total_stretch_time_in_seconds = (self.continuous_action_time)*(num_of_stretches)
+        # total_stretch_set_time_in_mins = math.ceil((total_stretch_time_in_seconds)/60)
+        # self.stretch_time_length_label.config(text=f"Workout time total: {total_stretch_set_time_in_mins}m")
+
+        # Update the label for the active stretch name; we're starting at index 0, thus the initial target here
+        self.stretch_name_label.config(text=f"{self.selected_stretches[0]}")
+
+    def start_continuous_session(self):    
         # Initialize the bg_audio_array
         self.copy_src_arr_to_temp(self.active_song_aud_arr, self.temp_active_song_aud_arr)
+        random.shuffle(self.temp_active_song_aud_arr)
         # copy the start auds and shuffle them around in a random order so we can pop them off later
         self.copy_src_arr_to_temp(self.start_bumper_aud_arr, self.temp_start_bumper_aud_arr)
         random.shuffle(self.temp_start_bumper_aud_arr)
         # Do the same for set ender barks
         self.copy_src_arr_to_temp(self.end_bumper_aud_arr, self.temp_end_bumper_aud_arr)
-        random.shuffle(self.temp_end_bumper_aud_arr)
+        random.shuffle(self.temp_end_bumper_aud_arr) 
+        # Activate the timer by turning the pause Boolean to False
+        self.pause = False 
+        #  if the selected_stretches arr is not empty, then it was already generated. 
+        if self.selected_stretches:
+            print("[+] preview generation of stretches detected, skipping regen of stretch set")
+        else: # If there's an empty list, we need to make a list with this function.
+            self.initialize_stretches_update_display()
+        stretch_timer_thread = threading.Thread(target=self.update_timer_continuous_action_pattern)
+        stretch_timer_thread.start()
+        self.create_and_call_stretch_aud_threads()
+    def trigger_starter_stretch_audio(self):
+        # start the timer to half so it's not blocked by anything, running in background thread
+        current_stretch = self.selected_stretches[self.current_continuous_action_index]
+        current_stretch_aud_file = random.choice(self.master_exercise_name_audio_dic[current_stretch])
+        stretch_name_audio = pygame.mixer.Sound(current_stretch_aud_file)
 
-        # get the exercises for the continuous set:
-        #  ------------ NOTE: modify with conditional for other continuous exercises?
-        self.selected_exercises = self.get_stretching_exercises()
-        # display the rolled exercises, hilighting the 0th index
-        self.update_list_display_with_hilight(self.selected_exercises, 0)
+        # Start motion encouragement EDITED OUT CURRENTLY (functionality works, but is a bit annoying in practice)
+        # if self.temp_start_bumper_aud_arr:
+        #     motion_start_encouragement = self.temp_start_bumper_aud_arr.pop()
+        # else:
+        #     self.copy_src_arr_to_temp(self.start_bumper_aud_arr, self.temp_start_bumper_aud_arr)
+        #     random.shuffle(self.temp_start_bumper_aud_arr)
+        #     motion_start_encouragement = self.temp_start_bumper_aud_arr.pop()
+        # encouragement_1_sound_obj = pygame.mixer.Sound(motion_start_encouragement)
+        # encouragement_1_sound_obj.play()
+        # while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+        #     pygame.time.Clock().tick(30)
 
-        num_of_stretches = len(self.selected_exercises)
-        each_stretch_duration = self.stretch_duration_slider.get()
-        print(f"\t-- duration for each stretch: {each_stretch_duration}")
-        total_stretch_time_in_seconds = (each_stretch_duration)*(num_of_stretches)
-        total_stretch_set_time_in_mins = math.ceil((total_stretch_time_in_seconds)/60)
-        print(f" [+] Total stretch time in mins: {total_stretch_set_time_in_mins}")
-        self.stretch_time_length_label.config(text=f"Workout time total: {total_stretch_set_time_in_mins}m")
-    
-        self.stretch_name_label.config(text=f"{self.selected_exercises[0]}")
+        stretch_name_sound_obj = pygame.mixer.Sound(stretch_name_audio)
+        stretch_name_sound_obj.play()
+        while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+            pygame.time.Clock().tick(30)     
+    def play_half_and_end_chirps_after_delay(self, duration_time):
+        half_duration_in_seconds = math.floor(duration_time/2)
+        pygame.time.wait((half_duration_in_seconds*1000)) 
+        # at halfway point, Playing statically assigned halfway-alarm
+        half_alarm_aud_obj = pygame.mixer.Sound(self.halfway_alarm)
+        half_alarm_aud_obj.play()
+        # at end, Playing statically assigned end-alarm
+        #  - We're only waiting half the duration because we already waited for the first half
 
+        # add 1 second if the time is odd, so the audio triggers correctly at the 0th countdown instead of at 1
+        # We still need to offset it slightly early so it's not overlapping with the starter audio
+        # NOTE: Bootleg fix for the initial delay of the timer on first run-through. It's consistent thereafter...
+        wait_time_to_end = (half_duration_in_seconds*1000)
+        if self.current_continuous_action_index == 0:
+            # print(f"prev wait time in ms = {wait_time_to_end}")
+            # print(f"0th index of stretches detected, lowering wait time to compensate for inconsistent clockwork")
+            wait_time_to_end -= 1000
+            # print(f"post reduction wait time {wait_time_to_end}")
+        
+        pygame.time.wait(wait_time_to_end) 
+        half_alarm_aud_obj = pygame.mixer.Sound(self.end_alarm)
+        half_alarm_aud_obj.play() 
+    def create_and_call_stretch_aud_threads(self):
+        duration_in_s = self.stretch_duration_slider.get()
+        pygame.mixer.music.stop()
+        # play the stretch audio
+        self.trigger_starter_stretch_audio()
+
+        bark_thread = threading.Thread(target=self.play_half_and_end_chirps_after_delay, args=(duration_in_s, ))
+        bark_thread.start()
+        # init_aud_thread = threading.Thread(target=self.trigger_starter_stretch_audio)
+        # init_aud_thread.start()
+
+        # Get next music track and activate after the other audio threads are done being scum
+        if len(self.temp_active_song_aud_arr) == 0:
+            # regenerate temp bg audio array if all have been popped off
+            self.copy_src_arr_to_temp(self.active_song_aud_arr, self.temp_active_song_aud_arr)
+            random.shuffle(self.temp_active_song_aud_arr)
+        curr_bg_aud = self.temp_active_song_aud_arr.pop()
+        pygame.mixer.music.load(curr_bg_aud)
+        pygame.mixer.music.play()
+        # bgm_thread = threading.Thread(target=self.simply_play_bgm_once, args=(curr_bg_aud, ))
+        # bgm_thread.start()
+
+    def update_timer_continuous_action_pattern(self):
+        # If there's still time left on the clock...
+        if self.continuous_action_time != 0:
+            self.stretch_timer_label.config(text="Time left : " + str(self.continuous_action_time), fg="yellow", bg="black")
+            self.continuous_action_time -= 1
+        else:
+            self.stretch_timer_label.config(text="Time up!", fg="#931621", bg="#0077B6")
+            # reset the continuous action time
+            # increase the index counter up by one, then update the display
+            self.current_continuous_action_index += 1
+            if len(self.selected_stretches) == self.current_continuous_action_index:
+                print("program completed!")
+                pygame.mixer.music.stop()
+                pygame.mixer.music.load(self.workout_end_aud)
+                pygame.mixer.music.play()
+                return "finished"
+            # else:
+            #     print(f"{len(self.selected_stretches)} =/?= {self.current_continuous_action_index} ?")
+            # restore the continuous action time countdowner thing... 
+            self.continuous_action_time = self.stretch_duration_slider.get()
+            # print(f"type of curr..idx {type(self.current_continuous_action_index)} \n type of len applied to selected stretches arr: {type(len(self.selected_stretches))}\n {self.current_continuous_action_index} of {len(self.selected_stretches)}" )
+            # update the exercise label at the top, using the index
+            self.stretch_name_label.config(text=f"{self.selected_stretches[self.current_continuous_action_index]}")
+            # update listbox display
+            self.update_list_display_with_hilight(self.current_continuous_action_index)
+            # Make audio thread; use duration of the action time to control for half and end chirps
+            
+            self.create_and_call_stretch_aud_threads()
+        
+        # Check if starting bumper encouragements need to regen and re-shuffle
+         
+# -----NOTE: NYI Generate random active bg music then play
+              
+        if not self.pause:
+            self.master.after(1000, self.update_timer_continuous_action_pattern)
+
+
+
+#  NYI list
+#  make var: number of stretches
+#  make logic to move to next stretch
+            # make logic to end the session when everything is done
+# Make one file for total advanced moves included and another for simple, VR friendly
+#  Make kicks list
+
+            
+# ------------------------------------------------------------------------------------------------------------------------------------
+#  Lol, put together all the girly names and weird movements for "work out like a girl" session
+#  Fantasy workout, all moves based off fantasy tropes
+            
+# before workout checklist: make sure you know where your wall is IRL so you don't bump it, or you can reach out to balance. Will keep facing the same way, so you maintain orientation; room wall in vr will help orientation.
+# pole friendly for support (though this is not a pole dancing class, if you know how, hit me up, I'd love to record and edit vids for you)
+# Do not need VR to participate; desktop users can watch like a live instructional video and follow along.
+
+# Resource:
+# https://www.workoutsprograms.com/exercises
+# choreography for short dance moves in a cardio program?
+#  Know any dance or cheerleading? Yoga, or boxing?
+            #  Tai chi movements?
+
+# learning about calinesthetics and I don't have the vocabulary to describe some motions; yoga poses have names, but so do arm positions
+
+# NYI NOTE: compound exercises need their keyword in both/all arrays that comply with it as a primary motion 
 # ----------------------------------------------------------------------------------------------------------------------------------------------   
     
+
+
+
+
+
+# ----------------------------------------------------------------------------------------------------------------------------------------------
+    # one exercise array, simple random
+    # def get_continuous_exercise_motions_from_source_arr()
+
+    # simple active x rest pattern timer
+
+    # one exercise array, but num moves by num ronuds, ex 5 moves by 3 rounds
+    # def get_X_moves_for_Y_rounds_routine()
+
+    # routine like ABC x 3, then rest, then DEF x 3, then rest ....
+
+# NYI boxing rest after X amount of time/moves
+
 def main():
     root = tk.Tk()
     app = ExerciseTimerApp(root)
