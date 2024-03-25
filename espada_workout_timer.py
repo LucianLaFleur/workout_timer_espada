@@ -10,10 +10,14 @@ import audio_doc
 import stretches_doc
 import exercise_lists
 import make_martial_arts
+# https://www.setforset.com/blogs/news/bodyweight-leg-exercises-without-weights
+# Initial version: set for arms workout x abs on rest intervals
+
+default_start_sound = "start_auds/go1.wav"
 
 # -------------- Color scheme note for other tabs -----------------------------------
-   # Main color BG: DARK PURPLE: #27233A 
-    # aquamarine  52FFB8
+   # Main color BG: DARK PURPLE: #27233A
+    # aquamarine  #52FFB8
     # carmine #931621
     # saffron #F9C22E
     # timberwolf grey #D5C7BC
@@ -25,6 +29,12 @@ import make_martial_arts
     # honolulu blue #0077B6
     # sienna 	#A0522D
 # -------------- / Color scheme note  -----------------------------------------------
+
+#  Stretching version as basis for non-stop exercise target...
+#  Work and just rest version
+#  Stretching sets 35 sec each, with exercise intervals every 3 motions
+
+
 # -------------- For martial arts audio with 43e's voice -----------------------------------
 voice_43e_dictionary = {
     "backhand": "martial_audio/43e_backhand1.wav",
@@ -114,142 +124,226 @@ voice_43e_right_auds = [
 ]
 
 class WorkoutMove:
-    def __init__(self, name_string, display_name_list, info_list):
-        self.key_name = name_string
-        self.display_name_list = display_name_list
+    def __init__(self, name_string, info_list):
+        self.name_string = name_string
+        # self.display_name_list = display_name_list
         self.info_list = info_list
 
 # key name
 all_exercise_objects = [
-    WorkoutMove("single rock-and-box",
-        ["L. rock-and-box","R. rock-and-box"],
-        ["abs", "obliques", "delts", "mirrored", "cardio", "light", "martial"]),
-    WorkoutMove("alternating rock-and-box", # need aud
-        ["Alt. rock-and-box"],
-        ["abs", "obliques", "delts", "cardio", "light", "martial"]),
-    WorkoutMove("Side-slugger torso twist", # side punch, turn, punch to other side
-        ["Side-slugger torso twist"],
-        ["abs", "cardio", "light", "martial", "res_band"]),
-    WorkoutMove("squat to overhead press",
-        ["squat to overhead press"],
+    WorkoutMove("Sing. Rock-and-box", ["abs", "obliques", "delts", "mirrored", "cardio", "light", "martial"]),
+    WorkoutMove("Alt. Rock-and-box", ["abs", "obliques", "delts", "cardio", "light", "martial"]),
+    WorkoutMove("squat to overhead press", #the superhero lift
         ["hamstrings", "delts", "med", "cardio", "compound", "big_weight", "small_weight"]),
-    WorkoutMove("marching doll high knee",
-        ["marching doll high knee"],
-        ["hip flexors", "delts", "light", "cardio", "compound"]),
-    WorkoutMove("alt. arm fly side-step",
-        ["alt. arm fly side-step"],
-        ["pecs", "delts", "light", "cardio", "compound"]),
-    WorkoutMove("lat pull-down push-out",
-        ["lat pull-down push-out"],
-        ["traps", "delts", "compound", "cardio", "small_weight"]),
-    WorkoutMove("3-point frog squats",
-        ["3-point frog squats"],
-        ["quads", "delts", "med", "cardio", "compound", "dumbbell", "small_weight"]),
-    WorkoutMove("kneel lat pull-down push-out", # need aud
-        ["Kn.Lat pull-down push-out"],# need aud
-        ["traps", "delts", "compound", "cardio", "small_weight", "ground"]),
-    WorkoutMove("single forearm raise",
-        ["L.forearm raise", "R.forearm raise"],
-        ["forearms", "mirrored", "small_weight", "big_weight", "dumbbell"]),
-    WorkoutMove("alternating forearm raise",
-        ["Alt.forearm raise"],
-        ["forearms", "small_weight", "big_weight", "dumbbell", "med"]),
-    WorkoutMove("single inner bicep curl",# need aud
-        ["L.inner bicep curl", "R.inner bicep curl"],
-        ["biceps", "mirrored", "small_weight", "big_weight", "dumbbell", "med"]),
-    WorkoutMove("alternating bicep curl",
-        ["Alt.Bicep curl"],
-        ["bicebs", "small_weight", "big_weight", "dumbbell"]),
-    WorkoutMove("4-count cheer squad",
-        ["4-count cheer squad"], # remember to pull down with the back like lat pull down to activate traps
-        ["traps", "light", "small_weight", "delts"]),
-    WorkoutMove("Alt.Side-step sky-punch",
-        ["Alt.Side-step sky-punch"],
-        ["delts", "light", "small_weight", "cardio", "dumbbell"]),
-    WorkoutMove("slow lat pull-down",
-        ["slow lat pull-down"],
-        ["traps", "light"]),
-    WorkoutMove("flying cobra",
-        ["flying cobra"],
-        ["traps", "ground"]),
-    WorkoutMove("lying lat pull-downs",
-        ["lying lat pull-downs"],
-        ["traps", "ground"]),
-    WorkoutMove("supermans",
-        ["supermans"],
-        ["traps", "ground"]),
-    WorkoutMove("shoulder swimmers",
-        ["shoulder swimmers"],
-        ["traps"]),
-    WorkoutMove("3-count cherry pickers",
-        ["3-count cherry pickers"],
-        ["traps", "meme", "light"]),
-    WorkoutMove("lying back-splash reach-outs",
-        ["lying back-splash reach-outs"],
-        ["traps", "light", "ground"]),
-    WorkoutMove("superman swimmers",
-        ["superman swimmers"],
-        ["traps"]),
-    WorkoutMove("lying alt. backstroke",
-        ["lying alt. backstroke"],
-        ["traps"]),
-    WorkoutMove("Fly-press side-step",
-        ["Fly-press side-step"],
-        ["traps", "small_weight", "light"]),
-    WorkoutMove("sing.Hip abductions",
-        ["sing.Hip abductions"],
-        ["hip flexors"]),
-    WorkoutMove("alt. hammer-downs",
-        ["alt. hammer-downs"],
-        ["triceps", "small_weight", "light"]),
-    WorkoutMove("tricep dips",
-        ["tricep dips"],
-        ["triceps", "ground", "bench"]),
-    WorkoutMove("sing.Leg tricep dips",
-        ["L.Leg tricep dips", "R.Leg tricep dips"],
-        ["triceps", "ground", "bench", "heavy"]),
-    WorkoutMove("Tricep get-ups",
-        ["Tricep get-ups", "heavy"],
-        ["triceps", "ground"]),
-    WorkoutMove("sing.Tri kick-backs",
-        ["L.Tri kick-backs", "R.Tri kick-backs", "med", "heavy"],
-        ["triceps", "res_band", "small_weight"]),
-    WorkoutMove("sphynx push-up",
-        ["sphynx push-up"],
-        ["triceps", "ground", "adv", "heavy"]),
-    WorkoutMove("Sing.3/4 Stance Hatchet",
-        ["R.3/4 Stance Hatchet", "L.3/4 Stance Hatchet"],
-        ["triceps", "small_weight", "light"]),
-    WorkoutMove("Alt.3/4 Stance Hatchet",
-        ["Alt.3/4 Stance Hatchet"],
-        ["triceps", "small_weight", "light"]),
-    WorkoutMove("Double Down Swords",
-        ["Double Down Swords"],
-        ["triceps", "small_weight", "light"]),
-    WorkoutMove("Sing.Overhead Tri.Ext.",
-        ["Sing.Overhead Tri.Ext."],
-        ["triceps", "adv", "dumbbell", "small_weights"]),
-    WorkoutMove("Overhead goblet Tri.Ext.",
-        ["Overhead goblet Tri.Ext."],
-        ["triceps", "compound", "dumbbell", "big_weight"]),
-    WorkoutMove("Goblet squat Tri.Ext.",
-        ["Goblet squat Tri.Ext."],
-        ["triceps", "dumbbell", "heavy", "big_weight"]),
-    WorkoutMove("Diamond push-up",
-        ["Diamond push-up"],
-        ["triceps", "ground", "heavy"]),
-    WorkoutMove("Elbows-back Tri.Push-up",
-        ["Elbows-back Tri.Push-up"],
-        ["triceps", "ground", "heavy"]),
-    
+    WorkoutMove("marching doll high knee", ["hip flexors", "delts", "light", "cardio", "compound"]),
+    WorkoutMove("alt. arm fly side-step",["pecs", "delts", "light", "cardio", "compound"]),
+    WorkoutMove("lat pull-down push-out",["traps", "delts", "compound", "cardio", "small_weight"]),
+    WorkoutMove("3-point frog squats", ["quads", "glutes", "med", "small_weight", "backpack"]),
+    # WorkoutMove("kneel lat pull-down push-out", # kneeling allows to lean back and crunch up
+    #         ["traps", "delts", "abs", "compound", "cardio", "small_weight", "ground"]),
+    WorkoutMove("Sing. forearm raise", ["forearms", "mirrored", "small_weight", "big_weight", "dumbbell"]),
+    WorkoutMove("Alt. forearm raise", ["forearms", "small_weight", "big_weight", "dumbbell", "med"]),
+    WorkoutMove("Sing. In.Bicep curl", ["biceps", "mirrored", "small_weight", "big_weight", "dumbbell", "med"]),
+    WorkoutMove("Alt. Bicep curl",["bicebs", "small_weight", "big_weight", "dumbbell"]),
+    WorkoutMove("4-count cheer squad", # remember to pull down with the back like lat pull down to activate traps
+    # left diag, right diag, out to sides while bending back, arms swing forward, pump both arms up *On diagonals the opposite leg steps out for support
+                ["traps", "light", "small_weight", "delts"]),
+    WorkoutMove("Alt.Side-step sky-punch", ["delts", "light", "small_weight", "cardio", "dumbbell"]),
+    WorkoutMove("slow lat pull-down",["traps", "light"]),
+    WorkoutMove("flying cobra",["traps", "ground"]),
+    WorkoutMove("lying lat pull-downs",["traps", "ground"]),
+    WorkoutMove("supermans",["traps", "ground"]),
+    WorkoutMove("shoulder swimmers",["traps", "ground"]),
+    # WorkoutMove("3-count cherry pickers", ["traps", "meme", "light"]),
+    # WorkoutMove("lying back-splash reach-outs", ["traps", "light", "ground"]),
+    # WorkoutMove("superman swimmers", ["traps", "ground"]),
+    # WorkoutMove("superman body crescent", ["traps", "abs", "ground"]),
+    # WorkoutMove("lying alt. backstroke", ["traps", "ground"]),
+    # WorkoutMove("fly-press side-step", ["traps", "small_weight", "light"]),
+    WorkoutMove("sing.Hip abductions", ["hip flexors"]),
+    # WorkoutMove("Stand.Hip pendulum", ["traps", "small_weight", "light"]),
+    # WorkoutMove("Lying Hip pendulum", ["traps", "small_weight", "light"]),
+    WorkoutMove("alt. hammer-downs", ["triceps", "small_weight", "light"]),
+    # WorkoutMove("tricep dips",["triceps", "ground", "bench"]),
+    # WorkoutMove("sing.Leg tricep dips", ["triceps", "ground", "bench", "heavy"]),
+    # WorkoutMove("Tricep get-ups", ["triceps", "ground", "heavy"]),
+    # WorkoutMove("sing.Tri kick-backs",["triceps", "res_band", "small_weight", "med"]),
+    # WorkoutMove("sphynx push-up",["triceps", "ground", "adv", "heavy"]),
+    # WorkoutMove("Sing.3/4 Stance Hatchet", ["triceps", "small_weight", "light"]),
+    # WorkoutMove("Alt.3/4 Stance Hatchet",  # from 3/4 boxer's stance, Ushiro-iaijutsu, one arm at a time, full range of motion for tricep dip back, full slash forward
+    # ["triceps", "small_weight", "light"]),
+    # WorkoutMove("Double Down Swords",["triceps", # draw double swords from back # (the elephant tusk backpack)
+    # "small_weight", "light"]),
+    WorkoutMove("Sing.Overhead Tri.Ext.", ["triceps", "adv", "dumbbell", "small_weights"]),
+    # WorkoutMove("Overhead goblet Tri.Ext.", ["triceps", "compound", "dumbbell", "big_weight"]),
+    # WorkoutMove("Goblet squat Tri.Ext.", ["triceps", "dumbbell", "big_weight"]),
+    # WorkoutMove("Diamond push-up", ["triceps", "ground", "heavy"]),
+    # WorkoutMove("Elbows-back Tri.Push-up", ["triceps", "ground", "heavy"]),
+    WorkoutMove("belly dancer kicks", ["abs", "hip flexors", "adv", "dance", "meme"]),
+    WorkoutMove("cross-core knee strike", ["abs", "cardio", "hip flexors", "light"]),
+    WorkoutMove("draw sword, side-bend", ["abs", "compound", "light"]),
+    WorkoutMove("hip raise, leg extension", ["ground", "abs", "lower abs", "center abs", "heavy"]),
+    WorkoutMove("boat row", ["ground", "abs", "center abs"]),
+    WorkoutMove("leg lifts, candle pose", ["ground", "abs", "lower abs", "center abs", "heavy"]),
+    WorkoutMove("wall-crawlers", ["abs", "hip flexors", "cardio", "meme", "delts", "light"]),
+    WorkoutMove("open-hip, str. high-knee", ["abs", "hip flexors", "cardio", "light"]),
+    WorkoutMove("flutter kicks", ["ground", "abs", "lower abs", "quads", "hip flexors"]),
+    # WorkoutMove("out.Knee Strike", ["abs", "lower abs", "hip flexors", "cardio", "light"]),
+    WorkoutMove("full extension cross-crunch", ["abs", "lower abs", "obliques", "heavy"]),
+    WorkoutMove("half windshield wiper combo", ["ground", "abs", "lower abs", "obliques", "heavy"]),
+    WorkoutMove("Figure-8 oblique Ax.", ["abs", "obliques", "cardio", "delts", "meme"]),
+    WorkoutMove("side-slugger torso twist", ["abs", "small_weight", "obliques", "cardio", "delts", "martial", "res_band"]),
+    WorkoutMove("lighthouse torso twists", ["abs", "small_weight", "obliques", "delts"]),
+    WorkoutMove("oblique heel-taps", ["ground", "abs", "obliques"]),
+    WorkoutMove("windshield wiper leg lifts", ["ground", "abs", "obliques", "heavy"]),
+    WorkoutMove("seated russian twists", ["abs", "obliques", "ground"]),
+    WorkoutMove("torso twist hip taps", ["abs", "obliques",]),
+    WorkoutMove("alt. torso-twist lunges", ["obliques", "abs", "quads", "glutes", "small_weight", "compound"]),
+    WorkoutMove("step-back lunges", ["abs", "quads", "glutes"]),
+    WorkoutMove("half-bridge hip-thrusts", ["abs", "hip flexors", "ground"]),
+    WorkoutMove("heels to the heavens", ["abs", "center abs", "lower abs"]),
+    WorkoutMove("slow stand. Bicycles", ["abs", ""]),
+    WorkoutMove("stellar windmills", ["abs", "obliques", "small_weight"]),
+    # WorkoutMove("basic windmills", ["abs", "obliques", "small_weight"]),
+    WorkoutMove("straight-leg toe taps", ["abs", "hip flexors", "adv", "center abs"]),
+    WorkoutMove("windmill toe touches", ["abs", "obliques", "small_weight"]),
+    WorkoutMove("windmill sky chops", ["abs", "obliques", "small_weight"]),
+    WorkoutMove("wood chopper oblique", ["abs", "obliques"]),
+    WorkoutMove("barrel hug hammer curl", ["biceps", "forearm"]),
+    WorkoutMove("biceb curl fly press", ["biceps", "pecs", "small_weight", "light"]),
+    WorkoutMove("curl, overhead press", ["biceps", "delts"]),
+    WorkoutMove("curl & double punch out", ["biceps", "delts", "meme"]), # greaser's jacket
+    WorkoutMove("T-rex bicep curl", ["biceps", "forearm", "light"]), # this is the not-weighted version
+    WorkoutMove("A-pose ro. claw-curls", ["forearms","light"]),
+    WorkoutMove("shrieking ghoul", ["delts", "forearms","light"]),
+    WorkoutMove("Franken Forearm Raise", # Claw hand alternating forearm raise
+                ["forearms","light"]),
+    WorkoutMove("claw-hand Z-curls", ["forearms","light"]),
+    WorkoutMove("zombie claw f.Arm Raise", ["delts","light"]),
+    WorkoutMove("sky-punch fly press", ["delts", "pecs", "small_weight", "big_weight", "light"]),
+    WorkoutMove("vampire wings", ["delts", "pecs", "small_weight", "light"]),
+    WorkoutMove("X-Y fly press", ["delts", "pecs", "small_weight", "light"]),
+    WorkoutMove("florentine 1-2", ["delts", "triceps", "small_weight"]),
+    WorkoutMove("squat pulse stand-ups", ["quads", "glutes", "heavy"]),
+    WorkoutMove("Backstroke torso twist", ["delts", "light"]),
+    WorkoutMove("sky-punch, side stab", ["delts", "triceps", "small_weight", "light"]),
+    WorkoutMove("bear crawl", ["delts", "ground", "heavy", "adv", "cardio"]),
+    WorkoutMove("pike position cross toe-touches", ["delts", "obliques", "ground"]),
+    WorkoutMove("pike push-up", ["delts", "ground", "heavy"]),
+    WorkoutMove("plank shoulder taps", ["delts", "ground"]),
+    WorkoutMove("slow and low crawl", ["delts", "ground", "heavy", "adv"]),
+    WorkoutMove("double-fang down-stab", ["delts", "triceps", "small_weight"]),
+    WorkoutMove("Dual high-hammer curls", ["triceps", "small_weight", "delts", "biceps"]),
+    WorkoutMove("Alt. high-hammer curls", ["triceps", "small_weight", "delts", "biceps"]),
+    WorkoutMove("Basic hammer curl", ["forearms", "biceps", "small_weight", "big_weight", "heavy", "res_band"]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # WorkoutMove("", [""]),
+    # lunge down to plank, alternate legs while rising. Start with the right leg (audio direct.)
+
     # WorkoutMove("",
     #     [""],
     #     ["traps"]),
 ]
-muscle_groups = [ "abs", "biceps", "forearms", "glutes", "hamstrings", 
-    "obliques",  "pecs", "traps",  "triceps"]
-traits = ["adv", "big_weight", "cardio", "dumbbell", "ground", "heavy", "light", "martial", 
-    "med", "mirrored", "res_band", "small_weight"]
+muscle_groups = [ 
+    "abs", 
+    "biceps", 
+    # "center abs"
+    "forearms", 
+    "glutes", 
+    "hamstrings", 
+    # "lower abs"
+    "obliques",  
+    "pecs", 
+    "traps",  
+    "triceps"
+]
+traits = ["adv", # complicated movements that take some skill or adjustment
+    # "backpack" # moves compatible with a weighted backpack or vest
+    # "bench", #move requires a bench to do
+    "big_weight", # compatible with heavy weights, may overlap with small_weight
+    "cardio",    # focuses on cardio move rather than muscle-move
+    "compound", # multiple movements and multi muscle-targets
+    "dance",  # movements evocative of dance moves
+    "dumbbell", # doable with dumbbells
+    # "equip", # requires equipment to execute, misc. equipment gets this tag, like a pull-up bar
+    "ground",   # must be done on the ground or with a mat
+    "heavy", # Motion can push lots of weight, (tag for targeting muscle growth)
+    "light",    # low impact and low stress activities 
+    "martial", # some variation of matrial arts
+    "mirrored", # has left/right variations
+    "res_band",  # motion cna be done with a resistance band
+    "small_weight" # compatible with small weights, but not heavy
+    ]
+# unadded traits:
+    # compound, dance, meme, backpack (for a weighted backpack or weight vest)
 
 # franken forearm, delts
 # preying mantis
@@ -258,65 +352,7 @@ traits = ["adv", "big_weight", "cardio", "dumbbell", "ground", "heavy", "light",
 #  a pose inner
 #  a pose outer
 
-# also need aud call: auds exist
-# R.Elbow, L.Knee
-# L.Elbow, R.Knee
-#  figure eight obliques
-# prisoner position high knees #dance
-
 # SALVAGE THE WARMUPS FROM STRETCHES DOC FIRST BECAUSE AUDIO EXISTS
-
-all_workout_object_keys = [
-"Side-slugger torso twist", 
-"single rock-and-box", 
-"alternating rock-and-box",
-"squat to overhead press",
-"marching doll high knee",
-"alt. arm fly side-step",
-"lat pull-down push-out",
-"3-point frog squats",
-"kneel lat pull-down push-out",
-"single forearm raise",
-"single inner bicep curl"
-]
-
-def exclude_keywords_from_workout_list(keyword_list):
-    # out_arr = []
-    # for move in all_exercise_objects:
-    #     for keyword in keyword_list:
-    #         if keyword in move.info_list:
-    #             for name_string in move.display_name_list:
-    #                 out_arr.append(name_string)
-    # print(out_arr)
-    out_arr = [move.display_name_list for move in all_exercise_objects if not any(exclusion_term in keyword_list for exclusion_term in move.info_list)]
-    # print(out_arr)
-
-def get_moves_matching_at_least_one_keyword(keyword_list):
-    # iterate through all exercise objects. only return the ones that match at least one item in the target array
-    out_arr = [move.display_name_list for move in all_exercise_objects if any(exclusion_term in keyword_list for exclusion_term in move.info_list)]
-    # return [car for car in cars if not any(color in exclude_colors for color in car.color)]
-    # print(out_arr)
-    
-# NYI NOTE: NYI filtering options in the above functions DO work! Not applied though
-# get_moves_matching_at_least_one_keyword(["traps"])
-# print(f"*"*24)
-# exclude_keywords_from_workout_list(["delts", "biceps"])
-
-# audio: Lunge down into triangle pose standups!
-# "kn.Lat pull-down push-out" audio_hit_half/pdaBeepBeep.wav
-# "L.forearm raise", "R.forearm raise" audio_hit_half/pdaBeepBeep.wav
-# "L.inner bicep curl", "R.inner bicep curl" audio_hit_half/pdaBeepBeep.wav
-
-# main properties for info:
-#   - main muscle group is in position 0. Other muscle groups follow
-#   - if NEEDS equipment, tag keyword "equip" DO NOT use if there is an empty-hand variant; this is a limiting filter
-#   -- if compatible with heavy lifting, "big_weight", and light only, "small_weight"
-#   - if needs ground for sit of lying, tag keyword "ground"
-#   - if not compatible with a VR workout, tag "no vr"
-#   - cardio, stretch, compound, res_band, dumbbell
-#   - light, med, heavy, explosive, high impact
-
-
 
 
 
@@ -379,7 +415,13 @@ class ExerciseTimerApp:
         self.tab_manager.add(self.tab3, text="Boxing")
 
         self.tab4 = ttk.Frame(self.tab_manager)
-        self.tab_manager.add(self.tab4, text="Hard x Soft")
+        self.tab_manager.add(self.tab4, text="NYI")
+
+        self.tab5 = ttk.Frame(self.tab_manager)
+        self.tab_manager.add(self.tab5, text="SFX Only")
+
+        self.tab6 = ttk.Frame(self.tab_manager)
+        self.tab_manager.add(self.tab6, text="Adjustable")
 
         #  initialize pygame so I can play music properly
         pygame.init()
@@ -391,35 +433,39 @@ class ExerciseTimerApp:
         self.temp_active_song_aud_arr = []
         self.temp_end_bumper_aud_arr = []   
         self.temp_interval_song_aud_arr = []
+        self.temp_funny_sound_arr = []
+        self.temp_encouragement_auds = []
         # self.temp_half_bumper_aud_arr = []
         # self.end_of_workout_arr = []
         # self.temp_special_ender_aud_arr = []
-        self.default_encouragement = "audio_hit_start/letsGetMovingBubblegum1.wav"
         #  -----------------------------------------------------------------------------
         # NOTE: motion halfway SFX, motion end SFX, and workout end MSG are currently static sounds
         self.halfway_alarm = "audio_hit_half/pdaBeepBeep.wav"
-        self.end_alarm = "audio_hit_end/blake_gunfire_shot.wav"
-        self.workout_end_aud = "audio_special_ender/TP_Fanfare_SmallItem_tada.wav"
+        # self.end_alarm = "audio_hit_end/blake_gunfire_shot.wav"
+        self.end_alarm = "audio_hit_end/ue11.wav"
+        self.workout_end_aud = random.choice(audio_doc.workout_end_hits)
         # ---------------------------------------------------------------------------------------------------------
         # audio_hit_start/
         self.start_bumper_aud_arr = audio_doc.outsourced_start_bumper_aud_arr 
-        
         # audio_active_songs for push sets
         self.active_song_aud_arr = audio_doc.outsourced_active_song_aud_arr
-        
         # audio_interval_songs, for downtempo sets/rest
         self.interval_song_aud_arr = audio_doc.outsourced_interval_song_aud_arr 
-        
         # audio_hit_end, for end of motion
         self.end_bumper_aud_arr = audio_doc.outsourced_end_bumper_aud_arr 
-
+        self.funny_sound_arr = audio_doc.funny_sound_arr
+        self.encouragement_auds = audio_doc.continuation_encouragement_arr
         # audio_special_ender for when the workout is done
         # self.special_ender_aud_arr = []
-
 
 # This is the default array with mixed voices, 
         #  a similar structure could be done for specific voices only
         self.master_exercise_name_audio_dic = {
+# unsorted:
+        "Dual high-hammer curls": ["stretch_auds/mori_highHammerCurl.wav"],
+        "Alt. high-hammer curls": ["stretch_auds/mori_altHighHammerCurls.wav"],
+        "Basic hammer curl":["stretch_auds/mori_alt_basicHammerCurls.wav"],
+
 # [!] Abs  ------------------------------------------------------------------------------------------------------
         "belly dancer kicks":["exercise_names/mori_bellydancerKicks.wav"], 
         "cross-core knee strike":["exercise_names/mori_crossCoreKneeStrike.wav"],
@@ -428,8 +474,6 @@ class ExerciseTimerApp:
         "hip raise, leg extension": ["exercise_names/23B_hipRaiseLegExtension.wav"],
         "boat row" : ["exercise_names/23B_boatRow.wav"],
         "leg lifts, candle pose": ["exercise_names/23B_legLiftsCandlePose.wav", "exercise_names/legLiftCandleBubblegum.wav"],
-        # [add l8r]: Turtle crunch
-
     # + Lower Abs  ----------------------------------------
         # compound for hip flexor, quad, lower ab
         "wall-crawlers":["exercise_names/mori_wallCrawlers.wav"],
@@ -441,8 +485,6 @@ class ExerciseTimerApp:
         "full extension cross-crunch":["exercise_names/23B_fullExtensionCrossCrunch.wav", "exercise_names/fullextensioncrossCrunchBubblegum.wav"],
         # compound for obliques
         "half windshield wiper combo": ["exercise_names/23b_halfwayWindshieldWiperCombo.wav"],
-        # [add l8r; NYI] single leg windshield wiper
-        # [add l8r; NYI] seated leg lever
     # + Obliques  ---------------------------------------------------------------------------
         "Figure-8 oblique Ax.":["exercise_names/kaf_figure8Obliques.wav", "exercise_names/kaf_alternatingAxeHandleObliques.wav"],
         "side-slugger torso twist":["stretch_auds/mori_torsoTwistSidePunch.wav", "stretch_auds/mori_torsoTwistPunches.wav", "stretch_auds/mori_sideChamberSlugs.wav"], # compound 
@@ -459,6 +501,8 @@ class ExerciseTimerApp:
     # + Shoulders --------------------------------------------------------------------------------
         "L. rock-and-box": ["exercise_names/mori_leftRockAndBox.wav"],
         "R. rock-and-box": ["exercise_names/mori_RightrockAndBox.wav"],
+        "Sing. Rock-and-box":["exercise_names/mori_leftRockAndBox.wav", "exercise_names/mori_RightrockAndBox.wav"],
+        "Alt. Rock-and-box":["exercise_names/mori_leftRockAndBox.wav", "exercise_names/mori_RightrockAndBox.wav"],
     # + Upper abs -------------------------------------------------------------------------------------
     # "open-hip T-bolt pr.ess":["stretch_auds/.wav"],
     # basic crunch
@@ -480,22 +524,23 @@ class ExerciseTimerApp:
     # + Delts
         "curl & double punch out":["stretch_auds/mori_curlUpDoublePunchOut.wav"],
     # + Forearm 
-        "T-rex bicep curl":["stretch_auds/mori_trexBicebCurl.wav"], # weighted variation
+        "T-rex bicep curl":["stretch_auds/mori_trexBicebCurl.wav", "exercise_names/me_preyingMantisForearmRaise.wav"], #
         "A-pose ro. claw-curls":["stretch_auds/mori_latPoseRotatingClaws.wav"],
         "shrieking ghoul":["stretch_auds/mori_shriekingGhoul1.wav", "stretch_auds/mori_shriekingGhoul2.wav"], # and Delts
     # + Tricep & forearm
-        "alternating hammer-downs":["stretch_auds/mori_whackamoleHammers.wav","stretch_auds/mori_alternatingHammerDown.wav", "stretch_auds/mori_altWhackAMole.wav"],
+        "alt. hammer-downs":["stretch_auds/mori_whackamoleHammers.wav","stretch_auds/mori_alternatingHammerDown.wav", "stretch_auds/mori_altWhackAMole.wav"],
 # Delts -----------------------------------------------------------
         "Franken Forearm Raise":["exercise_names/me_frankensteinForearmRaise.wav"],
 # [!] Forearms ------------------------------------------------------------------------------------------------------
         "claw-hand Z-curls":["stretch_auds/mori_clawHandZCurls.wav", "stretch_auds/mori_clawHandZCurls2.wav"],
-        "zombie claw f.Arm Raise":["stretch_auds/mori_zombie_clawForearmRaise.wav", "exercise_names/me_preyingMantisForearmRaise.wav"], 
+        "zombie claw f.Arm Raise":["stretch_auds/mori_zombie_clawForearmRaise.wav"], 
 # [!] Hamstrings ---------------------------------------------------------------------------------------------------
     # + Delts, traps
         "squat to overhead press":["exercise_names/mori_squatToOverheadPress1.wav"],
 # [!] Hip Flexors ----------------------------------------------------------------------------------------
         "R.Side hip abduction":["exercise_names/kaf_obliqueLegLift.wav"],
         "L.Side hip abduction":["exercise_names/kaf_obliqueLegLift.wav"],
+        "sing.Hip abductions":["exercise_names/kaf_obliqueLegLift.wav"],
     # + delts    
         "marching doll high knee":["stretch_auds/mori_marchingDollHighKnee.wav"],
 # [!] Pectorals ----------------------------------------------------------------------------------------------------
@@ -507,16 +552,14 @@ class ExerciseTimerApp:
         "X-Y fly press":["stretch_auds/mori_xyFlyPress.wav", "stretch_auds/mori_cactusHugger.wav"],
     # compound, multiple
         "florentine 1-2":["stretch_auds/mori_florentine12.wav", "stretch_auds/mori_florentineone-two.wav"],
-
 # [!] Quads -----------------------------------------------------------------------------------------------------     
         "squat pulse stand-ups":["exercise_names/mori_squatPulseStandUps.wav", "exercise_names/mori_squatPulseStandUp2.wav"],
         "3-point frog squats":["stretch_auds/mori_3ptFrogSquats.wav"],
-
 # [!] Shoulders------------------------------------------------------------------------------------------------------
         #  !!! - Division for delts and traps needed -
         "slow lat pull-down":["exercise_names/kaf_tensionLatPullDown.wav", "exercise_names/tensionLatPullDownBubblegum.wav","exercise_names/elf_tension_lat_pull_downs.wav","stretch_auds/mori_overheadLat3.wav", "stretch_auds/mori_overheadLatPulldown2.wav"],
         "Alt.Side-step sky-punch":["stretch_auds/mori_singleArmSidesteppingSkyPunches.wav"],
-        "back-stroke torso twist":["stretch_auds/mori_armCircleTorsoRotations.wav", "stretch_auds/mori_backstrokeTorsoTwists.wav"],
+        "Backstroke torso twist":["stretch_auds/mori_armCircleTorsoRotations.wav", "stretch_auds/mori_backstrokeTorsoTwists.wav"],
         "sky-punch, side stab":["stretch_auds/mori_skyPunchSideStab.wav"],
         "4-count cheer squad":["stretch_auds/mori_4countCheerSquad.wav"],
         "bear crawl": ["exercise_names/bearCrawlBubble.wav"], 
@@ -528,18 +571,13 @@ class ExerciseTimerApp:
         "plank shoulder taps":["exercise_names/kaf_plankShoulderTaps.wav", "exercise_names/elf_plank_shoulder_taps.wav", "exercise_names/plankShoulderTapsbub.wav"], 
         # "reaching row" : ["exercise_names/kaf_reachingRow.wav", "exercise_names/reachingRowBubble.wav"], 
         "slow and low crawl": ["exercise_names/elf_slow_and_low_crawl.wav"],
-        "snow angel shoulders":["exercise_names/kaf_snowAngelShoulders.wav", "exercise_names/snowAngelShoulders1.wav"],
+        "shoulder swimmers":["exercise_names/kaf_snowAngelShoulders.wav", "exercise_names/snowAngelShoulders1.wav"],
         "supermans": ["exercise_names/kaf_supermans.wav", "exercise_names/elf_supermans.wav"],
 # [!] Triceps    ------------------------------------------------------------------------------------------------------
     # + bicep 
-        # "left overhead tricep extension":["exercise_names/mori_leftOverheadTriExtension.wav"]
-        # "right overhead tricep extension":["exercise_names/mori_RtOverheadTriExtension.wav", "exercise_names/mori_RtOverheadTriExtension.wav"] 
-        # "chop out, scrape in":["stretch_auds/.wav"], # compound, push and pull
-
+        "Sing.Overhead Tri.Ext":["exercise_names/mori_leftOverheadTriExtension.wav", "exercise_names/mori_RtOverheadTriExtension.wav", "exercise_names/mori_RtOverheadTriExtension.wav"],
     #  + Delts
         "double-fang down-stab":["stretch_auds/mori_doubleFangDown3.wav", "stretch_auds/mori_doubleFangDownwardStab.wav"],
-        # draw double swords from back # (the elephant tusk backpack)
-        # from 3/4 boxer's stance, Ushiro-iaijutsu (L/R mirror), one arm at a time, full range of motion for tricep dip back, full slash forward
 # + Forearms
         # "basic hammer curl":["stretch_auds/mori_alt_basicHammerCurls.wav"],   
         #  Hammer curl to wrist rotation # compoun
@@ -547,7 +585,6 @@ class ExerciseTimerApp:
     # + Multiple compound, chest and shoulders
         # "high-hammer curls": ["stretch_auds/mori_highHammerCurl.wav"],
         # "Alt. high-hammer curls": ["stretch_auds/mori_altHighHammerCurls.wav"],
-   
 # [!] Stretches ------------------------------------------------------------------------------------------------------
         "R.Stand ankle rotations":["stretch_auds/me_RtLegStAnkleRotation.wav", "stretch_auds/me_rtSideStandAnkleRotations.wav"],
         "L.Stand ankle rotations":["stretch_auds/me_leftLegStAnkleRotations.wav"],
@@ -627,20 +664,26 @@ class ExerciseTimerApp:
         self.trait_vars = {trait: tk.BooleanVar() for trait in traits}
         self.trait_vars_to_exclude = {trait: tk.BooleanVar() for trait in traits}
 
+        self.filtered_timer_top_banner = tk.Label(self.tab1, text="Filtered workout\n (informational banner)")
+        self.filtered_timer_top_banner.grid(row=0, column=0, columnspan=4, padx=2, pady=5)
+        self.filtered_timer_top_banner.config(font=("times", 20), fg="lime", bg="black")
+
+        self.filtered_timer_progress = tk.Label(self.tab1, text="Move # of # : 00s")
+        self.filtered_timer_progress.grid(row=0, column=5, padx=2, pady=5)
+        self.filtered_timer_progress.config(font=("times", 36), fg="lime", bg="black")
+
         self.muscle_include_label = tk.Label(self.tab1, text="Include")
         self.muscle_include_label.config(font=("times", 12), fg="#F9C22E", bg="#27133A", bd=2, relief="solid", padx=5, pady=5) 
-        self.muscle_include_label.grid(row=0, column=0, padx=2, pady=5)
+        self.muscle_include_label.grid(row=1, column=0, padx=2, pady=5)
         self.muscle_exclude_label = tk.Label(self.tab1, text="Exlude")
         self.muscle_exclude_label.config(font=("times", 12), fg="#F9C22E", bg="#27133A", bd=2, relief="solid", padx=5, pady=5) 
-        self.muscle_exclude_label.grid(row=0, column=1, padx=2, pady=5)
+        self.muscle_exclude_label.grid(row=1, column=1, padx=2, pady=5)
         self.trait_include_label = tk.Label(self.tab1, text="Include")
         self.trait_include_label.config(font=("times", 12), fg="#ff3", bg="#224", bd=2, relief="solid", padx=5, pady=5) 
-        self.trait_include_label.grid(row=0, column=2, padx=2, pady=5)
+        self.trait_include_label.grid(row=1, column=2, padx=2, pady=5)
         self.trait_exclude_label = tk.Label(self.tab1, text="Exlude")
         self.trait_exclude_label.config(font=("times", 12), fg="#ff3", bg="#224", bd=2, relief="solid", padx=5, pady=5) 
-        self.trait_exclude_label.grid(row=0, column=3, padx=2, pady=5)
-
-
+        self.trait_exclude_label.grid(row=1, column=3, padx=2, pady=5)
 
         # # Create checkboxes for inclusion and exclusion
         # for i, muscle in enumerate(muscle_groups):
@@ -652,128 +695,228 @@ class ExerciseTimerApp:
 
         # Checkbutton widgets for muscle inclusion and exclusion
         self.checkbutton_abs_include = tk.Checkbutton(self.tab1, text="abs", variable=self.muscle_vars["abs"])
-        self.checkbutton_abs_include.grid(row=1, column=0, sticky='w')
-        self.muscle_vars["abs"].set(True)
+        self.checkbutton_abs_include.grid(row=2, column=0, sticky='w')
+        # self.muscle_vars["abs"].set(True)
 
         self.checkbutton_abs_exclude = tk.Checkbutton(self.tab1, text="abs", variable=self.muscle_vars_to_exclude["abs"])
-        self.checkbutton_abs_exclude.grid(row=1, column=1, sticky='w')
+        self.checkbutton_abs_exclude.grid(row=2, column=1, sticky='w')
 
         self.checkbutton_biceps_include = tk.Checkbutton(self.tab1, text="biceps", variable=self.muscle_vars["biceps"])
-        self.checkbutton_biceps_include.grid(row=2, column=0, sticky='w')
+        self.checkbutton_biceps_include.grid(row=3, column=0, sticky='w')
         self.checkbutton_biceps_exclude = tk.Checkbutton(self.tab1, text="biceps", variable=self.muscle_vars_to_exclude["biceps"])
-        self.checkbutton_biceps_exclude.grid(row=2, column=1, sticky='w')
+        self.checkbutton_biceps_exclude.grid(row=3, column=1, sticky='w')
 
         self.checkbutton_forearms_include = tk.Checkbutton(self.tab1, text="forearms", variable=self.muscle_vars["forearms"])
-        self.checkbutton_forearms_include.grid(row=3, column=0, sticky='w')
+        self.checkbutton_forearms_include.grid(row=4, column=0, sticky='w')
         self.checkbutton_forearms_exclude = tk.Checkbutton(self.tab1, text="forearms", variable=self.muscle_vars_to_exclude["forearms"])
-        self.checkbutton_forearms_exclude.grid(row=3, column=1, sticky='w')
+        self.checkbutton_forearms_exclude.grid(row=4, column=1, sticky='w')
 
         self.checkbutton_glutes_include = tk.Checkbutton(self.tab1, text="glutes", variable=self.muscle_vars["glutes"])
-        self.checkbutton_glutes_include.grid(row=4, column=0, sticky='w')
+        self.checkbutton_glutes_include.grid(row=5, column=0, sticky='w')
         self.checkbutton_glutes_exclude = tk.Checkbutton(self.tab1, text="glutes", variable=self.muscle_vars_to_exclude["glutes"])
-        self.checkbutton_glutes_exclude.grid(row=4, column=1, sticky='w')
+        self.checkbutton_glutes_exclude.grid(row=5, column=1, sticky='w')
 
         self.checkbutton_hamstrings_include = tk.Checkbutton(self.tab1, text="hamstrings", variable=self.muscle_vars["hamstrings"])
-        self.checkbutton_hamstrings_include.grid(row=5, column=0, sticky='w')
+        self.checkbutton_hamstrings_include.grid(row=6, column=0, sticky='w')
         self.checkbutton_hamstrings_exclude = tk.Checkbutton(self.tab1, text="hamstrings", variable=self.muscle_vars_to_exclude["hamstrings"])
-        self.checkbutton_hamstrings_exclude.grid(row=5, column=1, sticky='w')
+        self.checkbutton_hamstrings_exclude.grid(row=6, column=1, sticky='w')
 
         self.checkbutton_obliques_include = tk.Checkbutton(self.tab1, text="obliques", variable=self.muscle_vars["obliques"])
-        self.checkbutton_obliques_include.grid(row=6, column=0, sticky='w')
+        self.checkbutton_obliques_include.grid(row=7, column=0, sticky='w')
         self.checkbutton_obliques_exclude = tk.Checkbutton(self.tab1, text="obliques", variable=self.muscle_vars_to_exclude["obliques"])
-        self.checkbutton_obliques_exclude.grid(row=6, column=1, sticky='w')
+        self.checkbutton_obliques_exclude.grid(row=7, column=1, sticky='w')
 
         self.checkbutton_pecs_include = tk.Checkbutton(self.tab1, text="pecs", variable=self.muscle_vars["pecs"])
-        self.checkbutton_pecs_include.grid(row=7, column=0, sticky='w')
+        self.checkbutton_pecs_include.grid(row=8, column=0, sticky='w')
         self.checkbutton_pecs_exclude = tk.Checkbutton(self.tab1, text="pecs", variable=self.muscle_vars_to_exclude["pecs"])
-        self.checkbutton_pecs_exclude.grid(row=7, column=1, sticky='w')
+        self.checkbutton_pecs_exclude.grid(row=8, column=1, sticky='w')
 
         self.checkbutton_traps_include = tk.Checkbutton(self.tab1, text="traps", variable=self.muscle_vars["traps"])
-        self.checkbutton_traps_include.grid(row=8, column=0, sticky='w')
+        self.checkbutton_traps_include.grid(row=9, column=0, sticky='w')
         self.checkbutton_traps_exclude = tk.Checkbutton(self.tab1, text="traps", variable=self.muscle_vars_to_exclude["traps"])
-        self.checkbutton_traps_exclude.grid(row=8, column=1, sticky='w')
+        self.checkbutton_traps_exclude.grid(row=9, column=1, sticky='w')
+        self.muscle_vars["traps"].set(True)
 
         self.checkbutton_triceps_include = tk.Checkbutton(self.tab1, text="triceps", variable=self.muscle_vars["triceps"])
-        self.checkbutton_triceps_include.grid(row=9, column=0, sticky='w')
+        self.checkbutton_triceps_include.grid(row=10, column=0, sticky='w')
         self.checkbutton_triceps_exclude = tk.Checkbutton(self.tab1, text="triceps", variable=self.muscle_vars_to_exclude["triceps"])
-        self.checkbutton_triceps_exclude.grid(row=9, column=1, sticky='w')
+        self.checkbutton_triceps_exclude.grid(row=10, column=1, sticky='w')
 
         # --------traits ----------------------------------------------------------------
 
         self.checkbutton_adv_include = tk.Checkbutton(self.tab1, text="adv", variable=self.trait_vars["adv"])
-        self.checkbutton_adv_include.grid(row=1, column=2, sticky='w')
+        self.checkbutton_adv_include.grid(row=2, column=2, sticky='w')
         self.checkbutton_adv_exclude = tk.Checkbutton(self.tab1, text="adv", variable=self.trait_vars_to_exclude["adv"])
-        self.checkbutton_adv_exclude.grid(row=1, column=3, sticky='w')
-        self.trait_vars_to_exclude["adv"].set(True)
+        self.checkbutton_adv_exclude.grid(row=2, column=3, sticky='w')
+        # self.trait_vars_to_exclude["adv"].set(True)
 
         self.checkbutton_big_weight_include = tk.Checkbutton(self.tab1, text="big_weight", variable=self.trait_vars["big_weight"])
-        self.checkbutton_big_weight_include.grid(row=2, column=2, sticky='w')
+        self.checkbutton_big_weight_include.grid(row=3, column=2, sticky='w')
         self.checkbutton_big_weight_exclude = tk.Checkbutton(self.tab1, text="big_weight", variable=self.trait_vars_to_exclude["big_weight"])
-        self.checkbutton_big_weight_exclude.grid(row=2, column=3, sticky='w')
+        self.checkbutton_big_weight_exclude.grid(row=3, column=3, sticky='w')
 
         self.checkbutton_cardio_include = tk.Checkbutton(self.tab1, text="cardio", variable=self.trait_vars["cardio"])
-        self.checkbutton_cardio_include.grid(row=3, column=2, sticky='w')
+        self.checkbutton_cardio_include.grid(row=4, column=2, sticky='w')
         self.checkbutton_cardio_exclude = tk.Checkbutton(self.tab1, text="cardio", variable=self.trait_vars_to_exclude["cardio"])
-        self.checkbutton_cardio_exclude.grid(row=3, column=3, sticky='w')
+        self.checkbutton_cardio_exclude.grid(row=4, column=3, sticky='w')
 
         self.checkbutton_dumbbell_include = tk.Checkbutton(self.tab1, text="dumbbell", variable=self.trait_vars["dumbbell"])
-        self.checkbutton_dumbbell_include.grid(row=4, column=2, sticky='w')
+        self.checkbutton_dumbbell_include.grid(row=5, column=2, sticky='w')
         self.checkbutton_dumbbell_exclude = tk.Checkbutton(self.tab1, text="dumbbell", variable=self.trait_vars_to_exclude["dumbbell"])
-        self.checkbutton_dumbbell_exclude.grid(row=4, column=3, sticky='w')
+        self.checkbutton_dumbbell_exclude.grid(row=5, column=3, sticky='w')
 
         self.checkbutton_ground_include = tk.Checkbutton(self.tab1, text="ground", variable=self.trait_vars["ground"])
-        self.checkbutton_ground_include.grid(row=5, column=2, sticky='w')
+        self.checkbutton_ground_include.grid(row=6, column=2, sticky='w')
         self.checkbutton_ground_exclude = tk.Checkbutton(self.tab1, text="ground", variable=self.trait_vars_to_exclude["ground"])
-        self.checkbutton_ground_exclude.grid(row=5, column=3, sticky='w')
-        self.trait_vars_to_exclude["ground"].set(True)
+        self.checkbutton_ground_exclude.grid(row=6, column=3, sticky='w')
+        # self.trait_vars_to_exclude["ground"].set(True)
 
         self.checkbutton_heavy_include = tk.Checkbutton(self.tab1, text="heavy", variable=self.trait_vars["heavy"])
-        self.checkbutton_heavy_include.grid(row=6, column=2, sticky='w')
+        self.checkbutton_heavy_include.grid(row=7, column=2, sticky='w')
         self.checkbutton_heavy_exclude = tk.Checkbutton(self.tab1, text="heavy", variable=self.trait_vars_to_exclude["heavy"])
-        self.checkbutton_heavy_exclude.grid(row=6, column=3, sticky='w')
+        self.checkbutton_heavy_exclude.grid(row=7, column=3, sticky='w')
 
         self.checkbutton_light_include = tk.Checkbutton(self.tab1, text="light", variable=self.trait_vars["light"])
-        self.checkbutton_light_include.grid(row=7, column=2, sticky='w')
+        self.checkbutton_light_include.grid(row=8, column=2, sticky='w')
         self.checkbutton_light_exclude = tk.Checkbutton(self.tab1, text="light", variable=self.trait_vars_to_exclude["light"])
-        self.checkbutton_light_exclude.grid(row=7, column=3, sticky='w')
+        self.checkbutton_light_exclude.grid(row=8, column=3, sticky='w')
 
         self.checkbutton_martial_include = tk.Checkbutton(self.tab1, text="martial", variable=self.trait_vars["martial"])
-        self.checkbutton_martial_include.grid(row=8, column=2, sticky='w')
+        self.checkbutton_martial_include.grid(row=9, column=2, sticky='w')
         self.checkbutton_martial_exclude = tk.Checkbutton(self.tab1, text="martial", variable=self.trait_vars_to_exclude["martial"])
-        self.checkbutton_martial_exclude.grid(row=8, column=3, sticky='w')
-
-        self.checkbutton_med_include = tk.Checkbutton(self.tab1, text="med", variable=self.trait_vars["med"])
-        self.checkbutton_med_include.grid(row=9, column=2, sticky='w')
-        self.checkbutton_med_exclude = tk.Checkbutton(self.tab1, text="med", variable=self.trait_vars_to_exclude["med"])
-        self.checkbutton_med_exclude.grid(row=9, column=3, sticky='w')
-
-        self.checkbutton_mirrored_include = tk.Checkbutton(self.tab1, text="mirrored", variable=self.trait_vars["mirrored"])
-        self.checkbutton_mirrored_include.grid(row=10, column=2, sticky='w')
-        self.checkbutton_mirrored_exclude = tk.Checkbutton(self.tab1, text="mirrored", variable=self.trait_vars_to_exclude["mirrored"])
-        self.checkbutton_mirrored_exclude.grid(row=10, column=3, sticky='w')
-
-        self.checkbutton_res_band_include = tk.Checkbutton(self.tab1, text="res_band", variable=self.trait_vars["res_band"])
-        self.checkbutton_res_band_include.grid(row=11, column=2, sticky='w')
-        self.checkbutton_res_band_exclude = tk.Checkbutton(self.tab1, text="res_band", variable=self.trait_vars_to_exclude["res_band"])
-        self.checkbutton_res_band_exclude.grid(row=11, column=3, sticky='w')
+        self.checkbutton_martial_exclude.grid(row=9, column=3, sticky='w')
 
         self.checkbutton_small_weight_include = tk.Checkbutton(self.tab1, text="small_weight", variable=self.trait_vars["small_weight"])
-        self.checkbutton_small_weight_include.grid(row=12, column=2, sticky='w')
+        self.checkbutton_small_weight_include.grid(row=10, column=2, sticky='w')
         self.checkbutton_small_weight_exclude = tk.Checkbutton(self.tab1, text="small_weight", variable=self.trait_vars_to_exclude["small_weight"])
-        self.checkbutton_small_weight_exclude.grid(row=12, column=3, sticky='w')
+        self.checkbutton_small_weight_exclude.grid(row=10, column=3, sticky='w')
+        
 
-        self.get_filtered_workout_button = tk.Button(self.tab1, text="Get Workout", command=lambda:self.get_filtered_workout_items())
-        self.get_filtered_workout_button.grid(row=len(traits)+1, column=0, columnspan=4)
+        self.checkbutton_mirrored_include = tk.Checkbutton(self.tab1, text="mirrored", variable=self.trait_vars["mirrored"])
+        self.checkbutton_mirrored_include.grid(row=11, column=2, sticky='w')
+        self.checkbutton_mirrored_exclude = tk.Checkbutton(self.tab1, text="mirrored", variable=self.trait_vars_to_exclude["mirrored"])
+        self.checkbutton_mirrored_exclude.grid(row=11, column=3, sticky='w')
+        self.trait_vars_to_exclude["mirrored"].set(True)
+
+        self.checkbutton_res_band_include = tk.Checkbutton(self.tab1, text="res_band", variable=self.trait_vars["res_band"])
+        self.checkbutton_res_band_include.grid(row=12, column=2, sticky='w')
+        self.checkbutton_res_band_exclude = tk.Checkbutton(self.tab1, text="res_band", variable=self.trait_vars_to_exclude["res_band"])
+        self.checkbutton_res_band_exclude.grid(row=12, column=3, sticky='w')
+
+        self.checkbutton_compound_include = tk.Checkbutton(self.tab1, text="compound", variable=self.trait_vars["compound"])
+        self.checkbutton_compound_include.grid(row=13, column=2, sticky='w')
+        self.checkbutton_compound_exclude = tk.Checkbutton(self.tab1, text="compound", variable=self.trait_vars_to_exclude["compound"])
+        self.checkbutton_compound_exclude.grid(row=13, column=3, sticky='w')
+
+        self.checkbutton_dance_include = tk.Checkbutton(self.tab1, text="dance", variable=self.trait_vars["dance"])
+        self.checkbutton_dance_include.grid(row=14, column=2, sticky='w')
+        self.checkbutton_dance_exclude = tk.Checkbutton(self.tab1, text="dance", variable=self.trait_vars_to_exclude["dance"])
+        self.checkbutton_dance_exclude.grid(row=14, column=3, sticky='w')
 
 
-        # display area tab1
-        self.filtered_timer_display = tk.Label(self.tab1, text="[countdown display]")
-        self.filtered_timer_display.grid(row=0, column=5, padx=2, pady=5)
-        self.filtered_timer_display.config(font=("times", 36), fg="lime", bg="black")
+        self.filter_est_time_label = tk.Label(self.tab1, text="Est. Time ...")
+        self.filter_est_time_label.config(font=("times", 16), fg="#52FFB8", bg="Black", bd=2, relief="solid", padx=5, pady=5) 
+        self.filter_est_time_label.grid(row=len(traits)+2, column=0, columnspan=4, padx=5)
 
-        self.combo_box002 = tk.Listbox(self.tab1, height=10, width=50)
-        self.combo_box002.grid(row=1, rowspan=30, column=5, pady=5)
-        self.combo_box002.config(font=("Times", 30), width="24", height="15", fg="#F9C22E", bg="#27233A")
+        self.filter_time_dur_label = tk.Label(self.tab1, text="Sec/Move")
+        self.filter_time_dur_label.config(font=("times", 16), fg="#52FFB8", bg="#27133A", padx=5, pady=5) 
+        self.filter_time_dur_label.grid(row=len(traits)+3, column=0, padx=5)
+        self.filter_active_duration_slider = tk.IntVar()
+        self.filter_active_duration_slider = tk.Scale(self.tab1, from_=2, to=92, orient=tk.HORIZONTAL, resolution=4, variable=self.filter_active_duration_slider, command=self.update_filter_workout_timing_preview_label)
+        self.filter_active_duration_slider.set(6)
+        self.filter_active_duration_slider.grid(row=len(traits)+3, column=1, padx=2)
+
+        self.filter_rest_seconds_label = tk.Label(self.tab1, text="Sec/Rest")
+        self.filter_rest_seconds_label.config(font=("times", 16), fg="#52FFB8", bg="#27133A", padx=5, pady=5) 
+        self.filter_rest_seconds_label.grid(row=len(traits)+3, column=2, padx=5)
+        self.filter_rest_seconds_slider = tk.IntVar()
+        self.filter_rest_seconds_slider = tk.Scale(self.tab1, from_=3, to=90, orient=tk.HORIZONTAL, resolution=3, variable=self.filter_rest_seconds_slider, command=self.update_filter_workout_timing_preview_label)
+        self.filter_rest_seconds_slider.set(3)
+        self.filter_rest_seconds_slider.grid(row=len(traits)+3, column=3, padx=2)
+
+        self.filter_n_moves_label = tk.Label(self.tab1, text="# Moves")
+        self.filter_n_moves_label.config(font=("times", 16), fg="#F9C22E", bg="#27133A", padx=5, pady=5) 
+        self.filter_n_moves_label.grid(row=len(traits)+4, column=0, padx=5)
+        self.filter_n_moves_slider = tk.IntVar()
+        self.filter_n_moves_slider = tk.Scale(self.tab1, from_=2, to=30, orient=tk.HORIZONTAL, resolution=1, variable=self.filter_n_moves_slider, command=self.update_filter_workout_timing_preview_label)
+        self.filter_n_moves_slider.set(3)
+        self.filter_n_moves_slider.grid(row=len(traits)+4, column=1, padx=2)
+
+        self.filter_moves_per_set_label = tk.Label(self.tab1, text="# Moves/set")
+        self.filter_moves_per_set_label.config(font=("times", 16), fg="#F9C22E", bg="#27133A", padx=5, pady=5) 
+        self.filter_moves_per_set_label.grid(row=len(traits)+4, column=2, padx=5)
+        self.filter_moves_per_set_slider = tk.IntVar()
+        self.filter_moves_per_set_slider = tk.Scale(self.tab1, from_=1, to=15, orient=tk.HORIZONTAL, resolution=1, variable=self.filter_moves_per_set_slider, command=self.update_filter_workout_timing_preview_label)
+        self.filter_moves_per_set_slider.set(3)
+        self.filter_moves_per_set_slider.grid(row=len(traits)+4, column=3, padx=2)
+
+        self.get_filtered_workout_button = tk.Button(self.tab1, text="Gen. Preview", command=lambda:self.preview_filtered_workout_items())
+        self.get_filtered_workout_button.grid(row=len(traits)+5, column=0)
+        self.get_filtered_workout_button.config(font=("times", 16), fg="#27233A", bg="#D5C7BC")
+
+        self.start_filtered_workout_button = tk.Button(self.tab1, text="NYI start", command=lambda:self.start_filtered_workout())
+        self.start_filtered_workout_button.grid(row=len(traits)+5, column=1)
+        self.start_filtered_workout_button.config(font=("times", 16), fg="#27233A", bg="#D5C7BC")
+
+        self.pause_filtered_workout_button = tk.Button(self.tab1, text="NYI pause", command=lambda:self.toggle_filtered_timer())
+        self.pause_filtered_workout_button.grid(row=len(traits)+5, column=2)
+        self.pause_filtered_workout_button.config(font=("times", 16), fg="#27233A", bg="#D5C7BC")
+
+        self.rand_filtered_workout_button = tk.Button(self.tab1, text="NYI random", command=lambda: self.get_and_play_rand_aud_to_end(self.funny_sound_arr, self.temp_funny_sound_arr))
+        self.rand_filtered_workout_button.grid(row=len(traits)+5, column=3)
+        self.rand_filtered_workout_button.config(font=("times", 16), fg="#27233A", bg="#D5C7BC")
+
+
+# DARK PURPLE: #27233A 
+    # aquamarine  #52FFB8
+    # carmine #931621
+    # saffron #F9C22E
+    # timberwolf grey #D5C7BC
+#  display area---------------------------------------------
+        # NOTE: use the display label to show round/timer/etc. on the conditionals in actual countdown
+
+        self.filtered_moves_display_area = tk.Listbox(self.tab1, height=12, width=50)
+        self.filtered_moves_display_area.grid(row=1, rowspan=20, column=5, pady=5)
+        self.filtered_moves_display_area.config(font=("Times", 30), width="24", height="15", fg="#F9C22E", bg="#27233A")
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # ----------  Set up Tab2 widgets -------------------------------------------------------------------------------------------
@@ -994,8 +1137,275 @@ class ExerciseTimerApp:
 
 
 
+
+        self.sfx_filtered_timer_top_banner = tk.Label(self.tab5, text="SFX Only workout\n (informational banner)")
+        self.sfx_filtered_timer_top_banner.grid(row=0, column=0, columnspan=4, padx=2, pady=5)
+        self.sfx_filtered_timer_top_banner.config(font=("times", 20), fg="lime", bg="black")
+
+        self.sfx_filtered_timer_progress = tk.Label(self.tab5, text="Move # of # : 00s")
+        self.sfx_filtered_timer_progress.grid(row=0, column=5, padx=2, pady=5)
+        self.sfx_filtered_timer_progress.config(font=("times", 36), fg="lime", bg="black")
+
+        self.sfx_muscle_include_label = tk.Label(self.tab5, text="Include")
+        self.sfx_muscle_include_label.config(font=("times", 12), fg="#F9C22E", bg="#27133A", bd=2, relief="solid", padx=5, pady=5) 
+        self.sfx_muscle_include_label.grid(row=1, column=0, padx=2, pady=5)
+        self.sfx_muscle_exclude_label = tk.Label(self.tab5, text="Exlude")
+        self.sfx_muscle_exclude_label.config(font=("times", 12), fg="#F9C22E", bg="#27133A", bd=2, relief="solid", padx=5, pady=5) 
+        self.sfx_muscle_exclude_label.grid(row=1, column=1, padx=2, pady=5)
+        self.sfx_trait_include_label = tk.Label(self.tab5, text="Include")
+        self.sfx_trait_include_label.config(font=("times", 12), fg="#ff3", bg="#224", bd=2, relief="solid", padx=5, pady=5) 
+        self.sfx_trait_include_label.grid(row=1, column=2, padx=2, pady=5)
+        self.sfx_trait_exclude_label = tk.Label(self.tab5, text="Exlude")
+        self.sfx_trait_exclude_label.config(font=("times", 12), fg="#ff3", bg="#224", bd=2, relief="solid", padx=5, pady=5) 
+        self.sfx_trait_exclude_label.grid(row=1, column=3, padx=2, pady=5)
+
+        # Checkbutton widgets for muscle inclusion and exclusion
+        self.sfx_checkbutton_abs_include = tk.Checkbutton(self.tab5, text="abs", variable=self.muscle_vars["abs"])
+        self.sfx_checkbutton_abs_include.grid(row=2, column=0, sticky='w')
+        # self.muscle_vars["abs"].set(True)
+
+        self.sfx_checkbutton_abs_exclude = tk.Checkbutton(self.tab5, text="abs", variable=self.muscle_vars_to_exclude["abs"])
+        self.sfx_checkbutton_abs_exclude.grid(row=2, column=1, sticky='w')
+
+        self.sfx_checkbutton_biceps_include = tk.Checkbutton(self.tab5, text="biceps", variable=self.muscle_vars["biceps"])
+        self.sfx_checkbutton_biceps_include.grid(row=3, column=0, sticky='w')
+        self.sfx_checkbutton_biceps_exclude = tk.Checkbutton(self.tab5, text="biceps", variable=self.muscle_vars_to_exclude["biceps"])
+        self.sfx_checkbutton_biceps_exclude.grid(row=3, column=1, sticky='w')
+
+        self.sfx_checkbutton_forearms_include = tk.Checkbutton(self.tab5, text="forearms", variable=self.muscle_vars["forearms"])
+        self.sfx_checkbutton_forearms_include.grid(row=4, column=0, sticky='w')
+        self.sfx_checkbutton_forearms_exclude = tk.Checkbutton(self.tab5, text="forearms", variable=self.muscle_vars_to_exclude["forearms"])
+        self.sfx_checkbutton_forearms_exclude.grid(row=4, column=1, sticky='w')
+
+        self.sfx_checkbutton_glutes_include = tk.Checkbutton(self.tab5, text="glutes", variable=self.muscle_vars["glutes"])
+        self.sfx_checkbutton_glutes_include.grid(row=5, column=0, sticky='w')
+        self.sfx_checkbutton_glutes_exclude = tk.Checkbutton(self.tab5, text="glutes", variable=self.muscle_vars_to_exclude["glutes"])
+        self.sfx_checkbutton_glutes_exclude.grid(row=5, column=1, sticky='w')
+
+        self.sfx_checkbutton_hamstrings_include = tk.Checkbutton(self.tab5, text="hamstrings", variable=self.muscle_vars["hamstrings"])
+        self.sfx_checkbutton_hamstrings_include.grid(row=6, column=0, sticky='w')
+        self.sfx_checkbutton_hamstrings_exclude = tk.Checkbutton(self.tab5, text="hamstrings", variable=self.muscle_vars_to_exclude["hamstrings"])
+        self.sfx_checkbutton_hamstrings_exclude.grid(row=6, column=1, sticky='w')
+
+        self.sfx_checkbutton_obliques_include = tk.Checkbutton(self.tab5, text="obliques", variable=self.muscle_vars["obliques"])
+        self.sfx_checkbutton_obliques_include.grid(row=7, column=0, sticky='w')
+        self.sfx_checkbutton_obliques_exclude = tk.Checkbutton(self.tab5, text="obliques", variable=self.muscle_vars_to_exclude["obliques"])
+        self.sfx_checkbutton_obliques_exclude.grid(row=7, column=1, sticky='w')
+
+        self.sfx_checkbutton_pecs_include = tk.Checkbutton(self.tab5, text="pecs", variable=self.muscle_vars["pecs"])
+        self.sfx_checkbutton_pecs_include.grid(row=8, column=0, sticky='w')
+        self.sfx_checkbutton_pecs_exclude = tk.Checkbutton(self.tab5, text="pecs", variable=self.muscle_vars_to_exclude["pecs"])
+        self.sfx_checkbutton_pecs_exclude.grid(row=8, column=1, sticky='w')
+
+        self.sfx_checkbutton_traps_include = tk.Checkbutton(self.tab5, text="traps", variable=self.muscle_vars["traps"])
+        self.sfx_checkbutton_traps_include.grid(row=9, column=0, sticky='w')
+        self.sfx_checkbutton_traps_exclude = tk.Checkbutton(self.tab5, text="traps", variable=self.muscle_vars_to_exclude["traps"])
+        self.sfx_checkbutton_traps_exclude.grid(row=9, column=1, sticky='w')
+        self.muscle_vars["traps"].set(True)
+
+        self.sfx_checkbutton_triceps_include = tk.Checkbutton(self.tab5, text="triceps", variable=self.muscle_vars["triceps"])
+        self.sfx_checkbutton_triceps_include.grid(row=10, column=0, sticky='w')
+        self.sfx_checkbutton_triceps_exclude = tk.Checkbutton(self.tab5, text="triceps", variable=self.muscle_vars_to_exclude["triceps"])
+        self.sfx_checkbutton_triceps_exclude.grid(row=10, column=1, sticky='w')
+
+        # --------traits ----------------------------------------------------------------
+
+        self.sfx_checkbutton_adv_include = tk.Checkbutton(self.tab5, text="adv", variable=self.trait_vars["adv"])
+        self.sfx_checkbutton_adv_include.grid(row=2, column=2, sticky='w')
+        self.sfx_checkbutton_adv_exclude = tk.Checkbutton(self.tab5, text="adv", variable=self.trait_vars_to_exclude["adv"])
+        self.sfx_checkbutton_adv_exclude.grid(row=2, column=3, sticky='w')
+        # self.trait_vars_to_exclude["adv"].set(True)
+
+        self.sfx_checkbutton_big_weight_include = tk.Checkbutton(self.tab5, text="big_weight", variable=self.trait_vars["big_weight"])
+        self.sfx_checkbutton_big_weight_include.grid(row=3, column=2, sticky='w')
+        self.sfx_checkbutton_big_weight_exclude = tk.Checkbutton(self.tab5, text="big_weight", variable=self.trait_vars_to_exclude["big_weight"])
+        self.sfx_checkbutton_big_weight_exclude.grid(row=3, column=3, sticky='w')
+
+        self.sfx_checkbutton_cardio_include = tk.Checkbutton(self.tab5, text="cardio", variable=self.trait_vars["cardio"])
+        self.sfx_checkbutton_cardio_include.grid(row=4, column=2, sticky='w')
+        self.sfx_checkbutton_cardio_exclude = tk.Checkbutton(self.tab5, text="cardio", variable=self.trait_vars_to_exclude["cardio"])
+        self.sfx_checkbutton_cardio_exclude.grid(row=4, column=3, sticky='w')
+
+        self.sfx_checkbutton_dumbbell_include = tk.Checkbutton(self.tab5, text="dumbbell", variable=self.trait_vars["dumbbell"])
+        self.sfx_checkbutton_dumbbell_include.grid(row=5, column=2, sticky='w')
+        self.sfx_checkbutton_dumbbell_exclude = tk.Checkbutton(self.tab5, text="dumbbell", variable=self.trait_vars_to_exclude["dumbbell"])
+        self.sfx_checkbutton_dumbbell_exclude.grid(row=5, column=3, sticky='w')
+
+        self.sfx_checkbutton_ground_include = tk.Checkbutton(self.tab5, text="ground", variable=self.trait_vars["ground"])
+        self.sfx_checkbutton_ground_include.grid(row=6, column=2, sticky='w')
+        self.sfx_checkbutton_ground_exclude = tk.Checkbutton(self.tab5, text="ground", variable=self.trait_vars_to_exclude["ground"])
+        self.sfx_checkbutton_ground_exclude.grid(row=6, column=3, sticky='w')
+        # self.trait_vars_to_exclude["ground"].set(True)
+
+        self.sfx_checkbutton_heavy_include = tk.Checkbutton(self.tab5, text="heavy", variable=self.trait_vars["heavy"])
+        self.sfx_checkbutton_heavy_include.grid(row=7, column=2, sticky='w')
+        self.sfx_checkbutton_heavy_exclude = tk.Checkbutton(self.tab5, text="heavy", variable=self.trait_vars_to_exclude["heavy"])
+        self.sfx_checkbutton_heavy_exclude.grid(row=7, column=3, sticky='w')
+
+        self.sfx_checkbutton_light_include = tk.Checkbutton(self.tab5, text="light", variable=self.trait_vars["light"])
+        self.sfx_checkbutton_light_include.grid(row=8, column=2, sticky='w')
+        self.sfx_checkbutton_light_exclude = tk.Checkbutton(self.tab5, text="light", variable=self.trait_vars_to_exclude["light"])
+        self.sfx_checkbutton_light_exclude.grid(row=8, column=3, sticky='w')
+
+        self.sfx_checkbutton_martial_include = tk.Checkbutton(self.tab5, text="martial", variable=self.trait_vars["martial"])
+        self.sfx_checkbutton_martial_include.grid(row=9, column=2, sticky='w')
+        self.sfx_checkbutton_martial_exclude = tk.Checkbutton(self.tab5, text="martial", variable=self.trait_vars_to_exclude["martial"])
+        self.sfx_checkbutton_martial_exclude.grid(row=9, column=3, sticky='w')
+
+        self.sfx_checkbutton_small_weight_include = tk.Checkbutton(self.tab5, text="small_weight", variable=self.trait_vars["small_weight"])
+        self.sfx_checkbutton_small_weight_include.grid(row=10, column=2, sticky='w')
+        self.sfx_checkbutton_small_weight_exclude = tk.Checkbutton(self.tab5, text="small_weight", variable=self.trait_vars_to_exclude["small_weight"])
+        self.sfx_checkbutton_small_weight_exclude.grid(row=10, column=3, sticky='w')
+        
+        self.sfx_checkbutton_mirrored_include = tk.Checkbutton(self.tab5, text="mirrored", variable=self.trait_vars["mirrored"])
+        self.sfx_checkbutton_mirrored_include.grid(row=11, column=2, sticky='w')
+        self.sfx_checkbutton_mirrored_exclude = tk.Checkbutton(self.tab5, text="mirrored", variable=self.trait_vars_to_exclude["mirrored"])
+        self.sfx_checkbutton_mirrored_exclude.grid(row=11, column=3, sticky='w')
+        self.trait_vars_to_exclude["mirrored"].set(True)
+
+        self.sfx_checkbutton_res_band_include = tk.Checkbutton(self.tab5, text="res_band", variable=self.trait_vars["res_band"])
+        self.sfx_checkbutton_res_band_include.grid(row=12, column=2, sticky='w')
+        self.sfx_checkbutton_res_band_exclude = tk.Checkbutton(self.tab5, text="res_band", variable=self.trait_vars_to_exclude["res_band"])
+        self.sfx_checkbutton_res_band_exclude.grid(row=12, column=3, sticky='w')
+
+        self.sfx_checkbutton_compound_include = tk.Checkbutton(self.tab5, text="compound", variable=self.trait_vars["compound"])
+        self.sfx_checkbutton_compound_include.grid(row=13, column=2, sticky='w')
+        self.sfx_checkbutton_compound_exclude = tk.Checkbutton(self.tab5, text="compound", variable=self.trait_vars_to_exclude["compound"])
+        self.sfx_checkbutton_compound_exclude.grid(row=13, column=3, sticky='w')
+
+        self.sfx_checkbutton_dance_include = tk.Checkbutton(self.tab5, text="dance", variable=self.trait_vars["dance"])
+        self.sfx_checkbutton_dance_include.grid(row=14, column=2, sticky='w')
+        self.sfx_checkbutton_dance_exclude = tk.Checkbutton(self.tab5, text="dance", variable=self.trait_vars_to_exclude["dance"])
+        self.sfx_checkbutton_dance_exclude.grid(row=14, column=3, sticky='w')
+
+        self.sfx_filter_est_time_label = tk.Label(self.tab5, text="Est. Time ...")
+        self.sfx_filter_est_time_label.config(font=("times", 16), fg="#52FFB8", bg="Black", bd=2, relief="solid", padx=5, pady=5) 
+        self.sfx_filter_est_time_label.grid(row=len(traits)+2, column=0, columnspan=4, padx=5)
+
+        self.sfx_filter_time_dur_label = tk.Label(self.tab5, text="Sec/Move")
+        self.sfx_filter_time_dur_label.config(font=("times", 16), fg="#52FFB8", bg="#27133A", padx=5, pady=5) 
+        self.sfx_filter_time_dur_label.grid(row=len(traits)+3, column=0, padx=5)
+        self.sfx_filter_active_duration_slider = tk.IntVar()
+        self.sfx_filter_active_duration_slider = tk.Scale(self.tab5, from_=2, to=92, orient=tk.HORIZONTAL, resolution=4, variable=self.sfx_filter_active_duration_slider, command=self.update_sfx_workout_timing_preview_label)
+        self.sfx_filter_active_duration_slider.set(6)
+        self.sfx_filter_active_duration_slider.grid(row=len(traits)+3, column=1, padx=2)
+
+        self.sfx_filter_rest_seconds_label = tk.Label(self.tab5, text="Sec/Rest")
+        self.sfx_filter_rest_seconds_label.config(font=("times", 16), fg="#52FFB8", bg="#27133A", padx=5, pady=5) 
+        self.sfx_filter_rest_seconds_label.grid(row=len(traits)+3, column=2, padx=5)
+        self.sfx_filter_rest_seconds_slider = tk.IntVar()
+        self.sfx_filter_rest_seconds_slider = tk.Scale(self.tab5, from_=3, to=90, orient=tk.HORIZONTAL, resolution=3, variable=self.sfx_filter_rest_seconds_slider, command=self.update_sfx_workout_timing_preview_label)
+        self.sfx_filter_rest_seconds_slider.set(3)
+        self.sfx_filter_rest_seconds_slider.grid(row=len(traits)+3, column=3, padx=2)
+
+        self.sfx_filter_n_moves_label = tk.Label(self.tab5, text="# Moves")
+        self.sfx_filter_n_moves_label.config(font=("times", 16), fg="#F9C22E", bg="#27133A", padx=5, pady=5) 
+        self.sfx_filter_n_moves_label.grid(row=len(traits)+4, column=0, padx=5)
+        self.sfx_filter_n_moves_slider = tk.IntVar()
+        self.sfx_filter_n_moves_slider = tk.Scale(self.tab5, from_=2, to=30, orient=tk.HORIZONTAL, resolution=1, variable=self.sfx_filter_n_moves_slider, command=self.update_sfx_workout_timing_preview_label)
+        self.sfx_filter_n_moves_slider.set(3)
+        self.sfx_filter_n_moves_slider.grid(row=len(traits)+4, column=1, padx=2)
+
+        self.sfx_filter_moves_per_set_label = tk.Label(self.tab5, text="# Moves/set")
+        self.sfx_filter_moves_per_set_label.config(font=("times", 16), fg="#F9C22E", bg="#27133A", padx=5, pady=5) 
+        self.sfx_filter_moves_per_set_label.grid(row=len(traits)+4, column=2, padx=5)
+        self.sfx_filter_moves_per_set_slider = tk.IntVar()
+        self.sfx_filter_moves_per_set_slider = tk.Scale(self.tab5, from_=1, to=15, orient=tk.HORIZONTAL, resolution=1, variable=self.sfx_filter_moves_per_set_slider, command=self.update_sfx_workout_timing_preview_label)
+        self.sfx_filter_moves_per_set_slider.set(3)
+        self.sfx_filter_moves_per_set_slider.grid(row=len(traits)+4, column=3, padx=2)
+
+        self.sfx_get_filtered_workout_button = tk.Button(self.tab5, text="Gen. Preview", command=lambda:self.preview_sfx_only_workout_items())
+        self.sfx_get_filtered_workout_button.grid(row=len(traits)+5, column=0)
+        self.sfx_get_filtered_workout_button.config(font=("times", 16), fg="#27233A", bg="#D5C7BC")
+
+        self.sfx_start_filtered_workout_button = tk.Button(self.tab5, text="NYI start", command=lambda:self.start_filtered_workout())
+        self.sfx_start_filtered_workout_button.grid(row=len(traits)+5, column=1)
+        self.sfx_start_filtered_workout_button.config(font=("times", 16), fg="#27233A", bg="#D5C7BC")
+
+        self.sfx_pause_filtered_workout_button = tk.Button(self.tab5, text="NYI pause", command=lambda:self.toggle_filtered_timer())
+        self.sfx_pause_filtered_workout_button.grid(row=len(traits)+5, column=2)
+        self.sfx_pause_filtered_workout_button.config(font=("times", 16), fg="#27233A", bg="#D5C7BC")
+
+        self.sfx_rand_filtered_workout_button = tk.Button(self.tab5, text="NYI random", command=lambda: self.get_and_play_rand_aud_to_end(self.funny_sound_arr, self.temp_funny_sound_arr))
+        self.sfx_rand_filtered_workout_button.grid(row=len(traits)+5, column=3)
+        self.sfx_rand_filtered_workout_button.config(font=("times", 16), fg="#27233A", bg="#D5C7BC")
+
+        self.sfx_filtered_moves_display_area = tk.Listbox(self.tab5, height=12, width=50)
+        self.sfx_filtered_moves_display_area.grid(row=1, rowspan=20, column=5, pady=5)
+        self.sfx_filtered_moves_display_area.config(font=("Times", 30), width="24", height="15", fg="#F9C22E", bg="#27233A")
+
+
+
+
+
+
+
+
+
+
+
+
+#  color scheme values -------------------------------------------------
+        # chartreuse = "#E0FF4F"
+        emerald = "#36E6C0"
+        golden_sunglow = "#FFD166"
+        ch_violet = "#7F5A83"
+        fr_gray = "#B7B6C2"
+        teal = "#401C3B"
+
+        self.is_this_loop_active_time = True
+        self.loop_pause = True
+
+        self.digital_clock_label = tk.Label(self.tab6, text="00:00")
+        self.digital_clock_label.config(font=("times", 38), fg="lime", bg="#212140", bd=5, relief="solid", padx=5, pady=5) 
+        self.digital_clock_label.grid(row=0, column=0, columnspan=4, padx=5, pady=5)
+
+        self.simple_loop_length_time_label = tk.Label(self.tab6, text="general information")
+        self.simple_loop_length_time_label.config(font=("times", 16), fg=golden_sunglow, bg="#212140", bd=2, relief="solid", padx=5, pady=5) 
+        self.simple_loop_length_time_label.grid(row=1, column=0, columnspan=4, padx=5)
+
+        self.loop_active_label = tk.Label(self.tab6, text="Min/Work")
+        self.loop_active_label.config(font=("times", 16), fg="cyan", bg="black", padx=5, pady=5) 
+        self.loop_active_label.grid(row=3, column=0, padx=5)
+        self.loop_active_slider = tk.IntVar()
+        # self.loop_duration_slider = tk.Scale(self.tab6, from_=2, to=92, orient=tk.HORIZONTAL, resolution=4, variable=self.filter_active_duration_slider, command=self.update_filter_workout_timing_preview_label)
+        self.loop_active_slider = tk.Scale(self.tab6, from_=1, to=90, orient=tk.HORIZONTAL, resolution=1, variable=self.loop_active_slider)
+        self.loop_active_slider.set(1)
+        self.loop_active_slider.grid(row=3, column=1, padx=2)
+
+        self.loop_rest_label = tk.Label(self.tab6, text="Min/Rest")
+        self.loop_rest_label.config(font=("times", 16), fg="cyan", bg="black", padx=5, pady=5) 
+        self.loop_rest_label.grid(row=3, column=2, padx=5)
+        self.loop_rest_slider = tk.IntVar()
+        # self.loop_rest_slider = tk.Scale(self.tab6, from_=3, to=90, orient=tk.HORIZONTAL, resolution=3, variable=self.loop_rest_slider, command=self.update_filter_workout_timing_preview_label)
+        self.loop_rest_slider = tk.Scale(self.tab6, from_=1, to=90, orient=tk.HORIZONTAL, resolution=3, variable=self.loop_rest_slider)
+        self.loop_rest_slider.set(1)
+        self.loop_rest_slider.grid(row=3, column=3, padx=2)
+
+        self.loops_done_label = tk.Label(self.tab6, text="Loops done")
+        self.loops_done_label.config(font=("times", 16), fg="lime", bg="#212140", padx=5, pady=5) 
+        self.loops_done_label.grid(row=4, column=0, padx=5)
+
+        self.loops_done_counter = tk.Label(self.tab6, text="0")
+        self.loops_done_counter.config(font=("times", 16), fg="lime", bg="#212140", padx=5, pady=5) 
+        self.loops_done_counter.grid(row=4, column=1, padx=5)
+
+        self.simple_loop_workout_button = tk.Button(self.tab6, text="Start", command=lambda: self.init_loop_countdown())
+        self.simple_loop_workout_button.grid(row=5, column=0)
+        self.simple_loop_workout_button.config(font=("times", 16), fg="#27233A", bg="#D5C7BC")
+
+        self.simple_looop_pause_toggle_button = tk.Button(self.tab6, text="Pause", command=lambda: self.toggle_loop_pause())
+        self.simple_looop_pause_toggle_button.grid(row=5, column=1)
+        self.simple_looop_pause_toggle_button.config(font=("times", 16), fg="#27233A", bg="#D5C7BC")
+
+        self.simple_rand_sound_button = tk.Button(self.tab6, text="RandSND", command=lambda: self.get_and_play_rand_aud_to_end(self.funny_sound_arr, self.temp_funny_sound_arr))
+        self.simple_rand_sound_button.grid(row=5, column=2)
+        self.simple_rand_sound_button.config(font=("times", 16), fg="#27233A", bg="#D5C7BC")
+
         
 
+        self.remaining_simple_loop_active_time = 0
+        self.remaining_simple_loop_rest_time = 0
 
 
 
@@ -1003,11 +1413,7 @@ class ExerciseTimerApp:
 
 
 
-
-
-
-
-
+        
 
 
 
@@ -1045,12 +1451,21 @@ class ExerciseTimerApp:
 
         # used in tab2, for stretches, the stretch time slider will update this
         self.standing_stretch_only = False
+        self.total_stretch_set_time_in_mins = 0
         self.continuous_action_time = 0
         self.current_continuous_action_index = 0
 
         self.boxing_workout_move_list = ["default string"]
         self.boxing_duration_in_mins = 0
 
+        self.current_filtered_move_index = 0
+        self.included_muscle_groups = []
+        self.excluded_muscle_groups = []
+        self.included_workout_traits =[]
+        self.excluded_workout_traits =[]
+
+        self.loop_active_seconds_total = 0
+        self.loop_rest_seconds_total = 0
 
 
 
@@ -1070,6 +1485,373 @@ class ExerciseTimerApp:
 
 
 
+
+
+
+
+
+
+    def toggle_loop_pause(self):
+        print("pause btn hit!")
+        if self.loop_pause == True:
+            self.loop_pause = False
+        else:
+            self.loop_pause = True
+        if not self.loop_pause:
+            print("resuming clock-ticking")
+            self.update_loop_clock()
+
+    def init_loop_countdown(self):
+        # get the INT value of the active slider for remaining active time
+        # convert minutes on slider to seconds
+        self.loop_active_seconds_total = self.loop_active_slider.get()*60
+        num_active_mins = self.loop_active_seconds_total // 60
+        num_active_seconds = self.loop_active_seconds_total % 60
+        clock_string = f"{num_active_mins:02d}:{num_active_seconds:02d}"
+        self.digital_clock_label.config(text=clock_string)
+        # disable start button after it's clicked
+        self.simple_loop_workout_button.config(state="disabled")
+        # Since we're active, the loop is NOT paused, so adjust the boolean for the pause btn
+        self.loop_pause = False
+# hook for initial audio drop ------------------------------------------------------------------------------------- INIT AUD HOOK ---------------------
+        self.update_loop_clock()
+
+    def update_loop_clock(self):
+        if self.loop_pause:
+            print("Simple loop is paused...")
+        else:
+            if self.is_this_loop_active_time:
+                # subtract remaining time
+                self.loop_active_seconds_total -= 1
+                num_active_mins = self.loop_active_seconds_total // 60
+                num_active_seconds = self.loop_active_seconds_total % 60
+                        # Format the remaining time as "MM:SS"
+                clock_string = f"{num_active_mins:02d}:{num_active_seconds:02d}"
+                self.digital_clock_label.config(text=clock_string)
+                if self.loop_active_seconds_total == 0:
+                    self.is_this_loop_active_time = False
+                    # regenerate time
+                    self.loop_active_seconds_total = self.loop_active_slider.get()*60
+                    input("stalling!")
+
+
+            # if len(formatted_time) < 5:
+            #     formatted_time = "0" + formatted_time  # Add leading zero if needed
+            # self.digital_clock_label.config(text=formatted_time)
+            # self.remaining_simple_loop_active_time -= timedelta(seconds=1)
+            
+            # # Check if the countdown has finished
+            # if self.remaining_simple_loop_active_time <= timedelta(0):
+            #     print("loop done")
+            #     self.start_countdown()  # Restart the countdown
+            # else:
+            #     # Schedule the update_clock function to run after 1 second
+            self.master.after(1000, self.update_loop_clock)
+            
+
+
+
+    def update_hilight_in_sfx_workout_column(self):
+    #  Clear out listbox area before 
+        self.sfx_filtered_moves_display_area.delete(0, tk.END)
+        # Get the first 12 items via slice.
+        for i, move_name in enumerate(self.selected_exercises):
+            print(f"move # {i} name: {move_name}")
+                #  use index of current exercise to hilight motion-name in column display motion
+            if i == self.current_filtered_move_index:
+                self.sfx_filtered_moves_display_area.insert(tk.END, move_name)
+                self.sfx_filtered_moves_display_area.itemconfig(i, {'fg': '#F9C22E'}) #  saffron
+            else:                                           
+                self.sfx_filtered_moves_display_area.insert(tk.END, move_name)
+                self.sfx_filtered_moves_display_area.itemconfig(i, {'fg': '#BEA7E5'}) # wisteria, soft color for dark-purple background
+
+    def preview_sfx_only_workout_items(self):       
+        included_muscles = [muscle for muscle, var in self.muscle_vars.items() if var.get()]
+        excluded_muscles = [muscle for muscle, var in self.muscle_vars_to_exclude.items() if var.get()]
+        included_traits = [trait for trait, var in self.trait_vars.items() if var.get()]
+        excluded_traits = [trait for trait, var in self.trait_vars_to_exclude.items() if var.get()]
+        self.included_muscle_groups = included_muscles
+        self.excluded_muscle_groups = excluded_muscles
+        self.included_workout_traits = included_traits
+        self.excluded_workout_traits = excluded_traits
+        filtered_moves = [
+            exercise for exercise in all_exercise_objects
+            if (any(muscle in exercise.info_list for muscle in included_muscles) or self.are_all_boxes_empty(self.muscle_vars))
+            and not any(muscle in exercise.info_list for muscle in excluded_muscles)
+            and (any(trait in exercise.info_list for trait in included_traits) or self.are_all_boxes_empty(self.trait_vars))
+            and not any(trait in exercise.info_list for trait in excluded_traits)
+        ]
+        filtered_move_names = []
+        for item in filtered_moves:
+            filtered_move_names.append(item.name_string)
+        self.selected_exercises = filtered_move_names
+        # Randomly select up to N moves from the filter-slider, or return all available moves if the length is too short
+        try:
+            selected_move_names = random.sample(filtered_move_names, self.sfx_filter_n_moves_slider.get())
+            info_string = f"Choosing {self.sfx_filter_n_moves_slider.get()} of {len(filtered_moves)} \n matching moves"
+            self.sfx_filtered_timer_top_banner.config(text=info_string)
+        except:
+            n_available_moves = len(filtered_move_names)
+            if n_available_moves == 0:
+                info_string = "No items returned! \n Alter criteria please"
+                self.sfx_filtered_timer_top_banner.config(text=info_string)
+                selected_move_names = []
+            else:
+                info_string = f"Too few items match. \n {n_available_moves} available, auto-adjusting"
+                self.sfx_filtered_timer_top_banner.config(text=info_string)
+                self.sfx_filter_n_moves_slider.set(n_available_moves)
+                selected_move_names = random.sample(filtered_move_names, n_available_moves)
+        # assign the selected move names to the selected_exercises variable so we can run functions on it
+        self.selected_exercises = selected_move_names
+        # Update the combo box area with the selected move names
+        self.update_hilight_in_sfx_workout_column() 
+
+    def get_audio_from_destructable_list(self, src_list, temp_list):
+        if temp_list:
+            target_aud = temp_list.pop()
+        else:
+            self.copy_src_arr_to_temp(src_list, temp_list)
+            random.shuffle(temp_list)
+            target_aud = temp_list.pop()
+        return target_aud
+    
+    def write_filtered_workout_receipt(self):
+        current_time_stamp = datetime.now().strftime("%d-%m_%H-%M") 
+        timestamp_filename = "filtered_workout_" + current_time_stamp + ".txt"
+        with open(timestamp_filename, 'w', encoding='utf-8') as file:
+            file.write(f"Warmups And Stretch! Duration: {self.total_stretch_set_time_in_mins} mins ; at {current_time_stamp}\n")
+            file.write(f"Included muscle groups: {self.included_muscle_groups} \t Excluded muscle groups: {self.excluded_muscle_groups}")
+            file.write(f"Included traits: {self.included_workout_traits} \t Excluded traits: {self.excluded_workout_traits}")
+            for item in self.selected_exercises:
+                file.write(item + "\n")
+            file.write("[end of writing filtered workout info]")
+        print("Workout receipt made! Check current folder for textfile receipt of workout!")
+
+    def update_filtered_timer(self): 
+        # when Action timer hits zero 
+        if (self.is_it_action_time) and (self.remaining_action_time == 0):
+            #  End of active time, switch to rest time                              # change to rest colors on the timer-banner
+            self.filtered_timer_progress.config(text=f"Resting: {self.remaining_interval_time}s ", fg="#FEF6C9", bg="#27233A")
+            # Deactivate action time, since it's turned to Rest time in this conditional trigger
+            self.is_it_action_time = False
+            # we don't want to initiate the audios if it's the end of the set, checks for end of routine in block later...
+            if (self.current_round_index+1) != self.num_sets_per_exercise: # then it must NOT be the end of the exercise loop
+                # Check if encouragements need to regen and re-shuffle
+                if self.temp_end_bumper_aud_arr:
+                    relax_bark_aud = self.temp_end_bumper_aud_arr.pop()
+                else:
+                    self.copy_src_arr_to_temp(self.end_bumper_aud_arr, self.temp_end_bumper_aud_arr)
+                    random.shuffle(self.temp_end_bumper_aud_arr)
+                    relax_bark_aud = self.temp_end_bumper_aud_arr.pop()
+                # stop the BG fwith the end alarm hit
+                pygame.mixer.music.stop()
+                pygame.mixer.Sound(self.end_alarm).play()
+                while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+                    pygame.time.Clock().tick(30)
+# Note: this is bootleg, but gives 25% chance for special audio, the Chengyu would go here for that update too...
+                potato_randomizer = ["no", "no", "no", "yeah"]
+                potato_token = random.choice(potato_randomizer)
+                if potato_token == "yeah":
+                    # 1/4 chance for a funny sound
+                    if self.funny_sound_arr:
+                        funny_sound = self.temp_funny_sound_arr.pop()
+                    else:
+                        self.copy_src_arr_to_temp(self.funny_sound_arr, self.temp_funny_sound_arr)
+                        random.shuffle(self.temp_funny_sound_arr)
+                        funny_sound = self.temp_funny_sound_arr.pop()
+                    pygame.mixer.music.stop()
+                    pygame.mixer.Sound(funny_sound).play()
+                    while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+                        pygame.time.Clock().tick(30)
+                else:
+                    # after checking for/playing the funny sound, play the relax bark
+                    pygame.mixer.Sound(relax_bark_aud).play()
+                    while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+                        pygame.time.Clock().tick(30)
+
+                if self.temp_interval_song_aud_arr:
+                    rest_bgm = self.temp_interval_song_aud_arr.pop()
+                else:
+                    self.copy_src_arr_to_temp(self.interval_song_aud_arr, self.temp_interval_song_aud_arr)
+                    random.shuffle(self.temp_funny_sound_arr)
+                    rest_bgm = self.temp_funny_sound_arr.pop()
+                pygame.mixer.music.load(rest_bgm)
+                pygame.mixer.music.play()
+            else:
+                print(f"last exercise in set detected: \n round {self.current_round_index + 1} of {self.num_sets_per_exercise}")
+                #  if it's the last set of a particular exercise, see if it's the last exercise in the routine
+                if (self.current_filtered_move_index+1) == self.num_exercises: # END ROUTINE LOGIC
+                    print(f"exercise session complete! {self.current_filtered_move_index} rounds of {self.num_exercises} complete!")
+                    self.filtered_timer_progress.config(text="Workout Complete!")
+                    self.write_filtered_workout_receipt()
+                    pygame.mixer.music.stop()
+                    pygame.mixer.Sound(self.end_alarm).play()
+                    while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+                        pygame.time.Clock().tick(30)
+                    pygame.mixer.music.load(self.workout_end_aud)
+                    pygame.mixer.music.play()
+                    return  # Exit and end exercise routine
+                else:
+                    print(f"[!] All exercises in this set detected as done")
+# hook for special end-of-set audio NYI ----------------------------------------------------------
+                    pygame.mixer.music.stop()
+                    pygame.mixer.Sound(self.end_alarm).play()
+                    while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+                        pygame.time.Clock().tick(30)
+                    if self.temp_interval_song_aud_arr:
+                        rest_bgm = self.temp_interval_song_aud_arr.pop()
+                    else:
+                        self.copy_src_arr_to_temp(self.interval_song_aud_arr, self.temp_interval_song_aud_arr)
+                        random.shuffle(self.temp_funny_sound_arr)
+                        rest_bgm = self.temp_funny_sound_arr.pop()
+                    pygame.mixer.music.stop()
+                    pygame.mixer.music.load(rest_bgm)
+                    pygame.mixer.music.play()
+                
+
+        # when Interval timer hits zero 
+        elif self.remaining_interval_time == 0:
+            pygame.mixer.music.stop()
+            # starter_sound = self.get_audio_from_destructable_list(self.start_bumper_aud_arr, self.temp_start_bumper_aud_arr)
+            pygame.mixer.Sound(default_start_sound).play()
+            while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+                pygame.time.Clock().tick(30)
+            # reset both timing counters here
+            self.remaining_action_time = self.filter_active_duration_slider.get()  # Reset exercise time-amount
+            self.remaining_interval_time = self.filter_rest_seconds_slider.get()  # Reset interval time-amount
+            self.is_it_action_time = True
+            # "round" count increases when the interval action is complete, commonly called "sets", these are subsequent repeats of the same exercise
+            self.current_round_index += 1    
+            # reset colors on the initial text switch on the timer-banner when starting a new round
+            self.filtered_timer_progress.config(text=f"Move {self.current_round_index +1 } of {self.num_sets_per_exercise} : {self.remaining_action_time}s   ", fg="lime", bg="black")
+            if self.current_round_index != self.num_sets_per_exercise:
+                encourage_aud = self.get_audio_from_destructable_list(self.encouragement_auds, self.temp_encouragement_auds)
+                pygame.mixer.Sound(encourage_aud).play()
+                while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+                    pygame.time.Clock().tick(30)
+                curr_exercise = self.selected_exercises[self.current_filtered_move_index]
+                curr_action_aud_file = random.choice(self.master_exercise_name_audio_dic[curr_exercise]) 
+                pygame.mixer.Sound(curr_action_aud_file).play()
+                while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+                    pygame.time.Clock().tick(30)
+                # initialize the halfway alarm to count-down in its own thread
+                half_alarm_thread = threading.Thread(target=self.play_half_chirp, args=(self.filter_active_duration_slider.get(), ))
+                half_alarm_thread.start()
+                action_bg_aud = self.get_audio_from_destructable_list(self.active_song_aud_arr, self.temp_active_song_aud_arr) 
+                pygame.mixer.music.load(action_bg_aud)
+                pygame.mixer.music.play()
+        else: # If remaining time is not zero, tick down the clock on the display and also tick down the action time var
+            if self.is_it_action_time and (self.remaining_action_time != 0):
+                self.remaining_action_time -= 1
+                self.filtered_timer_progress.config(text=f"Move {self.current_round_index + 1} of {self.num_sets_per_exercise} : {self.remaining_action_time}s   ") #, fg="lime", bg="black"
+            elif self.remaining_interval_time != 0:
+                self.remaining_interval_time -= 1
+                self.filtered_timer_progress.config(text=f"Resting: {self.remaining_interval_time}s ") #, fg="#FEF6C9", bg="#27233A 
+
+# if we've reached the max number of rounds for a particular exercise, then we've done all sets for that particular exercise and move to the next
+        if self.current_round_index == self.num_sets_per_exercise:
+            # reset round index to 0 so it'll be used as the ordinal for the interval sub-arr
+            self.current_round_index = 0
+            # increase exercise index to move to the next item in selected_exercises
+            self.current_filtered_move_index += 1
+            # workout end is handled way above, so in this case, we're moving to the next exercise
+            current_exercise = self.selected_exercises[self.current_filtered_move_index]
+            current_action_aud_file = random.choice(self.master_exercise_name_audio_dic[current_exercise]) 
+            # reset number label to one at beginning of new exercise motion
+            self.filtered_timer_progress.config(text=f"Move 1 of {self.num_sets_per_exercise} : {self.remaining_action_time}s   ")
+            # update the hilight column for the move name
+            self.update_hilight_in_filtered_workout_column()
+# NYI: run function check_for_special_initial_exercise_audios() to play unique audios based on the tags of an object 
+            pygame.mixer.music.stop()
+            pygame.mixer.music.load(current_action_aud_file)
+            pygame.mixer.music.play()
+            while pygame.mixer.get_busy():  # Wait for the sound to finish playing
+                pygame.time.Clock().tick(30)
+            # manage the halfway alarm in its own thread
+            half_alarm_thread = threading.Thread(target=self.play_half_chirp, args=(self.filter_active_duration_slider.get(), ))
+            half_alarm_thread.start()
+# Aud trigger potential, for the start of an exercise... get_audio_from_destructable_list(self, src_list, temp_list)
+            chosen_action_bgm = self.get_audio_from_destructable_list(self.active_song_aud_arr, self.temp_active_song_aud_arr)
+            pygame.mixer.music.load(chosen_action_bgm)
+            pygame.mixer.music.play()
+            print(f"current round index is {self.current_round_index}")
+        if not self.pause:
+            self.master.after(1000, self.update_filtered_timer)
+
+    def initialize_destructable_audio_lists(self):
+         # copy the start auds and shuffle them around in a random order so we can pop them off later
+        self.copy_src_arr_to_temp(self.start_bumper_aud_arr, self.temp_start_bumper_aud_arr)
+        random.shuffle(self.temp_start_bumper_aud_arr)
+        # # Do the same for set ender barks
+        self.copy_src_arr_to_temp(self.end_bumper_aud_arr, self.temp_end_bumper_aud_arr)
+        random.shuffle(self.temp_end_bumper_aud_arr)
+        # same for funny sounds
+        self.copy_src_arr_to_temp(self.funny_sound_arr, self.temp_funny_sound_arr)
+        random.shuffle(self.temp_funny_sound_arr)
+        # and for the rest-audio
+        self.copy_src_arr_to_temp(self.interval_song_aud_arr, self.temp_interval_song_aud_arr)
+        random.shuffle(self.temp_interval_song_aud_arr)
+        # and for the active-audio
+        self.copy_src_arr_to_temp(self.active_song_aud_arr, self.temp_active_song_aud_arr)
+        random.shuffle(self.temp_active_song_aud_arr)
+        # same for encouragement audio sounds
+        self.copy_src_arr_to_temp(self.encouragement_auds, self.temp_encouragement_auds)
+        random.shuffle(self.temp_encouragement_auds)
+
+# self.selected_exercises contains the chosen list of workout items
+    def start_filtered_workout(self):
+        self.pause = False
+        self.initialize_destructable_audio_lists()
+        # initialize basic stuff
+        self.num_exercises = self.filter_n_moves_slider.get()
+        self.num_sets_per_exercise = self.filter_moves_per_set_slider.get()
+        self.remaining_action_time  = self.filter_active_duration_slider.get()
+        self.remaining_interval_time = self.filter_rest_seconds_slider.get()
+        if self.selected_exercises == []:
+            print("selected exercises arr identified as empty... generating")
+            self.preview_filtered_workout_items()
+        # Chosen exercise array should be available in --> self.selected_exercises
+        # Initialize the bg_audio_array
+        self.copy_src_arr_to_temp(self.active_song_aud_arr, self.temp_active_song_aud_arr)
+        timer_thread = threading.Thread(target=self.update_filtered_timer)
+        timer_thread.start()
+        init_aud_thread = threading.Thread(target=self.trigger_starter_aud_with_bg_delay, args=(self.remaining_action_time ,))
+        init_aud_thread.start() 
+
+    def update_hilight_in_filtered_workout_column(self):
+    #  Clear out listbox area before 
+        self.filtered_moves_display_area.delete(0, tk.END)
+        # Get the first 12 items via slice.
+        for i, move_name in enumerate(self.selected_exercises):
+            print(f"move # {i} name: {move_name}")
+                #  use index of current exercise to hilight motion-name in column display motion
+            if i == self.current_filtered_move_index:
+                self.filtered_moves_display_area.insert(tk.END, move_name)
+                self.filtered_moves_display_area.itemconfig(i, {'fg': '#F9C22E'}) #  saffron
+            else:                                           
+                self.filtered_moves_display_area.insert(tk.END, move_name)
+                self.filtered_moves_display_area.itemconfig(i, {'fg': '#BEA7E5'}) # wisteria, soft color for dark-purple background
+
+    def update_sfx_workout_timing_preview_label(self, value):
+        num_exercises = self.sfx_filter_n_moves_slider.get()
+        num_sets_per_exercise = self.sfx_filter_moves_per_set_slider.get()
+        dur_active = self.sfx_filter_active_duration_slider.get()
+        dur_rest = self.sfx_filter_rest_seconds_slider.get()
+        self.duration_in_mins = math.ceil(((num_exercises*(num_sets_per_exercise*(dur_active+dur_rest)) - dur_rest))/60)
+        workout_stats_string = f"Total Duration: {self.duration_in_mins} minutes >> {num_exercises} exercises \n {num_sets_per_exercise} sets/exercise {dur_active}s active, {dur_rest}s rest-intervals"
+        self.sfx_filter_est_time_label.config(text=workout_stats_string)
+        self.sfx_filtered_timer_progress.config(text=f" Set 1 of {num_sets_per_exercise}   -   {dur_active}s   ")
+
+    def update_filter_workout_timing_preview_label(self, value):
+        num_exercises = self.filter_n_moves_slider.get()
+        num_sets_per_exercise = self.filter_moves_per_set_slider.get()
+        dur_active = self.filter_active_duration_slider.get()
+        dur_rest = self.filter_rest_seconds_slider.get()
+        # duration_in_mins = math.ceil(((num_sets*(dur_active+dur_interval)) - dur_interval)+(break_interval * num_breaks)/60)
+        self.duration_in_mins = math.ceil(((num_exercises*(num_sets_per_exercise*(dur_active+dur_rest)) - dur_rest))/60)
+        workout_stats_string = f"Total Duration: {self.duration_in_mins} minutes >> {num_exercises} exercises \n {num_sets_per_exercise} sets/exercise {dur_active}s active, {dur_rest}s rest-intervals"
+        self.filter_est_time_label.config(text=workout_stats_string)
+        self.filtered_timer_progress.config(text=f" Set 1 of {num_sets_per_exercise}   -   {dur_active}s   ")
 
     def are_all_boxes_empty(self, var_set):
         for var in var_set.values():
@@ -1077,50 +1859,65 @@ class ExerciseTimerApp:
                 return False
         return True
 
-
-
-    def get_filtered_workout_items(self):
-       
+    def preview_filtered_workout_items(self):       
         included_muscles = [muscle for muscle, var in self.muscle_vars.items() if var.get()]
         excluded_muscles = [muscle for muscle, var in self.muscle_vars_to_exclude.items() if var.get()]
         included_traits = [trait for trait, var in self.trait_vars.items() if var.get()]
         excluded_traits = [trait for trait, var in self.trait_vars_to_exclude.items() if var.get()]
-        print(f" included muscles: {included_muscles}\n excluded musc. {excluded_muscles}\n included traits {included_traits}\n excluded traits {excluded_traits}")
-        
+        # print(f" included muscles: {included_muscles}\n excluded musc. {excluded_muscles}\n included traits {included_traits}\n excluded traits {excluded_traits}")
+
+        # assign the values to the bigger variable so they can be referenced later
+        self.included_muscle_groups = included_muscles
+        self.excluded_muscle_groups = excluded_muscles
+        self.included_workout_traits = included_traits
+        self.excluded_workout_traits = excluded_traits
 
         filtered_moves = [
             exercise for exercise in all_exercise_objects
             # Must include at least 1 of the indicated muscle group, or anything if all boxes are empty
-            if (all(muscle in exercise.info_list for muscle in included_muscles) or self.are_all_boxes_empty(self.muscle_vars))
+            if (any(muscle in exercise.info_list for muscle in included_muscles) or self.are_all_boxes_empty(self.muscle_vars))
             # exclude any exercises with the exclusion tags
             and not any(muscle in exercise.info_list for muscle in excluded_muscles)
-            and (all(trait in exercise.info_list for trait in included_traits) or self.are_all_boxes_empty(self.trait_vars))
+            and (any(trait in exercise.info_list for trait in included_traits) or self.are_all_boxes_empty(self.trait_vars))
             and not any(trait in exercise.info_list for trait in excluded_traits)
         ]
-        temp_001arr = []
+        print(f"Total # of items fitting criteria: {len(filtered_moves)}")
+        # Make list of the exercise name strings that fit the filter criteria
+        filtered_move_names = []
         for item in filtered_moves:
-            temp_001arr.append(item.key_name)
-        print(temp_001arr)
-        print(f"-"*23)
-        print(f"Length of selection = {len(temp_001arr)}")
-
-        # Randomly select up to 3 moves
-        selected_moves = random.sample(filtered_moves, min(3, len(filtered_moves)))
-        # Update the combo box area with the selected moves
-        self.combo_box002.delete(0, tk.END)
-        combobox_counter = 0
-        for move in selected_moves:
-            combobox_counter +=1
-            for display_name in move.display_name_list:
-                    self.combo_box002.insert(tk.END, display_name)
-            print(f"move is: {move.display_name_list}")
-
-
-    # def simply_play_bgm_once(self, targetAudFile):
-    #     pygame.mixer.music.load(targetAudFile)
-    #     pygame.mixer.music.play(loops=0)     
+            filtered_move_names.append(item.name_string)
+        self.selected_exercises = filtered_move_names
+        # Randomly select up to N moves from the filter-slider, or return all available moves if the length is too short
+        try:
+            selected_move_names = random.sample(filtered_move_names, self.filter_n_moves_slider.get())
+            info_string = f"Choosing {self.filter_n_moves_slider.get()} of {len(filtered_moves)} \n matching moves"
+            self.filtered_timer_top_banner.config(text=info_string)
+        except:
+            n_available_moves = len(filtered_move_names)
+            if n_available_moves == 0:
+                info_string = "No items returned! \n Alter criteria please"
+                self.filtered_timer_top_banner.config(text=info_string)
+                selected_move_names = []
+            else:
+                info_string = f"Too few items match. \n {n_available_moves} available, auto-adjusting"
+                self.filtered_timer_top_banner.config(text=info_string)
+                self.filter_n_moves_slider.set(n_available_moves)
+                selected_move_names = random.sample(filtered_move_names, n_available_moves)
+        # assign the selected move names to the selected_exercises variable so we can run functions on it
+        self.selected_exercises = selected_move_names
+        # Update the combo box area with the selected move names
+        self.update_hilight_in_filtered_workout_column() 
           
     # Toggle timer countdown
+
+        
+    def toggle_filtered_timer(self):
+        self.pause = not self.pause
+        if not self.pause:
+            self.update_filtered_timer()
+        else:
+            pygame.mixer.music.stop()
+
     def toggle_hard_timer(self):
         self.pause = not self.pause
         if not self.pause:
@@ -1182,7 +1979,6 @@ class ExerciseTimerApp:
         self.manage_boxing_audio_cues(self.boxing_workout_move_list[0])
         self.update_boxing_timer_and_manage_aud_triggers()
         # otherwise, we can assume there's the array of moves already exists
-# self.current_exercise_index = 0
 
     def manage_boxing_audio_cues(self, input_list_of_strings):
         for current_word in input_list_of_strings:
@@ -1207,7 +2003,6 @@ class ExerciseTimerApp:
                     self.copy_src_arr_to_temp(audio_doc.outsourced_active_song_aud_arr, self.temp_active_song_aud_arr)
 # .pop() progressively reduces the length of the active song array
                 chosen_bgm = self.temp_active_song_aud_arr.pop()
-                duration_of_boxing_movement = self.boxing_duration_slider.get()
                 bgm_thread = threading.Thread(target=self.play_bg_audio_until_end, args=(chosen_bgm,))
                 bgm_thread.start() 
             else:
@@ -1220,8 +2015,7 @@ class ExerciseTimerApp:
     def update_boxing_timer_and_manage_aud_triggers(self):
         if self.remaining_action_time == 0:
             # Check if we've reached the end of the line
-            
-            # len needs -1 because we're tracking from a 0 index
+                                    # len needs -1 because we're tracking from a 0 index
             if self.current_exercise_index == (len(self.boxing_workout_move_list)-1):
                 # trigger ending message and jump out of the program if we've reached 0 on the last item
                 print("workout over!")
@@ -1231,15 +2025,10 @@ class ExerciseTimerApp:
                 pygame.mixer.music.stop()
                 pygame.mixer.Sound(self.workout_end_aud).play()
                 return
-            # else:
-            #     print(f"Movement #{self.current_exercise_index} of {len(self.boxing_workout_move_list)}")
             # increase the targeting index. The 0th index will run the first time through because we're fueling up remaining_action_time in start_boxing_routine()
             self.current_exercise_index += 1
             # target the list of strings for the current move
-            
-            # input(f"curr idx = {self.current_exercise_index}\ncurrent move {self.boxing_workout_move_list[self.current_exercise_index]}")
             curr_list_of_audio_strings = self.boxing_workout_move_list[self.current_exercise_index]
-            
             # replenish action time as a new move starts
             self.remaining_action_time = self.boxing_duration_slider.get()
             # make the display string and update the label area for the name of the movement/combo
@@ -1268,6 +2057,30 @@ class ExerciseTimerApp:
                     file.write(action_output_string+ "\n")
             file.write("and that's all she wrote!")
         print("Workout textfile completed! Check current folder for receipt of workout!")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1336,9 +2149,8 @@ class ExerciseTimerApp:
         pygame.mixer.music.load(file_path)
         pygame.mixer.music.play()
     def copy_src_arr_to_temp(self, src_arr, temp_arr):
-        random.shuffle(src_arr)
-        for x in src_arr:
-            temp_arr.append(x)
+        temp_arr.extend(src_arr)  # Copy src_arr to temp_arr
+        random.shuffle(temp_arr)  # Shuffle the copied temp_arr
     def select_and_play_random_bg_aud(self, src_arr, temp_arr, target_dur):
         pygame.mixer.init()
         # regenerate the temp arr from the source if temp is empty
@@ -1399,7 +2211,7 @@ class ExerciseTimerApp:
         # Play the background track once
         pygame.mixer.music.play()
 
-        time.sleep(half_active_dur - 3)
+        time.sleep(half_active_dur - 1)
         # (play pda beep at halfway point) Should overlap and not interrupt the bigger BG sound
         middle_sound_effect.play()
         # (do not use music.stop because the channel will automatically be overwritten when the interval sound starts)
@@ -1521,7 +2333,6 @@ class ExerciseTimerApp:
                 current_exercise = self.selected_exercises[self.current_exercise_index]
                 current_action_aud_file = random.choice(self.master_exercise_name_audio_dic[current_exercise]) 
                 initial_exercise_for_round__aud = pygame.mixer.Sound(current_action_aud_file)
-                encouragement = self.default_encouragement
                 # Check if encouragements need to regen and re-shuffle
                 if len(self.temp_start_bumper_aud_arr) > 0:
                     encouragement = self.temp_start_bumper_aud_arr.pop()
@@ -1741,8 +2552,8 @@ class ExerciseTimerApp:
         self.continuous_action_time = self.stretch_duration_slider.get()
         # Calculate the time of the stretching workout
         total_stretch_time_in_seconds = (self.continuous_action_time)*(num_of_stretches)
-        total_stretch_set_time_in_mins = math.ceil((total_stretch_time_in_seconds)/60)
-        self.stretch_time_length_label.config(text=f"Workout time total: {total_stretch_set_time_in_mins}m")
+        self.total_stretch_set_time_in_mins = math.ceil((total_stretch_time_in_seconds)/60)
+        self.stretch_time_length_label.config(text=f"Workout time total: {self.total_stretch_set_time_in_mins}m")
         
     def initialize_stretches_update_display(self):
         # Get the randomized list of exercises
@@ -1804,35 +2615,20 @@ class ExerciseTimerApp:
         stretch_name_sound_obj.play()
         while pygame.mixer.get_busy():  # Wait for the sound to finish playing
             pygame.time.Clock().tick(30)     
-    def play_half_and_end_chirps_after_delay(self, duration_time):
+    def play_half_chirp(self, duration_time):
         half_duration_in_seconds = math.floor(duration_time/2)
         pygame.time.wait((half_duration_in_seconds*1000)) 
         # at halfway point, Playing statically assigned halfway-alarm
         half_alarm_aud_obj = pygame.mixer.Sound(self.halfway_alarm)
         half_alarm_aud_obj.play()
-        # at end, Playing statically assigned end-alarm
-        #  - We're only waiting half the duration because we already waited for the first half
 
-        # add 1 second if the time is odd, so the audio triggers correctly at the 0th countdown instead of at 1
-        # We still need to offset it slightly early so it's not overlapping with the starter audio
-        # NOTE: Bootleg fix for the initial delay of the timer on first run-through. It's consistent thereafter...
-        wait_time_to_end = (half_duration_in_seconds*1000)
-        if self.current_continuous_action_index == 0:
-            # print(f"prev wait time in ms = {wait_time_to_end}")
-            # print(f"0th index of stretches detected, lowering wait time to compensate for inconsistent clockwork")
-            wait_time_to_end -= 1000
-            # print(f"post reduction wait time {wait_time_to_end}")
-        
-        pygame.time.wait(wait_time_to_end) 
-        half_alarm_aud_obj = pygame.mixer.Sound(self.end_alarm)
-        half_alarm_aud_obj.play() 
     def create_and_call_stretch_aud_threads(self):
         duration_in_s = self.stretch_duration_slider.get()
         pygame.mixer.music.stop()
         # play the stretch audio
         self.trigger_starter_stretch_audio()
 
-        bark_thread = threading.Thread(target=self.play_half_and_end_chirps_after_delay, args=(duration_in_s, ))
+        bark_thread = threading.Thread(target=self.play_half_chirp, args=(duration_in_s, ))
         bark_thread.start()
         # init_aud_thread = threading.Thread(target=self.trigger_starter_stretch_audio)
         # init_aud_thread.start()
@@ -1863,6 +2659,7 @@ class ExerciseTimerApp:
                 pygame.mixer.music.stop()
                 pygame.mixer.music.load(self.workout_end_aud)
                 pygame.mixer.music.play()
+                self.write_stretching_receipt()
                 return "finished"
             # else:
             #     print(f"{len(self.selected_stretches)} =/?= {self.current_continuous_action_index} ?")
@@ -1877,8 +2674,22 @@ class ExerciseTimerApp:
             
             self.create_and_call_stretch_aud_threads()
         
+        # Check if starting bumper encouragements need to regen and re-shuffle
+         
+# -----NOTE: NYI Generate random active bg music then play
+              
         if not self.pause:
             self.master.after(1000, self.update_timer_continuous_action_pattern)
+
+    def write_stretching_receipt(self):
+        current_time_stamp = datetime.now().strftime("%d-%m_%H-%M") 
+        timestamp_filename = "stretch_" + current_time_stamp + ".txt"
+        with open(timestamp_filename, 'w', encoding='utf-8') as file:
+            file.write(f"Warmups And Stretch! Duration: {self.total_stretch_set_time_in_mins} mins ; at {current_time_stamp}\n")
+            for item in self.selected_stretches:
+                file.write(item + "\n")
+            file.write("[end of writing warmup stuff]")
+        print("Warmup completion textfile done! Check current folder for receipt of workout!")
 
 def main():
     root = tk.Tk()
