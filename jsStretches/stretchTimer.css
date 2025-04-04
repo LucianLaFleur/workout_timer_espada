@@ -1,0 +1,137 @@
+body {
+    display: flex;
+    background-color: #114;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+}
+#container-for-timers, #timer-labels-container{
+    display: flex;
+    align-items: center; /* Optional: Align items vertically centered */
+    justify-content: space-between;
+}
+
+#timer-labels-container, #container-for-timers, #container-for-controls{
+    display: grid;
+    grid-template-columns: repeat(2, 300px); /* Each column is 300px wide */
+    justify-content: center; /* Center the grid within the container */
+    align-items: center; /* Center items vertically */
+    gap: 10px; /* Optional: Add some space between the columns */
+}
+
+#container-for-controls {
+    background-color: #063758;
+    color: aqua;
+}
+
+#timer-label, #long-timer-label {
+    font-size: 2em; /* Font size for labels */
+    text-align: center; /* Center text within each label */
+    padding: 5px; 
+    box-sizing: border-box; /* Include padding in the element's total width and height */
+    border: 5px solid #000; /* Optional: Add a border for better visualization */
+    border-radius: 12px;
+}
+
+#timer, #long-timer {
+    font-size: 4em; /* Font size for timers */
+    text-align: center; /* Center text within each timer */
+    padding: 5px; 
+    box-sizing: border-box; /* Include padding in the element's total width and height */
+    border: 5px solid #000; /* Optional: Add a border for better visualization */
+    border-radius: 12px;
+}
+
+#timer, #timer-label{
+    background-color: antiquewhite;
+}
+#long-timer, #long-timer-label{
+    background-color: #063758;
+    color: #ffadca;
+}
+
+.radio-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+#startButton {
+    width: 200px;
+    padding: 10px;
+    text-align: center;
+    font-size: 2em;
+    background-color: rgb(54, 3, 111);
+    color: aquamarine;
+}
+
+#exercise-container {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 5px;
+    width: 80%;
+}
+.column {
+    font-size: 25px;
+    max-height: 80vh;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.stretch {
+    background-color: lightblue;
+    color: darkblue;
+    padding: 10px;
+    margin: 1px;
+    border-radius: 5px;
+    width: 90%;
+    text-align: center;
+}
+.exercise {
+    background-color: lightcoral;
+    color: darkred;
+    padding: 10px;
+    margin: 1px;
+    border-radius: 5px;
+    width: 90%;
+    text-align: center;
+}
+.current-task {
+    background-color: black !important;
+    color: lime !important;
+    border: 2px solid lime;
+    border-radius: 5px;
+}
+#generate-all {
+    background-color: #271f82;
+    color: rgb(92, 255, 252);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+#generate-all:hover {
+    background-color: #271f82;
+}
+#rand-btn-holder {
+    background-color: #271f82;
+    color: rgb(92, 255, 252);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+#myGenerator {
+    background-color: #063758;
+    color: #ffadca;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 21px;
+}
+
