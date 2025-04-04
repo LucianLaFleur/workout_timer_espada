@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <link rel="stylesheet" href="stretchTimer.css">
+</head>
+<body>
+    <div id="timer-labels-container">
+        <div id="timer-label">Current Task</div>
+        <div id="long-timer-label">Total Left</div>
+    </div>
+    <div id="container-for-timers">
+        <div id="timer">00:30</div>
+        <div id="long-timer">00:00</div>
+    </div>
+    <div id="container-for-controls">
+        <input type="range" id="slider" min="10" max="90" step="5" value="30">
+        <div class="radio-buttons">
+            <label><input type="radio" name="options" value="A" checked> A</label>
+            <label><input type="radio" name="options" value="B"> B</label>
+            <label><input type="radio" name="options" value="C"> C</label>
+        </div>
+    </div>
+    <button id="startButton">Start</button>
+    <div id="exercise-container">
+        <div id="left-column" class="column"></div>
+        <div id="mid-left-column" class="column"></div>
+        <div id="mid-right-column" class="column"></div>
+        <div id="right-column" class="column"></div>
+    </div>
+    <!-- <div id="rand-btn-holder">
+        <button id="generate-all" onclick="generateAll()">Generate All</button>
+        <button id="instrument-gen1">instrument 1</button>
+        <button id="instrument-gen2">instrument 1</button>
+        <button id="style-gen">style</button>
+        <button id="mood-gen">mood</button>
+        <button id="tech-gen">tech.</button>
+    </div>
+    <div id="myGenerator">
+        <span id="instrument1">[Instrument 1]</span>, 
+        <span id="instrument2">[Instrument 2]</span>, 
+        <span id="style1">[Style]</span>, 
+        <span id="mood1">[Mood]</span>, 
+        <span id="tech1">[technique]</span>
+    </div> -->
+
+    <script src="stretchTimer.js"></script>
+    
+</body>
+</html>
