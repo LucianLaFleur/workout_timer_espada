@@ -1,0 +1,350 @@
+:root {
+  --fillerBodyBGColor:#180125;
+
+  --headerSubtitleFontColor: #04083c;
+  --headerSubtitleBGColor: rgb(39, 66, 73);
+  --headerSubtitleBorderColor: #000;
+
+  --midOverallBGColor:#72acad;
+  --midTitleColor: #72acad;
+  --midSliderDataNumberColor: cyan;
+  --midCellBGColor: #000;
+
+  --infoFooterBorder1: #04083c;
+  --infoFooterBorder2: #04083c;
+  --infoFooterFontColor1: #04083c;
+  --footerPrimaryColor: lime;
+  --footerSecondaryColor: gold;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+body {
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically (if needed) */
+  background-color: var(--fillerBodyBGColor);
+  font-family: sans-serif;
+}
+#main-container {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 4px solid rgb(0, 0, 0);
+    border-radius: 8px;}
+#top-display, #middle-display, #bottom-display {
+    width: 100%;
+    max-width: 600px;
+    box-sizing: border-box;}
+#top-display {
+    display: flex;
+    flex-direction: column;}
+#top-display .digital-clock {
+    height: 110px;
+    display: flex;
+    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+    font-size: 108px;
+    font-weight: bold;
+    text-align: center;}
+#top-display .subtitle {
+    height: 88px;
+    display: flex;
+    border-top: 2px solid var(--headerSubtitleBorderColor);
+    border-bottom: 2px solid var(--headerSubtitleBorderColor);
+    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--headerSubtitleBGColor);
+    text-align: center;
+    padding: 0 10px;}
+#top-display .subtitle p {
+    margin: 0;
+    line-height: 1.2;
+    font-size: 36px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;}
+
+
+
+#bottom-display {
+    padding:7px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 3px;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+#bottom-display span {
+    padding: 0px 5px;
+    text-align: center;
+    display: flex;
+    text-overflow: ellipsis;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    font-weight: bold;
+    width: 100%; /* <- This ensures it takes the full column */
+    box-sizing: border-box;
+    border-radius: 8px;
+}
+
+#middle-display {
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: -5px;
+    width: 100%;
+    max-width: 600px;
+    max-height: 800px;
+    background-color: var(--midOverallBGColor);
+    padding: 10px;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 0.7fr;
+    gap: 5px;}
+.left-column {
+    grid-column: 1;}
+.right-column {
+    grid-column: 2;}
+.slider-wrapper {
+    color:var(--midTitleColor);
+    background-color: var(--midCellBGColor);
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+.slider {
+    width: 100%;
+  }
+
+.slider-value {
+    font-weight: bold;
+    color: var(--midSliderDataNumberColor)
+  }
+
+  #time-preview {
+    color: var(--footerSecondaryColor);
+    font-weight: bold;
+    font-size: 3.3rem;
+  }
+
+#exercise-select-btn {
+  display: flex;
+  text-align: center;
+  margin: auto;
+  padding: 10px;
+  background-color: #04083c;
+  color: aqua;
+  border: 2px solid gold;
+  border-radius: 8px;
+}
+
+.middle-header {
+  width: 100%;
+  background-color: var(--midCellBGColor);
+  display: flex;
+  justify-content: space-between; /* This will evenly space the items */
+  align-items: center; /* This will vertically center the items */
+}
+
+.dropdown-wrapper {
+  color: gold;
+  background-color: #391e4f;
+  padding: 5px;
+  border-radius: 8px;
+  flex: 1; /* all grow and shrink equally */
+  text-align: center;
+  margin: 10px;
+}
+
+.workout-item-wrapper{
+  padding: 5px;
+  background-color: var(--midCellBGColor);
+  color: lime;
+  font-size: 24px;
+  text-wrap: wrap;
+  max-width: 300px;
+  text-align: center;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.btn-a,
+.btn-b {
+  flex-shrink: 0;       /* Don't let buttons shrink */
+  width: 30px;          /* Fixed width - adjust as needed */
+  height: 30px;         /* Fixed height - optional */
+}
+.workout-item-content {
+  flex: 1;              /* Let content grow to fill space */
+  text-align: center;
+  padding: 0 10px;      /* Give it breathing room */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mid-footer-item{
+  background-color: var(--midCellBGColor);
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.dropdown-wrapper select {
+    padding: 5px;
+    font-size: 16px;
+  }
+
+  /* Popup Window Container */
+.ad-hoc-selector-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #1a1a1a;
+  padding: 20px;
+  border: 2px solid lime;
+  border-radius: 10px;
+  z-index: 9999;
+  color: lime;
+  font-size: 16px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  min-width: 300px;
+}
+
+/* For the popup window styles */
+/* First dropdown: Muscle Group Selector */
+.muscle-select {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+/* Second dropdown: Exercise Selector */
+.exercise-select {
+  width: 100%;
+  margin-bottom: 10px;
+  overflow-y: auto;
+  /* To mimic the `size=8` behavior, use height with overflow */
+  max-height: 168px; /* approx 21px * 8 for 8 visible options */
+}
+
+/* Close Button */
+.ad-hoc-close-btn {
+  margin-top: 10px;
+  width: 100%;
+  background-color: #191919;
+  color: #fc3423;
+  
+  border: 1px solid #6d322d;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.ad-hoc-close-btn:hover {
+  background-color: rgb(112, 112, 112);
+  border: 1px solid rgb(57, 14, 33);
+}
+
+.ad-hoc-rand-btn {
+  font-size: 20px;
+  font-weight: bolder;
+  width: 100%;
+  background: linear-gradient(
+      to right,
+      rgb(25, 171, 32),
+      rgb(40, 230, 240),
+      rgb(60, 0, 255),
+      indigo,
+      rgb(252, 167, 252),
+      rgb(252, 64, 64),
+      rgb(235, 232, 40),
+      rgb(90, 154, 0),
+      rgb(20, 88, 91),
+      rgb(60, 0, 255),
+      indigo,
+      rgb(129, 17, 129),
+      rgb(252, 64, 64),
+      rgb(235, 232, 40)
+  );
+  background-size: 300% 100%;
+  background-position: 0% 0%;
+  color: white;
+  border: 1px solid lime;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+  transition: background-position 1s ease;
+}
+
+.ad-hoc-rand-btn:hover {
+  border-color: rgb(2, 85, 59);
+  background-position: 100% 0%;
+}
+
+#bottom-display span:nth-child(-n+4) {
+  background-color: #000;
+  color: var(--footerSecondaryColor);
+  border: 3px solid var(--footerPrimaryColor);
+}
+
+#bottom-display span:nth-child(n+5):nth-child(-n+8) {
+  background-color: black;
+  color: var(--footerPrimaryColor);
+  border: 3px solid var(--footerSecondaryColor);
+}
+
+.active-phase {
+  background-color: black;
+  color: lime;
+  border-color: #858585;
+}
+.intense-phase {
+  background-color: rgb(12, 12, 41);
+  color: rgb(255, 0, 0);
+  border-color: #853500;
+}
+.light-phase {
+  background-color: #0f3d5f;
+  color: #e39be0;
+  border-color: #e39be0;
+  /* #62F2FF; */
+}
+
+.is-paused {
+  background-color: black !important;
+  color: cyan !important;
+  border: 5px solid cyan !important;
+}
+
+.rest-phase {
+  background-color: #0f3d5f;
+  color: #62F2FF;
+  border-color: #62F2FF;
+}
