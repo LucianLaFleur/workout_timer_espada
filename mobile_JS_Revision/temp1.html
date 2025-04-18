@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Layout Project</title>
+  <link rel="stylesheet" href="temp1.css">
+</head>
+<body>
+  <div id="main-container">
+    <div id="top-display">
+      <div class="digital-clock">00:00</div>
+      <div id="header-text" class="subtitle">
+        <p>This is a dynamic subtitle.is is a dynamic subtitle</p>
+      </div>
+    </div>
+  
+    <div id="middle-display">
+      <div class="slider-wrapper left-column">
+        <div class="slider-header">
+          <span>Action Duration:</span>
+          <span class="slider-value" data-for="action-duration-slider">15</span>
+        </div>
+        <input type="range" min="5" max="120" step="5" value="15" class="slider" id="action-duration-slider">
+      </div>
+      <div class="slider-wrapper right-column">
+        <div class="slider-header">
+          <span>Sets/Workout:</span>
+          <span class="slider-value" data-for="sets-per-workout-slider">2</span>
+        </div>
+        <input type="range" min="2" max="20" step="1" value="2" class="slider" id="sets-per-workout-slider">
+      </div>
+      <div class="slider-wrapper left-column">
+        <div class="slider-header">
+          <span>Light Duration:</span>
+          <span class="slider-value" data-for="light-duration-slider">20</span>
+        </div>
+        <input type="range" min="5" max="180" step="5" value="20" class="slider" id="light-duration-slider">
+      </div>
+      <div class="slider-wrapper right-column">
+        <div class="slider-header">
+          <span>Rest Duration:</span>
+          <span class="slider-value" data-for="rest-duration-slider">10</span>
+        </div>
+        <input type="range" min="10" max="300" step="10" value="10" class="slider" id="rest-duration-slider">
+      </div>
+      <div class="slider-wrapper left-column">
+        <div class="slider-header">
+          <span>Actions per Set:</span>
+          <span class="slider-value" data-for="actions-per-set-slider">2</span>
+        </div>
+        <input type="range" min="2" max="10" step="1" value="2" class="slider" id="actions-per-set-slider">
+      </div>
+      <div class="slider-wrapper right-column">
+        <button id="exercise-select-btn"> Select Exercises </button>
+      </div>
+    </div>
+    
+    <div id="bottom-display">
+      <!-- class="header_data_hilight" ?? -->
+      <span>Actions left: <span id="actions-left">X</span> </span>
+      <span>Action.T: 100 Light.T: 100</span>
+      <span>Muscle1: Triceps</span>
+      <span id="total-time-footer">Total time</span>
+      <span>Rounds Left: <span id="rounds-left">X</span>  </span>
+      <span>Rest.T:180 L.Act: Abs </span>
+      <span>Muscle2: Shoulders</span>
+      <span id="pause-btn">NYI-Pause</span>
+    </div>
+  </div>
+    
+    
+  <script src="temp1.js"></script>
+</body>
+</html>
