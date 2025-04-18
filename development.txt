@@ -46,18 +46,25 @@ DEV LOG : --- 4/18/2025 ---
 - fixed lack of randomization for workout items, cleaning up a leftover randomizer prototype that repeated items. Now, repetitions will only occur if the entire array is exhausted
 - Added annotations made within timer logic to better explain different behavior triggers
 - changed names from prototype ones into more functional ones matching the streamlined visual design.
-// added css for header color management through the classes called during timer operation
-// edited class names for consistency -> revised underscores to dash separator like class ".is_paused" -> ".is-paused"
-// [!] WARNING : odd behavior in how the sets are calculated/cycled, 
-//          needs investigation as to why unexpected cycle amounts (too few actions and no lightActions) 
-//          --> observed from 2 actions 2 sets; appeared to only do 2 sets of 1 action with 1 break between
-// [?] possible solution: Target array isn't duplicated yet? But then why not iterate through the whole array once?
-// [!] WARNING : Interval not clearing at end of workout (every second, continues, trying to switch to a timer)
-//      [?] check for ending location, if remaining sets == 0 then clear interval
-//      --> all locations for "Clear interval" identified, it was called in the prototype app's disable/enableSliders functionality
-//      attempting a straight call of clearInterval(timerInterval) where the prior functions were managed
-//      NOTE: removed enable/disable sliders since we're controlling that by switching displays and re-rendering the screen instead
-// [+] countdown cycle fixed, cycles are moving through as expected
+- added css for header color management through the classes called during timer operation
+- edited class names for consistency -> revised underscores to dash separator like class ".is_paused" -> ".is-paused"
+
+-[RESOLVED] : odd behavior in how the sets are calculated/cycled, 
+     needs investigation as to why unexpected cycle amounts (too few actions and no lightActions) 
+        --> expected 2 actions 2 sets; appeared to only do 2 sets of 1 action with 1 break between
+[investigation]: Target array isn't duplicated yet? But then why not iterate through the whole array once?
+[+] Resolution to cycle calculation problem: the light-exercise actions were referenced, resulting in actions - 1. Correct variable assigned to the counting integer attached to number of actions.
+
+[RESOLVED]: Interval not clearing at end of workout (every second, continues with the ending print-statement)
+     [investigation]: check for ending location, if remaining sets == 0 then clear interval
+      --> all locations for "Clear interval" identified
+[+] Resolution:Clear interval was called in the prototype app's disable/enableSliders functionality. Removed these functions, since we're controlling that by switching displays and re-rendering the screen instead.
+The logic for clearing the interval should've been separated from managing the sliders in the first place, so I've done so.
+Replaced prior functions with a direct clearInterval() call.
+[+] countdown cycle fixed, ending occurs properly
+
+[resolved] Bug: When routine finishes, going back to slider select, the timer remains red because of the .intense-phase coloring for the last action set.
+[+] removed class on workout end, reverts to default color now.
 
 --------
 3/18:
