@@ -1,3 +1,65 @@
+------------------------------------------------------------
+   --- NYI features / in development ---
+------------------------------------------------------------
+- styling to exercise selection buttons not applied (currently just A and B buttone) 
+- Styling needs revision to custom exercise select dropdown (btn-b popup frame): 1) Review the font size/line height/padding/cursor:pointer for the dropdown bars
+- Rainbow randomization button NYI (custom exercise selection popup)
+   --> should replace target exercise with a random item from any active array
+
+Audio placeholders for action-start need to be swapped with exercise names:
+-- need audio files for exercise names and added to resources
+-- need to path the audio files, set as appropriate variables in JS.
+[!] -- helper function to analyze current workout move in MasterExercise array --> needs an exercise index global-var counter incrementing on each new exercise to relate to position of move in the master array's index.
+-- MasterExerciseArray needs to be saved as a JSON string to local storage (contains all exercises for current workout)
+
+Workout structure toggles affecting master-array construction:
+[!] helper function for making different versions of the master array based on workout ordering (muscle-focus, cycle, or true-random ordering).
+--> These options should occupy placeholder 3
+--> generate a cycle by default, then target arrangement on event listener when dropdown is selected.
+
+-------------------- low priority: --------------------
+placeholder dropdown 4 on exercise select screen --> audio pack selection?
+[?] Data re-structuring for audio-pack organization
+-- directory for each audio pack "AudioPack_X". 
+-- consistent names "workoutStart1_X.mp3", "actionEnd2_X".
+-- need to document all SFX audio packs
+-- [!] Workout names are too broad to get files for, just focus on making the SFX and timer notices interchangeable. 
+
+------------------------------------------------------------
+--- Bug List ---
+------------------------------------------------------------
+known bugs:
+- slider values revert to default when hitting back button (refreshes the page) 
+   --> use local storage to render last selection values to the HTML shown on the slider screen
+
+- First workout-type does not disable a muscle group already selected by dropdown 2 (second workout-type) on the workout list creation screen.
+
+------------------------------------------------------------
+  --- Dev Log ---
+------------------------------------------------------------
+4/18 :
+- Javascript Mobile version uploaded; many major changes, so it can be considered it's own offshoot.
+- I will track changes more closely as I develop this further.
+- Starting point: timing selection sliders, workout list-selection, and timer functionality all work at a basic degree
+
+DEV LOG : --- 4/18/2025 ---
+- fixed lack of randomization for workout items, cleaning up a leftover randomizer prototype that repeated items. Now, repetitions will only occur if the entire array is exhausted
+- Added annotations made within timer logic to better explain different behavior triggers
+- changed names from prototype ones into more functional ones matching the streamlined visual design.
+// added css for header color management through the classes called during timer operation
+// edited class names for consistency -> revised underscores to dash separator like class ".is_paused" -> ".is-paused"
+// [!] WARNING : odd behavior in how the sets are calculated/cycled, 
+//          needs investigation as to why unexpected cycle amounts (too few actions and no lightActions) 
+//          --> observed from 2 actions 2 sets; appeared to only do 2 sets of 1 action with 1 break between
+// [?] possible solution: Target array isn't duplicated yet? But then why not iterate through the whole array once?
+// [!] WARNING : Interval not clearing at end of workout (every second, continues, trying to switch to a timer)
+//      [?] check for ending location, if remaining sets == 0 then clear interval
+//      --> all locations for "Clear interval" identified, it was called in the prototype app's disable/enableSliders functionality
+//      attempting a straight call of clearInterval(timerInterval) where the prior functions were managed
+//      NOTE: removed enable/disable sliders since we're controlling that by switching displays and re-rendering the screen instead
+// [+] countdown cycle fixed, cycles are moving through as expected
+
+--------
 3/18:
 IMPORTANT UPDATE: Shifting from array structure to object oriented structure where each exercise is an object.
 reason: previous structure was sorting exercise types into arrays. This led to redundancy and difficulty in making arrays where certain situations applied. Damaged modularity and data normalization.
